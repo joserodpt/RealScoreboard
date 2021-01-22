@@ -1,0 +1,7 @@
+name: RealScoreboard
+version: ${project.version}
+main: josegamerpt.realscoreboard.RealScoreboard
+api-version: 1.13
+softdepend: [ Vault, PlaceholderAPI ]
+authors: [ JoseGamer_PT ]
+description: Lightweight and efficient scoreboard manager.
