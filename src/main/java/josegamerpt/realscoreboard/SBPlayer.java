@@ -42,6 +42,10 @@ public class SBPlayer {
     }
 
     public void stop() {
+        if(br != null && !br.isCancelled()) {
+            br.cancel();
+        }
+        
         if (scoreboard == null) {
             return;
         }
@@ -51,6 +55,8 @@ public class SBPlayer {
     }
 
     public void start() {
+        stop();
+        
         scoreboard = new FastBoard(p);
 
         br = new BukkitRunnable() {
