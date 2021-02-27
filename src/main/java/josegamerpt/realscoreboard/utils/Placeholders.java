@@ -21,8 +21,8 @@ public class Placeholders {
             CPClass = Class.forName("org.bukkit.craftbukkit." + RealScoreboard.getServerVersion() + ".entity.CraftPlayer");
             Object CraftPlayer = CPClass.cast(p);
 
-            Method getHandle = CraftPlayer.getClass().getMethod("getHandle", new Class[0]);
-            Object EntityPlayer = getHandle.invoke(CraftPlayer, new Object[0]);
+            Method getHandle = CraftPlayer.getClass().getMethod("getHandle");
+            Object EntityPlayer = getHandle.invoke(CraftPlayer);
 
             Field ping = EntityPlayer.getClass().getDeclaredField("ping");
 
@@ -142,6 +142,7 @@ public class Placeholders {
     private static String getKD(Player p) {
         int kills = p.getStatistic(Statistic.PLAYER_KILLS);
         int deaths = p.getStatistic(Statistic.DEATHS);
+      
         if (deaths != 0) {
           String send = (kills / deaths) + "";
           return send.contains(".") ? send.substring(0, send.indexOf(".")) : send;

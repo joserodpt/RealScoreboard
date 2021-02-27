@@ -25,16 +25,15 @@ public class CMD extends CommandBase {
     @SubCommand("reload")
     @Permission("realscoreboard.reload")
     public void reloadcmd(final CommandSender commandSender) {
-        PlayerManager.players.forEach(sbPlayer -> sbPlayer.stop());
+        PlayerManager.players.forEach(SBPlayer::stop);
         Config.reload();
         AnimationManager.refresh = Config.file().getInt("Config.Scoreboard-Refresh");
         commandSender.sendMessage(Text.color(RealScoreboard.getPrefix() + Config.file().getString("Config.Reloaded")));
-        PlayerManager.players.forEach(sbPlayer -> sbPlayer.start());
+        PlayerManager.players.forEach(SBPlayer::start);
     }
 
     @SubCommand("toggle")
     @Alias("t")
-    @Permission("realscoreboard.toggle")
     public void togglecmd(final CommandSender commandSender) {
         PlayerManager.getPlayer(Bukkit.getPlayer(commandSender.getName())).toggle();
     }
