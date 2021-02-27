@@ -142,13 +142,12 @@ public class Placeholders {
     private static String getKD(Player p) {
         int kills = p.getStatistic(Statistic.PLAYER_KILLS);
         int deaths = p.getStatistic(Statistic.DEATHS);
-
+      
         if (deaths != 0) {
-            String send = (kills / deaths + "");
-            return send.contains(".") ? send.substring(0, send.indexOf(".")) : send;
-        } else {
-            return "0";
-        }
+          String send = (kills / deaths) + "";
+          return send.contains(".") ? send.substring(0, send.indexOf(".")) : send;
+        } 
+        return "0";
     }
 
     public static String setPlaceHolders(Player p, String s) {
