@@ -97,7 +97,6 @@ public class RealScoreboard extends JavaPlugin {
             log(Level.INFO, header);
             disablePlugin();
         } else {
-
             AnimationManager.refresh = Config.file().getInt("Config.Scoreboard-Refresh");
 
             pm.registerEvents(new PlayerManager(), this);
