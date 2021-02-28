@@ -6,9 +6,9 @@ Config:
       'ON': '&fScoreboard turned &aON&f.'
       'OFF': '&fScoreboard turned &cOFF&f.'
   Animations:
-    Rainbow-Delay: 10
+    Rainbow-Delay: 20
     Title-Delay: 20
-  Scoreboard-Refresh: 10
+  Scoreboard-Refresh: 20
   Disabled-Worlds:
     - testWorld
     - ExampleWorld2
@@ -22,7 +22,7 @@ Config:
         - ' &7Location:'
         - ' &fX %x% Y %y% Z %z%'
         - ' &7Stats'
-        - '  &fKills: %kills%'
+        - '  &fKills: %kills% &7| &fKD: %kd%'
         - '  Mob Kills: %mobkills%'
         - '  Deaths: %deaths%'
         - '  Jumps: %jumps%'
@@ -32,7 +32,9 @@ Config:
         - '%blank%'
       Title:
         - '&bRealScoreBoard'
-        - '&aRealScoreBoard'
+        - '&6> &9RealScoreBoard &6<'
+        - '&a>&6> &bRealScoreBoard &6<&a<'
+        - '&6> &9RealScoreBoard &6<'
     test:
       Lines:
         - '%blank%'

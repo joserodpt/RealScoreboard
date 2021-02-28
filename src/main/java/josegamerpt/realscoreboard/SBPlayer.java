@@ -4,7 +4,6 @@ import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Data;
 import josegamerpt.realscoreboard.fastscoreboard.FastBoard;
 import josegamerpt.realscoreboard.managers.AnimationManager;
-import josegamerpt.realscoreboard.managers.TitleManager;
 import josegamerpt.realscoreboard.utils.Placeholders;
 import josegamerpt.realscoreboard.utils.Text;
 import org.bukkit.entity.Player;
@@ -33,8 +32,6 @@ public class SBPlayer {
             Config.save();
         }
 
-        AnimationManager.executeFor(p);
-
         if (Config.file().getBoolean("PlayerData." + p.getName() + ".ScoreboardON")) {
             if (!Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()))
                 start();
@@ -56,7 +53,6 @@ public class SBPlayer {
 
     public void start() {
         stop();
-        
         scoreboard = new FastBoard(p);
 
         br = new BukkitRunnable() {
@@ -69,16 +65,14 @@ public class SBPlayer {
                         List<String> send = new ArrayList<>();
 
                         for (String it : lista) {
-                            String place = Placeholders.setPlaceHolders(p, it);
-
                             if (it.equalsIgnoreCase("%blank%")) {
                                 send.add(Text.randomColor() + "§r" + Text.randomColor());
                             } else {
-                                send.add(place);
+                                send.add(Placeholders.setPlaceHolders(p, it));
                             }
                         }
 
-                        scoreboard.updateTitle(TitleManager.getTitleAnimation(p));
+                        scoreboard.updateTitle(AnimationManager.getTitleAnimation(p));
                         scoreboard.updateLines(send);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -86,7 +80,7 @@ public class SBPlayer {
                 }
 
             }
-        }.runTaskTimer(RealScoreboard.getPL(), 0L, AnimationManager.refresh);
+        }.runTaskTimer(RealScoreboard.getPlugin(), 0L, Config.file().getInt("Config.Scoreboard-Refresh"));
     }
 
 
@@ -97,12 +91,12 @@ public class SBPlayer {
             if (!Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName())) {
                 start();
             }
-            p.sendMessage(Text.color(RealScoreboard.getPrefix() + Config.file().getString("Config.Messages.Scoreboard-Toggle.ON")));
+            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
         } else {
             Config.file().set("PlayerData." + p.getName() + ".ScoreboardON", false);
             Config.save();
             stop();
-            p.sendMessage(Text.color(RealScoreboard.getPrefix() + Config.file().getString("Config.Messages.Scoreboard-Toggle.OFF")));
+            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
         }
     }
 }

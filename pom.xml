@@ -6,7 +6,7 @@
 
     <groupId>josegamerpt</groupId>
     <artifactId>RealScoreboard</artifactId>
-    <version>22-1-2021 Build 1</version>
+    <version>28-2-2021 Build 1</version>
     <packaging>jar</packaging>
 
     <name>RealScoreboard</name>
@@ -38,16 +38,8 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                        </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
                 <configuration>
                     <relocations>
                         <relocation>
@@ -56,14 +48,6 @@
                         </relocation>
                     </relocations>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
         <resources>
@@ -91,6 +75,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>savagelabs</id>
+            <url>https://nexus.savagelabs.net/repository/maven-releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -99,6 +87,11 @@
             <artifactId>spigot-api</artifactId>
             <version>1.13-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.iridium</groupId>
+            <artifactId>IridiumColorAPI</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>me.mattstudios.utils</groupId>

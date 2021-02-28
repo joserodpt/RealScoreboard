@@ -10,6 +10,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -20,24 +21,19 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class RealScoreboard extends JavaPlugin {
+    public static Boolean placeholderAPI = false;
     static Permission perms = null;
     static Economy economia = null;
     static Chat chat = null;
-    public static Boolean placeholderAPI = false;
-
     static Logger log = Bukkit.getLogger();
     static Plugin pl;
+    private static AnimationManager am;
     PluginManager pm = Bukkit.getPluginManager();
 
     CommandManager commandManager;
 
     String header = "------------------- RealScoreboard -------------------";
-
-    public static String getPrefix() {
-        return Text.color(Config.file().getString("Config.Prefix"));
-    }
 
     public static void log(Level l, String s) {
         log.log(l, s);
@@ -52,7 +48,7 @@ public class RealScoreboard extends JavaPlugin {
         return economia;
     }
 
-    public static Plugin getPL() {
+    public static Plugin getPlugin() {
         return pl;
     }
 
@@ -66,6 +62,25 @@ public class RealScoreboard extends JavaPlugin {
 
     public static String getVersion() {
         return pl.getDescription().getVersion();
+    }
+
+    public static void reload(CommandSender cs) {
+        PlayerManager.players.forEach(SBPlayer::stop);
+        am.cancelAnimationTasks();
+        Config.reload();
+
+        if (Configer.checkForErrors()) {
+            String msg = "There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.";
+            Text.send(cs, msg);
+        } else {
+            am = new AnimationManager();
+            PlayerManager.players.forEach(SBPlayer::start);
+        }
+    }
+
+    static void failMessage(String reason) {
+        Arrays.asList("Failed to load RealScoreboard.", reason,
+                "If you think this is a bug, please contact JoseGamer_PT.", "https://www.spigotmc.org/members/josegamer_pt.40267/").forEach(s -> log(Level.INFO, s));
     }
 
     public void onEnable() {
@@ -97,30 +112,28 @@ public class RealScoreboard extends JavaPlugin {
             log(Level.INFO, header);
             disablePlugin();
         } else {
-            AnimationManager.refresh = Config.file().getInt("Config.Scoreboard-Refresh");
 
             pm.registerEvents(new PlayerManager(), this);
 
             commandManager = new CommandManager(this);
+            commandManager.hideTabComplete(true);
             commandManager.register(new CMD());
 
-            AnimationManager.startAnimations();
-
+            am = new AnimationManager();
             Bukkit.getOnlinePlayers().forEach(PlayerManager::loadPlayer);
 
             new Metrics(this, 10080);
 
-            Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion(), "Plugin Version: " + getDescription().getVersion()).forEach(s -> log(Level.INFO, s));
+            Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> log(Level.INFO, s));
             log(Level.INFO, header);
         }
     }
 
-    private void failMessage(String reason) {
-        Arrays.asList("Failed to load RealScoreboard.", reason,
-                "If you think this is a bug, please contact JoseGamer_PT.", "https://www.spigotmc.org/members/josegamer_pt.40267/").forEach(s -> log(Level.INFO, s));
-    }
-
     private void disablePlugin() {
+        if (am != null) {
+            am.cancelAnimationTasks();
+        }
+
         HandlerList.unregisterAll(this);
 
         Bukkit.getPluginManager().disablePlugin(this);

@@ -152,7 +152,7 @@ public class Placeholders {
 
     public static String setPlaceHolders(Player p, String s) {
         try {
-            String placeholders = s.replaceAll("&", "§").replaceAll("%playername%", p.getName())
+            String placeholders = s.replaceAll("%playername%", p.getName())
                     .replaceAll("%loc%", cords(p))
                     .replaceAll("%life%", p.getHealth() + "")
                     .replaceAll("%time%", time())
@@ -174,13 +174,15 @@ public class Placeholders {
                     .replaceAll("%pitch%", String.valueOf(p.getLocation().getPitch()))
                     .replaceAll("%group%", getGroup(p))
                     .replaceAll("%money%", Text.formatMoney(money(p)))
+                    .replaceAll("%moneylong%", Text.formatMoneyLong(money(p)))
                     .replaceAll("%displayname%", p.getDisplayName())
                     .replaceAll("%xp%", p.getTotalExperience() + "")
                     .replaceAll("%x%", p.getLocation().getBlockX() + "")
                     .replaceAll("%y%", p.getLocation().getBlockY() + "")
                     .replaceAll("%z%", p.getLocation().getBlockZ() + "")
+                    .replaceAll("%rainbow%", Text.getRainbow())
                     .replaceAll("%playtime%", Text.formatTime(stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
-            return placeholderAPI(p, placeholders);
+            return placeholderAPI(p, Text.color(placeholders));
         } catch (Exception ignored) {
             ignored.printStackTrace();
         }
