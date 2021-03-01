@@ -1,10 +1,6 @@
 package josegamerpt.realscoreboard.config;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import josegamerpt.realscoreboard.RealScoreboard;
-import josegamerpt.realscoreboard.utils.Text;
 import org.bukkit.entity.Player;
 
 public class Data {
@@ -13,7 +9,7 @@ public class Data {
         return new ArrayList<>(Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false));
     }
 
-    public static String getCorrectPlace (Player p) {
+    public static String getCorrectPlace(Player p) {
         return checkSystem(p) ? p.getLocation().getWorld().getName() : Data.getRegisteredWorlds().get(0);
     }
 

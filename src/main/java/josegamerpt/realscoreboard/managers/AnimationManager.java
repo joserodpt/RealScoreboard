@@ -24,15 +24,14 @@ public class AnimationManager {
         start();
     }
 
-    public void start()
-    {
+    public void start() {
         loadAnimations();
         runLoopers();
     }
 
     private void loadAnimations() {
         //titles
-        for(String path : Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false)){
+        for (String path : Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false)) {
             titleAnim.put(path, new TextLooper(path, Config.file().getStringList("Config.Scoreboard." + path + ".Title")));
         }
         //loops
@@ -48,12 +47,7 @@ public class AnimationManager {
     }
 
     public void stop() {
-        if (title != null && !title.isCancelled()) {
-            title.cancel();
-        }
-        if (looper != null && !looper.isCancelled()) {
-            looper.cancel();
-        }
+        cancelAnimationTasks();
 
         titleAnim.clear();
         loopAnimations.clear();
@@ -81,4 +75,8 @@ public class AnimationManager {
         }.runTaskTimerAsynchronously(plugin, 0L, Config.file().getInt("Config.Animations.Loop-Delay"));
     }
 
+    public void reload() {
+        stop();
+        start();
+    }
 }

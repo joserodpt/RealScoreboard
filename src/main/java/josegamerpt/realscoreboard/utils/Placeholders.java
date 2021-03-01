@@ -150,11 +150,34 @@ public class Placeholders {
         return "0";
     }
 
+    private static String lifeHeart(long round) {
+        String heart = "❤";
+        if (round <= 5)
+        {
+            return "&c" + heart;
+        }
+        if (round <= 10)
+        {
+            return "&e" + heart;
+        }
+        if (round <= 15)
+        {
+            return "&6" + heart;
+        }
+        if (round <= 20)
+        {
+            return "&a" + heart;
+        }
+        return heart;
+    }
+
+
     public static String setPlaceHolders(Player p, String s) {
         try {
             String placeholders = s.replaceAll("%playername%", p.getName())
                     .replaceAll("%loc%", cords(p))
-                    .replaceAll("%life%", p.getHealth() + "")
+                    .replaceAll("%life%", Math.round(p.getHealth()) + "")
+                    .replaceAll("%lifeheart%", lifeHeart(Math.round(p.getHealth())) + "")
                     .replaceAll("%time%", time())
                     .replaceAll("%day%", day())
                     .replaceAll("%serverip%", serverIP())
@@ -188,6 +211,7 @@ public class Placeholders {
         }
         return "RealScoreboard";
     }
+
 
     private static String placeholderAPI(Player p, String placeholders) {
         return RealScoreboard.placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;

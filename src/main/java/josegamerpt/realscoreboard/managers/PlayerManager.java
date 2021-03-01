@@ -1,69 +1,42 @@
 package josegamerpt.realscoreboard.managers;
 
 import josegamerpt.realscoreboard.RealScoreboard;
-import josegamerpt.realscoreboard.classes.SBPlayer;
 import josegamerpt.realscoreboard.config.Config;
+import josegamerpt.realscoreboard.fastscoreboard.FastBoard;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
 
 public class PlayerManager implements Listener {
 
-    public static ArrayList<SBPlayer> players = new ArrayList<>();
+    public static HashMap<Player, FastBoard> sb = new HashMap<>();
 
-    public static SBPlayer getPlayer(Player p) {
-        for (SBPlayer player : players) {
-            return player.getPlayer() == p ? player : null;
+    public static void load(Player p) {
+        sb.put(p, new FastBoard(p));
+        if (Config.file().getConfigurationSection("PlayerData." + p.getName()) == null) {
+            RealScoreboard.log(Level.INFO, "Creating Player Data for " + p.getName());
+            Config.file().set("PlayerData." + p.getName() + ".ScoreboardON", true);
+            Config.save();
         }
-        return null;
-    }
-
-    public static void loadPlayer(Player p) {
-        players.add(new SBPlayer(p));
-    }
-
-    private static void unloadPlayer(SBPlayer sb) {
-        players.remove(sb);
+        if (!Config.file().contains("PlayerData." + p.getName() + ".ScoreboardON")) {
+            Config.file().set("PlayerData." + p.getName() + ".ScoreboardON", true);
+            Config.save();
+        }
     }
 
     @EventHandler
     public void join(PlayerJoinEvent e) {
-        loadPlayer(e.getPlayer());
+        load(e.getPlayer());
     }
 
     @EventHandler
     public void leave(PlayerQuitEvent e) {
-        SBPlayer sb = PlayerManager.getPlayer(e.getPlayer());
-        if (sb != null) {
-            sb.stop();
-            PlayerManager.unloadPlayer(sb);
-        }
+        sb.remove(e.getPlayer());
     }
 
-    @EventHandler
-    public void changeWorld(PlayerChangedWorldEvent e) {
-        SBPlayer player = PlayerManager.getPlayer(e.getPlayer());
-
-        new BukkitRunnable() {
-            public void run() {
-                if (Config.file().getList("Config.Disabled-Worlds").contains(e.getPlayer().getWorld().getName())) {
-                    if (player != null) {
-                        player.stop();
-                    }
-                } else {
-                    if (Config.file().getBoolean("PlayerData." + e.getPlayer().getName() + ".ScoreboardON")) {
-                        if (player != null) {
-                            player.start();
-                        }
-                    }
-                }
-            }
-        }.runTaskLaterAsynchronously(RealScoreboard.getPlugin(), 5);
-    }
 }
