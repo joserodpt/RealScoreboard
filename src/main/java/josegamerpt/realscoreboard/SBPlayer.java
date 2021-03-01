@@ -80,7 +80,7 @@ public class SBPlayer {
                 }
 
             }
-        }.runTaskTimer(RealScoreboard.getPlugin(), 0L, Config.file().getInt("Config.Scoreboard-Refresh"));
+        }.runTaskTimerAsynchronously(RealScoreboard.getPlugin(), 0L, Config.file().getInt("Config.Scoreboard-Refresh"));
     }
 
 
