@@ -1,11 +1,12 @@
-package josegamerpt.realscoreboard;
+package josegamerpt.realscoreboard.classes;
 
+import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Data;
 import josegamerpt.realscoreboard.fastscoreboard.FastBoard;
-import josegamerpt.realscoreboard.managers.AnimationManager;
 import josegamerpt.realscoreboard.utils.Placeholders;
 import josegamerpt.realscoreboard.utils.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -16,9 +17,9 @@ import java.util.logging.Level;
 
 public class SBPlayer {
 
-    public Player p;
-    public FastBoard scoreboard;
-    public BukkitTask br;
+    private Player p;
+    private FastBoard scoreboard;
+    private BukkitTask br;
 
     public SBPlayer(Player p) {
         this.p = p;
@@ -57,7 +58,6 @@ public class SBPlayer {
 
         br = new BukkitRunnable() {
             public void run() {
-                if (scoreboard != null && !scoreboard.isDeleted()) {
                     try {
                         List<String> lista = Config.file()
                                 .getStringList("Config.Scoreboard." + Data.getCorrectPlace(p) + ".Lines");
@@ -72,15 +72,13 @@ public class SBPlayer {
                             }
                         }
 
-                        scoreboard.updateTitle(AnimationManager.getTitleAnimation(p));
+                        scoreboard.updateTitle(RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName()));
                         scoreboard.updateLines(send);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-
             }
-        }.runTaskTimerAsynchronously(RealScoreboard.getPlugin(), 0L, Config.file().getInt("Config.Scoreboard-Refresh"));
+        }.runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("RealScoreboard"), 0L, Config.file().getInt("Config.Scoreboard-Refresh"));
     }
 
 
@@ -98,5 +96,9 @@ public class SBPlayer {
             stop();
             Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
         }
+    }
+
+    public Player getPlayer() {
+        return this.p;
     }
 }

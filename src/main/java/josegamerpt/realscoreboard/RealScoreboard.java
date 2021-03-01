@@ -1,5 +1,7 @@
 package josegamerpt.realscoreboard;
 
+import josegamerpt.realscoreboard.classes.Metrics;
+import josegamerpt.realscoreboard.classes.SBPlayer;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Configer;
 import josegamerpt.realscoreboard.managers.AnimationManager;
@@ -64,17 +66,20 @@ public class RealScoreboard extends JavaPlugin {
         return pl.getDescription().getVersion();
     }
 
+    public static AnimationManager getAnimationManager()
+    {
+        return am;
+    }
+
     public static void reload(CommandSender cs) {
-        PlayerManager.players.forEach(SBPlayer::stop);
-        am.cancelAnimationTasks();
+        am.stop();
         Config.reload();
 
         if (Configer.checkForErrors()) {
             String msg = "There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.";
             Text.send(cs, msg);
         } else {
-            am = new AnimationManager();
-            PlayerManager.players.forEach(SBPlayer::start);
+            am.start();
         }
     }
 
@@ -82,6 +87,24 @@ public class RealScoreboard extends JavaPlugin {
         Arrays.asList("Failed to load RealScoreboard.", reason,
                 "If you think this is a bug, please contact JoseGamer_PT.", "https://www.spigotmc.org/members/josegamer_pt.40267/").forEach(s -> log(Level.INFO, s));
     }
+
+    public static void debug(Class a, String s) {
+        if (Config.file().getBoolean("Debug"))
+        {
+            log(Level.WARNING, getName(a) + " - " + s);
+        }
+    }
+
+
+    static String getName(Class a) {
+        Class<?> enclosingClass = a.getEnclosingClass();
+        if (enclosingClass != null) {
+            return enclosingClass.getName();
+        } else {
+            return a.getName();
+        }
+    }
+
 
     public void onEnable() {
         pl = this;
@@ -105,7 +128,7 @@ public class RealScoreboard extends JavaPlugin {
         saveDefaultConfig();
         Config.setup(this);
         log(Level.INFO, "Your config version is: " + Configer.getConfigVersion());
-        Configer.updateConfig(Configer.getConfigVersion());
+        Configer.updateConfig();
 
         if (Configer.checkForErrors()) {
             failMessage("There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.");
@@ -119,7 +142,7 @@ public class RealScoreboard extends JavaPlugin {
             commandManager.hideTabComplete(true);
             commandManager.register(new CMD());
 
-            am = new AnimationManager();
+            am = new AnimationManager(this);
             Bukkit.getOnlinePlayers().forEach(PlayerManager::loadPlayer);
 
             new Metrics(this, 10080);
@@ -141,7 +164,6 @@ public class RealScoreboard extends JavaPlugin {
 
     public void onDisable() {
         PlayerManager.players.forEach(SBPlayer::stop);
-        PlayerManager.players.clear();
     }
 
     // Vault

@@ -1,4 +1,4 @@
-package josegamerpt.realscoreboard;
+package josegamerpt.realscoreboard.classes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

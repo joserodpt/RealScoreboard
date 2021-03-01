@@ -1,3 +1,4 @@
+Debug: false
 Config:
   Prefix: '&bReal&9Scoreboard &7| &r'
   Reloaded: '&fThe config has been &areloaded&f.'
@@ -6,8 +7,8 @@ Config:
       'ON': '&fScoreboard turned &aON&f.'
       'OFF': '&fScoreboard turned &cOFF&f.'
   Animations:
-    Rainbow-Delay: 20
     Title-Delay: 20
+    Loop-Delay: 20
   Scoreboard-Refresh: 20
   Disabled-Worlds:
     - testWorld
@@ -41,7 +42,7 @@ Config:
         - ' &7Hello, &f%playername%'
         - ' &fWelcome to the server!'
         - '%blank%'
-        - ' &fYou are on: #&f%world%#'
+        - ' &fYou are on: &f%world%'
         - '%blank%'
       Title:
         - '&aFlat &bWorld'
@@ -52,4 +53,4 @@ Config:
         - '%rainbow%&l&m------------------------'
       Title:
         - '&6This is the Third scoreboard.'
-Version: 3
+Version: 4

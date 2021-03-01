@@ -1,75 +1,84 @@
 package josegamerpt.realscoreboard.managers;
 
-import josegamerpt.realscoreboard.RealScoreboard;
+import josegamerpt.realscoreboard.classes.TextLooper;
 import josegamerpt.realscoreboard.config.Config;
-import josegamerpt.realscoreboard.config.Data;
-import josegamerpt.realscoreboard.utils.Text;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.UUID;
 
 public class AnimationManager {
 
-    private BukkitTask title;
-    private BukkitTask rainbow;
-    static HashMap<UUID, String> titleAnim = new HashMap<>();
-    static int i = 0;
+    static HashMap<String, TextLooper> titleAnim = new HashMap<>();
+    static HashMap<String, TextLooper> loopAnimations = new HashMap<>();
 
-    public AnimationManager() {
-        runTitle();
-        runRainbow();
+    private JavaPlugin plugin;
+
+    private BukkitTask title;
+    private BukkitTask looper;
+
+    public AnimationManager(JavaPlugin jp) {
+        this.plugin = jp;
+        start();
+    }
+
+    public void start()
+    {
+        loadAnimations();
+        runLoopers();
+    }
+
+    private void loadAnimations() {
+        //titles
+        for(String path : Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false)){
+            titleAnim.put(path, new TextLooper(path, Config.file().getStringList("Config.Scoreboard." + path + ".Title")));
+        }
+        //loops
+        loopAnimations.put("rainbow", new TextLooper("rainbow", Arrays.asList("&c", "&6", "&e", "&a", "&b", "&9", "&3", "&d")));
+    }
+
+    public String getTitleAnimation(String s) {
+        return titleAnim.containsKey(s) ? titleAnim.get(s).get() : "? not found";
+    }
+
+    public String getLoopAnimation(String s) {
+        return loopAnimations.containsKey(s) ? loopAnimations.get(s).get() : "? not found";
+    }
+
+    public void stop() {
+        if (title != null && !title.isCancelled()) {
+            title.cancel();
+        }
+        if (looper != null && !looper.isCancelled()) {
+            looper.cancel();
+        }
+
+        titleAnim.clear();
+        loopAnimations.clear();
     }
 
     public void cancelAnimationTasks() {
         if (title != null && !title.isCancelled()) {
             title.cancel();
         }
-        if (rainbow != null && !rainbow.isCancelled()) {
-            rainbow.cancel();
+        if (looper != null && !looper.isCancelled()) {
+            looper.cancel();
         }
-        titleAnim.clear();
     }
 
-
-    private void runTitle() {
+    private void runLoopers() {
         title = new BukkitRunnable() {
             public void run() {
-                Bukkit.getOnlinePlayers().forEach(AnimationManager::startTitleAnimation);
+                titleAnim.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimer(RealScoreboard.getPlugin(), 0L, Config.file().getInt("Config.Animations.Title-Delay"));
-    }
-
-    private void runRainbow() {
-        rainbow = new BukkitRunnable() {
+        }.runTaskTimerAsynchronously(plugin, 0L, Config.file().getInt("Config.Animations.Title-Delay"));
+        looper = new BukkitRunnable() {
             public void run() {
-                Text.startAnimation();
+                loopAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimer(RealScoreboard.getPlugin(), 0L, Config.file().getInt("Config.Animations.Rainbow-Delay"));
+        }.runTaskTimerAsynchronously(plugin, 0L, Config.file().getInt("Config.Animations.Loop-Delay"));
     }
 
-    public static void startTitleAnimation(Player p) {
-        String go = "Config.Scoreboard." + Data.getCorrectPlace(p) + ".Title";
-        try {
-            if (i >= Config.file().getStringList(go).size()) {
-                i = 0;
-            }
-            titleAnim.put(p.getUniqueId(), Text.color(Config.file().getStringList(go).get(i)));
-            i++;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static String getTitleAnimation(Player p) {
-        if (titleAnim.get(p.getUniqueId()) != null)
-        {
-            return titleAnim.get(p.getUniqueId());
-        }
-        return Text.getPrefix();
-    }
 }

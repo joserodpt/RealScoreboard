@@ -1,14 +1,14 @@
 package josegamerpt.realscoreboard.managers;
 
 import josegamerpt.realscoreboard.RealScoreboard;
-import josegamerpt.realscoreboard.SBPlayer;
+import josegamerpt.realscoreboard.classes.SBPlayer;
 import josegamerpt.realscoreboard.config.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class PlayerManager implements Listener {
 
     public static SBPlayer getPlayer(Player p) {
         for (SBPlayer player : players) {
-            return player.p == p ? player : null;
+            return player.getPlayer() == p ? player : null;
         }
         return null;
     }
@@ -47,20 +47,23 @@ public class PlayerManager implements Listener {
     }
 
     @EventHandler
-    public void changeWorld(PlayerTeleportEvent e) {
+    public void changeWorld(PlayerChangedWorldEvent e) {
+        SBPlayer player = PlayerManager.getPlayer(e.getPlayer());
+
         new BukkitRunnable() {
             public void run() {
                 if (Config.file().getList("Config.Disabled-Worlds").contains(e.getPlayer().getWorld().getName())) {
-                    PlayerManager.getPlayer(e.getPlayer()).stop();
+                    if (player != null) {
+                        player.stop();
+                    }
                 } else {
                     if (Config.file().getBoolean("PlayerData." + e.getPlayer().getName() + ".ScoreboardON")) {
-                        SBPlayer player = PlayerManager.getPlayer(e.getPlayer());
                         if (player != null) {
                             player.start();
                         }
                     }
                 }
             }
-        }.runTaskLater(RealScoreboard.getPlugin(), 5);
+        }.runTaskLaterAsynchronously(RealScoreboard.getPlugin(), 5);
     }
 }

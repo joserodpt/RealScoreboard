@@ -180,7 +180,7 @@ public class Placeholders {
                     .replaceAll("%x%", p.getLocation().getBlockX() + "")
                     .replaceAll("%y%", p.getLocation().getBlockY() + "")
                     .replaceAll("%z%", p.getLocation().getBlockZ() + "")
-                    .replaceAll("%rainbow%", Text.getRainbow())
+                    .replaceAll("%rainbow%", RealScoreboard.getAnimationManager().getLoopAnimation("rainbow"))
                     .replaceAll("%playtime%", Text.formatTime(stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
             return placeholderAPI(p, Text.color(placeholders));
         } catch (Exception ignored) {

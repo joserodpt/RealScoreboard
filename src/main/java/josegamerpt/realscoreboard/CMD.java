@@ -1,5 +1,6 @@
 package josegamerpt.realscoreboard;
 
+import josegamerpt.realscoreboard.classes.SBPlayer;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.utils.Text;

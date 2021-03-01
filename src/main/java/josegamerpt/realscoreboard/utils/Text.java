@@ -1,39 +1,23 @@
 package josegamerpt.realscoreboard.utils;
 
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.config.Config;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public class Text {
-    static final List<String> lista = Arrays.asList("&c", "&6", "&e", "&a", "&b", "&9", "&3", "&d");
-    static final Random random = new Random();
     static final String[] time = {"s", "m", "h", "h", "h", "h", "h", "h", "h"};
     static String[] money = {"", "k", "m", "b", "t", "q", "qi", "s", "sep", "OC", "N", "DEC", "UN", "DUO", "TRE"};
-    private static int i = 1;
-    private static String texto = "";
 
     public static String color(final String message) {
         return IridiumColorAPI.process(message);
-    }
-
-    public static void startAnimation() {
-        int s = lista.size();
-        try {
-            if (i >= s)
-                i = 0;
-            texto = lista.get(i);
-            i++;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public static String formatMoney(double value) {
@@ -61,11 +45,7 @@ public class Text {
     }
 
     public static String randomColor() {
-        return color(lista.get(random.nextInt(lista.size() - 1)));
-    }
-
-    public static String getRainbow() {
-        return texto;
+        return ChatColor.translateAlternateColorCodes('&', RealScoreboard.getAnimationManager().getLoopAnimation("rainbow") + "&6");
     }
 
     public static void send(CommandSender commandSender, List<String> asList) {
