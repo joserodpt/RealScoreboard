@@ -10,25 +10,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class ScoreboardTask extends BukkitRunnable {
 
-    private RealScoreboard plugin;
-
-    public ScoreboardTask(RealScoreboard rs) {
-        this.plugin = rs;
-    }
-
     @Override
     public void run() {
         for (Map.Entry<Player, FastBoard> playerFastBoardEntry : PlayerManager.sb.entrySet()) {
-            Map.Entry<Player, FastBoard> pair = playerFastBoardEntry;
-            Player p = pair.getKey();
+            Player p = playerFastBoardEntry.getKey();
+            FastBoard fb = playerFastBoardEntry.getValue();
 
-            FastBoard fb = pair.getValue();
             if (Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()) || !Config.file().getBoolean("PlayerData." + p.getName() + ".ScoreboardON")) {
                 if (!fb.isDeleted() || fb.getLines().size() != 0) {
                     fb.updateLines();

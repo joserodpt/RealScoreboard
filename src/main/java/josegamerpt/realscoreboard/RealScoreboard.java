@@ -145,7 +145,7 @@ public class RealScoreboard extends JavaPlugin {
 
     public void runTask()
     {
-        sbTask = new ScoreboardTask(this);
+        sbTask = new ScoreboardTask();
         sbTask.runTaskTimerAsynchronously(this, Config.file().getInt("Config.Scoreboard-Refresh"), Config.file().getInt("Config.Scoreboard-Refresh"));
     }
 
