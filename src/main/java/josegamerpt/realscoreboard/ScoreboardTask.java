@@ -1,5 +1,6 @@
 package josegamerpt.realscoreboard;
 
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Data;
 import josegamerpt.realscoreboard.fastscoreboard.FastBoard;
@@ -42,8 +43,8 @@ public class ScoreboardTask extends BukkitRunnable {
                     }
                 }
 
-                fb.updateTitle(RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName()));
-                fb.updateLines(send);
+                fb.updateTitle(IridiumColorAPI.process(RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName())));
+                fb.updateLines(IridiumColorAPI.process(send));
             } catch (Exception e) {
                 e.printStackTrace();
             }

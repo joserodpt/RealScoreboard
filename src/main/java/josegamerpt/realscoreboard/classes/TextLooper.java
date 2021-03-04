@@ -21,7 +21,7 @@ public class TextLooper {
         if (this.i >= this.list.size()) {
             this.i = 0;
         }
-        this.get = Text.color(list.get(i));
+        this.get = list.get(i);
         this.i++;
     }
 

@@ -85,7 +85,7 @@ public class Placeholders {
                 if (w == null) {
                     return "None";
                 }
-                return Text.color(w);
+                return w;
             } catch (UnsupportedOperationException e)
             {
                 return "No Perm Plugin";
@@ -106,7 +106,7 @@ public class Placeholders {
             if (prefix == null) {
                 return "None";
             }
-            return Text.color(prefix);
+            return prefix;
         } else {
             return "Missing Vault";
         }
@@ -122,7 +122,7 @@ public class Placeholders {
             if (prefix == null) {
                 return "None";
             }
-            return Text.color(prefix);
+            return prefix;
         } else {
             return "Missing Vault";
         }
@@ -205,7 +205,7 @@ public class Placeholders {
                     .replaceAll("%z%", p.getLocation().getBlockZ() + "")
                     .replaceAll("%rainbow%", RealScoreboard.getAnimationManager().getLoopAnimation("rainbow"))
                     .replaceAll("%playtime%", Text.formatTime(stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
-            return placeholderAPI(p, Text.color(placeholders));
+            return placeholderAPI(p, placeholders);
         } catch (Exception ignored) {
             ignored.printStackTrace();
         }
