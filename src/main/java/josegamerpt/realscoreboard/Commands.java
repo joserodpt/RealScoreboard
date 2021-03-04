@@ -59,6 +59,6 @@ public class Commands extends CommandBase {
                 "&fScoreboard refresh: &7" + Config.file().getInt("Config.Scoreboard-Refresh"),
                 "> &f&nAnimations",
                 "  &fTitle Delay: &7" + Config.file().getInt("Config.Animations.Title-Delay"),
-                "  &fRainbow Delay: &7" + Config.file().getInt("Config.Animations.Rainbow-Delay")));
+                "  &fLoop-Delay: &7" + Config.file().getInt("Config.Animations.Loop-Delay")));
     }
 }

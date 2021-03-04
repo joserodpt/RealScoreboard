@@ -2,6 +2,7 @@ package josegamerpt.realscoreboard.managers;
 
 import josegamerpt.realscoreboard.classes.TextLooper;
 import josegamerpt.realscoreboard.config.Config;
+import josegamerpt.realscoreboard.config.Data;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -39,7 +40,7 @@ public class AnimationManager {
     }
 
     public String getTitleAnimation(String s) {
-        return titleAnim.containsKey(s) ? titleAnim.get(s).get() : "? not found";
+        return titleAnim.containsKey(s) ? titleAnim.get(s).get() : titleAnim.get(Data.getRegisteredWorlds().get(0)).get();
     }
 
     public String getLoopAnimation(String s) {
