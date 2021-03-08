@@ -18,7 +18,7 @@ public class Placeholders {
 
     public static int ping(Player p) {
         try {
-            CPClass = Class.forName("org.bukkit.craftbukkit." + RealScoreboard.getServerVersion() + ".entity.CraftPlayer");
+            CPClass = Class.forName("org.bukkit.craftbukkit." + RealScoreboard.getInstance().getServerVersion() + ".entity.CraftPlayer");
             Object CraftPlayer = CPClass.cast(p);
 
             Method getHandle = CraftPlayer.getClass().getMethod("getHandle");
@@ -78,16 +78,14 @@ public class Placeholders {
     }
 
     private static String getGroup(Player p) {
-        if (RealScoreboard.getPerms() != null)
-        {
+        if (RealScoreboard.getInstance().getPerms() != null) {
             try {
-                String w = RealScoreboard.getPerms().getPrimaryGroup(p);
+                String w = RealScoreboard.getInstance().getPerms().getPrimaryGroup(p);
                 if (w == null) {
                     return "None";
                 }
                 return w;
-            } catch (UnsupportedOperationException e)
-            {
+            } catch (UnsupportedOperationException e) {
                 return "No Perm Plugin";
             }
         } else {
@@ -97,9 +95,9 @@ public class Placeholders {
     }
 
     private static String prefix(Player p) {
-        if (RealScoreboard.getChat() != null) {
-            String grupo = RealScoreboard.getChat().getPrimaryGroup(p);
-            String prefix = RealScoreboard.getChat().getGroupPrefix(p.getWorld(), grupo);
+        if (RealScoreboard.getInstance().getChat() != null) {
+            String grupo = RealScoreboard.getInstance().getChat().getPrimaryGroup(p);
+            String prefix = RealScoreboard.getInstance().getChat().getGroupPrefix(p.getWorld(), grupo);
             if (grupo == null) {
                 return "None";
             }
@@ -113,9 +111,9 @@ public class Placeholders {
     }
 
     private static String sufix(Player p) {
-        if (RealScoreboard.getChat() != null) {
-            String grupo = RealScoreboard.getChat().getPrimaryGroup(p);
-            String prefix = RealScoreboard.getChat().getGroupSuffix(p.getWorld(), grupo);
+        if (RealScoreboard.getInstance().getChat() != null) {
+            String grupo = RealScoreboard.getInstance().getChat().getPrimaryGroup(p);
+            String prefix = RealScoreboard.getInstance().getChat().getGroupSuffix(p.getWorld(), grupo);
             if (grupo == null) {
                 return "None";
             }
@@ -129,10 +127,10 @@ public class Placeholders {
     }
 
     private static double money(Player p) {
-        if (RealScoreboard.getEconomy() == null) {
+        if (RealScoreboard.getInstance().getEconomy() == null) {
             return -1D;
         }
-        return RealScoreboard.getEconomy().getBalance(p);
+        return RealScoreboard.getInstance().getEconomy().getBalance(p);
     }
 
     private static int stats(Player p, Statistic s) {
@@ -142,30 +140,26 @@ public class Placeholders {
     private static String getKD(Player p) {
         int kills = p.getStatistic(Statistic.PLAYER_KILLS);
         int deaths = p.getStatistic(Statistic.DEATHS);
-      
+
         if (deaths != 0) {
-          String send = (kills / deaths) + "";
-          return send.contains(".") ? send.substring(0, send.indexOf(".")) : send;
-        } 
+            String send = (kills / deaths) + "";
+            return send.contains(".") ? send.substring(0, send.indexOf(".")) : send;
+        }
         return "0";
     }
 
     private static String lifeHeart(long round) {
         String heart = "❤";
-        if (round <= 5)
-        {
+        if (round <= 5) {
             return "&c" + heart;
         }
-        if (round <= 10)
-        {
+        if (round <= 10) {
             return "&e" + heart;
         }
-        if (round <= 15)
-        {
+        if (round <= 15) {
             return "&6" + heart;
         }
-        if (round <= 20)
-        {
+        if (round <= 20) {
             return "&a" + heart;
         }
         return heart;
@@ -173,47 +167,42 @@ public class Placeholders {
 
 
     public static String setPlaceHolders(Player p, String s) {
-        try {
-            String placeholders = s.replaceAll("%playername%", p.getName())
-                    .replaceAll("%loc%", cords(p))
-                    .replaceAll("%life%", Math.round(p.getHealth()) + "")
-                    .replaceAll("%lifeheart%", lifeHeart(Math.round(p.getHealth())) + "")
-                    .replaceAll("%time%", time())
-                    .replaceAll("%day%", day())
-                    .replaceAll("%serverip%", serverIP())
-                    .replaceAll("%version%", getVersion())
-                    .replaceAll("%ping%", ping(p) + " ms")
-                    .replaceAll("%ram%", ram())
-                    .replaceAll("%jumps%", "" + stats(p, Statistic.JUMP))
-                    .replaceAll("%mobkills%", "" + stats(p, Statistic.MOB_KILLS))
-                    .replaceAll("%world%", getWorldName(p)).replaceAll("%port%", String.valueOf(port()))
-                    .replaceAll("%maxplayers%", String.valueOf(maxPlayers()))
-                    .replaceAll("%online%", String.valueOf(onlinePlayers()))
-                    .replaceAll("%prefix%", prefix(p))
-                    .replaceAll("%suffix%", sufix(p)).replaceAll("%yaw%", String.valueOf(p.getLocation().getYaw()))
-                    .replaceAll("%kills%", String.valueOf(stats(p, Statistic.PLAYER_KILLS)))
-                    .replaceAll("%deaths%", String.valueOf(stats(p, Statistic.DEATHS)))
-                    .replaceAll("%kd%", getKD(p))
-                    .replaceAll("%pitch%", String.valueOf(p.getLocation().getPitch()))
-                    .replaceAll("%group%", getGroup(p))
-                    .replaceAll("%money%", Text.formatMoney(money(p)))
-                    .replaceAll("%moneylong%", Text.formatMoneyLong(money(p)))
-                    .replaceAll("%displayname%", p.getDisplayName())
-                    .replaceAll("%xp%", p.getTotalExperience() + "")
-                    .replaceAll("%x%", p.getLocation().getBlockX() + "")
-                    .replaceAll("%y%", p.getLocation().getBlockY() + "")
-                    .replaceAll("%z%", p.getLocation().getBlockZ() + "")
-                    .replaceAll("%rainbow%", RealScoreboard.getAnimationManager().getLoopAnimation("rainbow"))
-                    .replaceAll("%playtime%", Text.formatTime(stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
-            return placeholderAPI(p, placeholders);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
-        return "RealScoreboard";
+        String placeholders = s.replaceAll("%playername%", p.getName())
+                .replaceAll("%loc%", cords(p))
+                .replaceAll("%life%", Math.round(p.getHealth()) + "")
+                .replaceAll("%lifeheart%", lifeHeart(Math.round(p.getHealth())) + "")
+                .replaceAll("%time%", time())
+                .replaceAll("%day%", day())
+                .replaceAll("%serverip%", serverIP())
+                .replaceAll("%version%", getVersion())
+                .replaceAll("%ping%", ping(p) + " ms")
+                .replaceAll("%ram%", ram())
+                .replaceAll("%jumps%", "" + stats(p, Statistic.JUMP))
+                .replaceAll("%mobkills%", "" + stats(p, Statistic.MOB_KILLS))
+                .replaceAll("%world%", getWorldName(p)).replaceAll("%port%", String.valueOf(port()))
+                .replaceAll("%maxplayers%", String.valueOf(maxPlayers()))
+                .replaceAll("%online%", String.valueOf(onlinePlayers()))
+                .replaceAll("%prefix%", prefix(p))
+                .replaceAll("%suffix%", sufix(p)).replaceAll("%yaw%", String.valueOf(p.getLocation().getYaw()))
+                .replaceAll("%kills%", String.valueOf(stats(p, Statistic.PLAYER_KILLS)))
+                .replaceAll("%deaths%", String.valueOf(stats(p, Statistic.DEATHS)))
+                .replaceAll("%kd%", getKD(p))
+                .replaceAll("%pitch%", String.valueOf(p.getLocation().getPitch()))
+                .replaceAll("%group%", getGroup(p))
+                .replaceAll("%money%", Text.formatMoney(money(p)))
+                .replaceAll("%moneylong%", Text.formatMoneyLong(money(p)))
+                .replaceAll("%displayname%", p.getDisplayName())
+                .replaceAll("%xp%", p.getTotalExperience() + "")
+                .replaceAll("%x%", p.getLocation().getBlockX() + "")
+                .replaceAll("%y%", p.getLocation().getBlockY() + "")
+                .replaceAll("%z%", p.getLocation().getBlockZ() + "")
+                .replaceAll("%rainbow%", RealScoreboard.getInstance().getAnimationManager().getLoopAnimation("rainbow"))
+                .replaceAll("%playtime%", Text.formatTime(stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
+        return placeholderAPI(p, placeholders);
     }
 
 
     private static String placeholderAPI(Player p, String placeholders) {
-        return RealScoreboard.placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
+        return RealScoreboard.getInstance().placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
     }
 }

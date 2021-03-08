@@ -2,14 +2,13 @@ package josegamerpt.realscoreboard;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 @DatabaseTable(tableName = "playerdata")
 public class PlayerData {
     @DatabaseField(columnName = "uuid", canBeNull = false, id = true)
-    private @NotNull UUID uuid;
+    private UUID uuid;
 
     @DatabaseField(columnName = "scoreboard_on")
     private boolean scoreboardON;
@@ -31,6 +30,7 @@ public class PlayerData {
         this.scoreboardON = true;
     }
 
+    // OrmLite needs a No Args constructor
     public PlayerData() {
     }
 
