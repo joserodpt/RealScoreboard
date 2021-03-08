@@ -10,27 +10,24 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class Config implements Listener {
 
-    static FileConfiguration data;
-    static File dfile;
+    private static FileConfiguration data;
+    private static File dfile;
 
-    static File sqlFile;
-    static FileConfiguration sql;
-    Plugin p;
+    private static File sqlFile;
+    private static FileConfiguration sql;
 
-    public static void setup(Plugin p) {
-        dfile = new File(p.getDataFolder(), "config.yml");
-        sqlFile = new File(p.getDataFolder(), "sql.yml");
+    public static void setup(JavaPlugin javaPlugin) {
+        dfile = new File(javaPlugin.getDataFolder(), "config.yml");
+        sqlFile = new File(javaPlugin.getDataFolder(), "sql.yml");
         if (!dfile.exists()) {
-            try {
-                dfile.createNewFile();
-            } catch (IOException localIOException) {
-            }
+            javaPlugin.saveResource("config.yml", false);
         }
         if (!sqlFile.exists()) {
-            p.saveResource("sql.yml", false);
+            javaPlugin.saveResource("sql.yml", false);
         }
         data = YamlConfiguration.loadConfiguration(dfile);
         sql = YamlConfiguration.loadConfiguration(sqlFile);
@@ -54,9 +51,5 @@ public class Config implements Listener {
 
     public static void reload() {
         data = YamlConfiguration.loadConfiguration(dfile);
-    }
-
-    public PluginDescriptionFile desc() {
-        return this.p.getDescription();
     }
 }

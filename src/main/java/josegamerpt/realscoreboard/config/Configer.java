@@ -57,10 +57,10 @@ public class Configer {
                     Config.save();
                     break;
             }
-            RealScoreboard.log(Level.INFO, "Config file updated to version " + newconfig + ".");
+            RealScoreboard.getInstance().getLogger().info("Config file updated to version " + newconfig + ".");
         }
         if (getConfigVersion() == latest) {
-            RealScoreboard.log(Level.INFO, "Your config file is updated to the latest version.");
+            RealScoreboard.getInstance().getLogger().info("Your config file is updated to the latest version.");
         }
     }
 

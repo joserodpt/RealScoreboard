@@ -11,47 +11,42 @@ import josegamerpt.realscoreboard.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ScoreboardTask extends BukkitRunnable {
 
     @Override
     public void run() {
         for (Map.Entry<Player, FastBoard> playerFastBoardEntry : PlayerManager.sb.entrySet()) {
-            Player p = playerFastBoardEntry.getKey();
-            FastBoard fb = playerFastBoardEntry.getValue();
-            PlayerData playerData = RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId());
-            if (Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()) || !playerData.isScoreboardON()) {
-                if (!fb.isDeleted() || fb.getLines().size() != 0) {
-                    fb.updateLines();
+            Player player = playerFastBoardEntry.getKey();
+            FastBoard fastBoard = playerFastBoardEntry.getValue();
+            PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(player.getUniqueId());
+            if (Config.file().getList("Config.Disabled-Worlds").contains(player.getWorld().getName()) || !playerData.isScoreboardON()) {
+                if (!fastBoard.isDeleted() || fastBoard.getLines().size() != 0) {
+                    fastBoard.updateLines();
                 }
                 return;
             }
 
             try {
-                List<String> lista = Config.file()
-                        .getStringList("Config.Scoreboard." + Data.getCorrectPlace(p) + ".Lines");
-
-                List<String> send = new ArrayList<>();
-
-                for (String string : lista) {
+                List<String> scoreboardLines = Config.file().getStringList("Config.Scoreboard." + Data.getCorrectPlace(player) + ".Lines").stream().map(string -> {
                     if (string.equalsIgnoreCase("%blank%")) {
-                        send.add(Text.randomColor() + "§r" + Text.randomColor());
+                        return Text.randomColor() + "§r" + Text.randomColor();
                     } else {
-                        send.add(Placeholders.setPlaceHolders(p, string));
+                        return Placeholders.setPlaceHolders(player, string);
                     }
-                }
+                }).collect(Collectors.toList());
 
-                String title = RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName());
+                String title = RealScoreboard.getInstance().getAnimationManager().getTitleAnimation(player.getWorld().getName());
 
                 if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
-                    title = Placeholders.setPlaceHolders(p, title);
+                    title = Placeholders.setPlaceHolders(player, title);
                 }
 
-                fb.updateTitle(IridiumColorAPI.process(title));
-                fb.updateLines(IridiumColorAPI.process(send));
+                fastBoard.updateTitle(IridiumColorAPI.process(title));
+                fastBoard.updateLines(IridiumColorAPI.process(scoreboardLines));
             } catch (Exception e) {
                 e.printStackTrace();
             }
