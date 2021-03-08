@@ -18,6 +18,10 @@ public class PlayerData {
         return scoreboardON;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     public void setScoreboardON(boolean scoreboardON) {
         this.scoreboardON = scoreboardON;
     }

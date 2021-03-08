@@ -21,32 +21,31 @@ public class ScoreboardTask extends BukkitRunnable {
         for (Map.Entry<Player, FastBoard> playerFastBoardEntry : PlayerManager.sb.entrySet()) {
             Player p = playerFastBoardEntry.getKey();
             FastBoard fb = playerFastBoardEntry.getValue();
-            RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId()).thenAccept(playerData -> {
-                if (Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()) || !playerData.isScoreboardON()) {
-                    if (!fb.isDeleted() || fb.getLines().size() != 0) {
-                        fb.updateLines();
-                    }
-                    return;
+            PlayerData playerData = RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId());
+            if (Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()) || !playerData.isScoreboardON()) {
+                if (!fb.isDeleted() || fb.getLines().size() != 0) {
+                    fb.updateLines();
                 }
+                return;
+            }
 
-                try {
-                    List<String> lista = Config.file()
-                            .getStringList("Config.Scoreboard." + Data.getCorrectPlace(p) + ".Lines");
+            try {
+                List<String> lista = Config.file()
+                        .getStringList("Config.Scoreboard." + Data.getCorrectPlace(p) + ".Lines");
 
-                    List<String> send = new ArrayList<>();
+                List<String> send = new ArrayList<>();
 
-                    for (String string : lista) {
-                        if (string.equalsIgnoreCase("%blank%")) {
-                            send.add(Text.randomColor() + "§r" + Text.randomColor());
-                        } else {
-                            send.add(Placeholders.setPlaceHolders(p, string));
-                        }
+                for (String string : lista) {
+                    if (string.equalsIgnoreCase("%blank%")) {
+                        send.add(Text.randomColor() + "§r" + Text.randomColor());
+                    } else {
+                        send.add(Placeholders.setPlaceHolders(p, string));
                     }
+                }
 
                 String title = RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName());
 
-                if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles"))
-                {
+                if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                     title = Placeholders.setPlaceHolders(p, title);
                 }
 
@@ -55,7 +54,6 @@ public class ScoreboardTask extends BukkitRunnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            });
         }
     }
 }

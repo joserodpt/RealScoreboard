@@ -39,11 +39,10 @@ public class Commands extends CommandBase {
     public void togglecmd(final CommandSender commandSender) {
         if (commandSender instanceof Player) {
             Player p = (Player) commandSender;
-            RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId()).thenAccept(playerData -> {
-                playerData.setScoreboardON(!playerData.isScoreboardON());
-                RealScoreboard.getDatabaseManager().savePlayerData(playerData, false);
-                Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle." + (playerData.isScoreboardON() ? "ON" : "OFF")));
-            });
+            PlayerData playerData = RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId());
+            playerData.setScoreboardON(!playerData.isScoreboardON());
+            RealScoreboard.getDatabaseManager().savePlayerData(playerData, false);
+            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle." + (playerData.isScoreboardON() ? "ON" : "OFF")));
         }
     }
 

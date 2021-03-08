@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -24,6 +25,8 @@ public class DatabaseManager {
     private final Dao<PlayerData, UUID> playerDataDao;
 
     private final JavaPlugin javaPlugin;
+
+    private final HashMap<UUID, PlayerData> playerDataCache = new HashMap<>();
 
     public DatabaseManager(JavaPlugin javaPlugin) throws SQLException {
         this.javaPlugin = javaPlugin;
@@ -39,6 +42,8 @@ public class DatabaseManager {
         TableUtils.createTableIfNotExists(connectionSource, PlayerData.class);
 
         this.playerDataDao = DaoManager.createDao(connectionSource, PlayerData.class);
+
+        getPlayerData();
     }
 
     /**
@@ -59,23 +64,22 @@ public class DatabaseManager {
         }
     }
 
-    public CompletableFuture<PlayerData> getPlayerData(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> {
-            PlayerData playerData = null;
-            try {
-                playerData = playerDataDao.queryForId(uuid);
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-            if (playerData == null) {
-                playerData = new PlayerData(uuid);
-                savePlayerData(playerData, true);
-            }
-            return playerData;
-        });
+    private void getPlayerData() {
+        try {
+            playerDataDao.queryForAll().forEach(playerData -> {
+                playerDataCache.put(playerData.getUuid(), playerData);
+            });
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public PlayerData getPlayerData(UUID uuid) {
+        return playerDataCache.getOrDefault(uuid, new PlayerData(uuid));
     }
 
     public void savePlayerData(PlayerData playerData, boolean async) {
+        playerDataCache.put(playerData.getUuid(), playerData);
         if (async) {
             Bukkit.getScheduler().runTaskAsynchronously(javaPlugin, () -> savePlayerData(playerData, false));
         } else {
