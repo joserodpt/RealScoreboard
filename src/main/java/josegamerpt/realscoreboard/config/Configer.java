@@ -7,7 +7,7 @@ import java.util.logging.Level;
 
 public class Configer {
 
-    private final static int latest = 4;
+    private final static int latest = 5;
     private static String errors;
 
     public static int getConfigVersion() {
@@ -46,6 +46,13 @@ public class Configer {
                     Config.file().set("Config.Animations.Loop-Delay", val);
                     Config.file().set("Config.Animations.Rainbow-Delay", null);
                     Config.file().set("Debug", false);
+                    Config.save();
+                    break;
+                case 4:
+                    //update to 5
+                    newconfig = 5;
+                    Config.file().set("Version", newconfig);
+                    Config.file().set("Config.Use-Placeholders-In-Scoreboard-Titles", false);
                     Config.save();
                     break;
             }

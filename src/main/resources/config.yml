@@ -2,6 +2,7 @@ Debug: false
 Config:
   Prefix: '&bReal&9Scoreboard &7| &r'
   Reloaded: '&fThe config has been &areloaded&f.'
+  Use-Placeholders-In-Scoreboard-Titles: false
   Messages:
     Scoreboard-Toggle:
       'ON': '&fScoreboard turned &aON&f.'
@@ -53,4 +54,4 @@ Config:
         - '%rainbow%&l&m------------------------'
       Title:
         - '&6This is the Third scoreboard.'
-Version: 4
+Version: 5

@@ -43,11 +43,18 @@ public class ScoreboardTask extends BukkitRunnable {
                         }
                     }
 
-                    fb.updateTitle(IridiumColorAPI.process(RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName())));
-                    fb.updateLines(IridiumColorAPI.process(send));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                String title = RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName());
+
+                if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles"))
+                {
+                    title = Placeholders.setPlaceHolders(p, title);
                 }
+
+                fb.updateTitle(IridiumColorAPI.process(title));
+                fb.updateLines(IridiumColorAPI.process(send));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             });
         }
     }
