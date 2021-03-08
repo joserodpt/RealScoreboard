@@ -14,8 +14,8 @@ import java.util.Arrays;
 public class Commands extends CommandBase {
 
     private RealScoreboard rs;
-    public Commands(RealScoreboard r)
-    {
+
+    public Commands(RealScoreboard r) {
         this.rs = r;
     }
 
@@ -39,15 +39,10 @@ public class Commands extends CommandBase {
     public void togglecmd(final CommandSender commandSender) {
         if (commandSender instanceof Player) {
             Player p = (Player) commandSender;
-            if (!Config.file().getBoolean("PlayerData." + p.getName() + ".ScoreboardON")) {
-                Config.file().set("PlayerData." + p.getName() + ".ScoreboardON", true);
-                Config.save();
-                Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
-            } else {
-                Config.file().set("PlayerData." + p.getName() + ".ScoreboardON", false);
-                Config.save();
-                Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
-            }
+            PlayerData playerData = RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId());
+            playerData.setScoreboardON(!playerData.isScoreboardON());
+            RealScoreboard.getDatabaseManager().savePlayerData(playerData, false);
+            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle." + (playerData.isScoreboardON() ? "ON" : "OFF")));
         }
     }
 

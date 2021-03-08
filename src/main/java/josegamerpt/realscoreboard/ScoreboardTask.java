@@ -21,8 +21,8 @@ public class ScoreboardTask extends BukkitRunnable {
         for (Map.Entry<Player, FastBoard> playerFastBoardEntry : PlayerManager.sb.entrySet()) {
             Player p = playerFastBoardEntry.getKey();
             FastBoard fb = playerFastBoardEntry.getValue();
-
-            if (Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()) || !Config.file().getBoolean("PlayerData." + p.getName() + ".ScoreboardON")) {
+            PlayerData playerData = RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId());
+            if (Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()) || !playerData.isScoreboardON()) {
                 if (!fb.isDeleted() || fb.getLines().size() != 0) {
                     fb.updateLines();
                 }
@@ -45,8 +45,7 @@ public class ScoreboardTask extends BukkitRunnable {
 
                 String title = RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName());
 
-                if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles"))
-                {
+                if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                     title = Placeholders.setPlaceHolders(p, title);
                 }
 
