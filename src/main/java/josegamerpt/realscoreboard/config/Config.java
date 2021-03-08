@@ -15,21 +15,33 @@ public class Config implements Listener {
 
     static FileConfiguration data;
     static File dfile;
+
+    static File sqlFile;
+    static FileConfiguration sql;
     Plugin p;
 
     public static void setup(Plugin p) {
         dfile = new File(p.getDataFolder(), "config.yml");
+        sqlFile = new File(p.getDataFolder(), "sql.yml");
         if (!dfile.exists()) {
             try {
                 dfile.createNewFile();
             } catch (IOException localIOException) {
             }
         }
+        if (!sqlFile.exists()) {
+            p.saveResource("sql.yml", false);
+        }
         data = YamlConfiguration.loadConfiguration(dfile);
+        sql = YamlConfiguration.loadConfiguration(sqlFile);
     }
 
     public static FileConfiguration file() {
         return data;
+    }
+
+    public static FileConfiguration getSql() {
+        return sql;
     }
 
     public static void save() {

@@ -4,6 +4,7 @@ import josegamerpt.realscoreboard.classes.Metrics;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Configer;
 import josegamerpt.realscoreboard.managers.AnimationManager;
+import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.utils.Text;
 import me.mattstudios.mf.base.CommandManager;
@@ -18,6 +19,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +33,7 @@ public class RealScoreboard extends JavaPlugin {
     static Plugin pl;
 
     private static AnimationManager am;
+    private static DatabaseManager databaseManager;
     private ScoreboardTask sbTask;
 
     PluginManager pm = Bukkit.getPluginManager();
@@ -38,6 +41,7 @@ public class RealScoreboard extends JavaPlugin {
     CommandManager commandManager;
 
     String header = "------------------- RealScoreboard -------------------";
+
     public static void log(Level l, String s) {
         log.log(l, s);
     }
@@ -63,9 +67,12 @@ public class RealScoreboard extends JavaPlugin {
         return pl.getDescription().getVersion();
     }
 
-    public static AnimationManager getAnimationManager()
-    {
+    public static AnimationManager getAnimationManager() {
         return am;
+    }
+
+    public static DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 
     public void reload(CommandSender cs) {
@@ -117,6 +124,11 @@ public class RealScoreboard extends JavaPlugin {
 
         saveDefaultConfig();
         Config.setup(this);
+        try {
+            this.databaseManager = new DatabaseManager(this);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         log(Level.INFO, "Your config version is: " + Configer.getConfigVersion());
         Configer.updateConfig();
 
@@ -143,16 +155,13 @@ public class RealScoreboard extends JavaPlugin {
         }
     }
 
-    public void runTask()
-    {
+    public void runTask() {
         sbTask = new ScoreboardTask();
         sbTask.runTaskTimerAsynchronously(this, Config.file().getInt("Config.Scoreboard-Refresh"), Config.file().getInt("Config.Scoreboard-Refresh"));
     }
 
-    public void stopTask()
-    {
-        if (sbTask != null)
-        {
+    public void stopTask() {
+        if (sbTask != null) {
             sbTask.cancel();
         }
     }

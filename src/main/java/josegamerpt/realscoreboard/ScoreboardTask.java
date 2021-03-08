@@ -21,33 +21,34 @@ public class ScoreboardTask extends BukkitRunnable {
         for (Map.Entry<Player, FastBoard> playerFastBoardEntry : PlayerManager.sb.entrySet()) {
             Player p = playerFastBoardEntry.getKey();
             FastBoard fb = playerFastBoardEntry.getValue();
-
-            if (Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()) || !Config.file().getBoolean("PlayerData." + p.getName() + ".ScoreboardON")) {
-                if (!fb.isDeleted() || fb.getLines().size() != 0) {
-                    fb.updateLines();
-                }
-                return;
-            }
-
-            try {
-                List<String> lista = Config.file()
-                        .getStringList("Config.Scoreboard." + Data.getCorrectPlace(p) + ".Lines");
-
-                List<String> send = new ArrayList<>();
-
-                for (String string : lista) {
-                    if (string.equalsIgnoreCase("%blank%")) {
-                        send.add(Text.randomColor() + "§r" + Text.randomColor());
-                    } else {
-                        send.add(Placeholders.setPlaceHolders(p, string));
+            RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId()).thenAccept(playerData -> {
+                if (Config.file().getList("Config.Disabled-Worlds").contains(p.getWorld().getName()) || !playerData.isScoreboardON()) {
+                    if (!fb.isDeleted() || fb.getLines().size() != 0) {
+                        fb.updateLines();
                     }
+                    return;
                 }
 
-                fb.updateTitle(IridiumColorAPI.process(RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName())));
-                fb.updateLines(IridiumColorAPI.process(send));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                try {
+                    List<String> lista = Config.file()
+                            .getStringList("Config.Scoreboard." + Data.getCorrectPlace(p) + ".Lines");
+
+                    List<String> send = new ArrayList<>();
+
+                    for (String string : lista) {
+                        if (string.equalsIgnoreCase("%blank%")) {
+                            send.add(Text.randomColor() + "§r" + Text.randomColor());
+                        } else {
+                            send.add(Placeholders.setPlaceHolders(p, string));
+                        }
+                    }
+
+                    fb.updateTitle(IridiumColorAPI.process(RealScoreboard.getAnimationManager().getTitleAnimation(p.getWorld().getName())));
+                    fb.updateLines(IridiumColorAPI.process(send));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 }
