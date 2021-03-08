@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-@DatabaseTable(tableName = "blockdata")
+@DatabaseTable(tableName = "playerdata")
 public class PlayerData {
     @DatabaseField(columnName = "uuid", canBeNull = false, id = true)
     private @NotNull UUID uuid;
