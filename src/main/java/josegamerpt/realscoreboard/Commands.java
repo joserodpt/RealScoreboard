@@ -13,10 +13,10 @@ import java.util.Arrays;
 @Alias({"rsb", "sb"})
 public class Commands extends CommandBase {
 
-    private RealScoreboard rs;
+    private RealScoreboard realScoreboard;
 
     public Commands(RealScoreboard r) {
-        this.rs = r;
+        this.realScoreboard = r;
     }
 
     @Default
@@ -28,15 +28,15 @@ public class Commands extends CommandBase {
 
     @SubCommand("reload")
     @Permission("realscoreboard.admin")
-    public void reloadcmd(final CommandSender commandSender) {
-        rs.reload(commandSender);
+    public void reloadCommand(final CommandSender commandSender) {
+        realScoreboard.reload(commandSender);
         Text.send(commandSender, Config.file().getString("Config.Reloaded"));
     }
 
     @SubCommand("toggle")
     @Alias("t")
     @Permission("realscoreboard.toggle")
-    public void togglecmd(final CommandSender commandSender) {
+    public void toggleCommand(final CommandSender commandSender) {
         if (commandSender instanceof Player) {
             Player p = (Player) commandSender;
             PlayerData playerData = RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId());
@@ -48,7 +48,7 @@ public class Commands extends CommandBase {
 
     @SubCommand("config")
     @Permission("realscoreboard.admin")
-    public void configcmd(final CommandSender commandSender) {
+    public void configCommand(final CommandSender commandSender) {
         Text.send(commandSender, Arrays.asList(Text.getPrefix(),
                 "&fConfig Version: &7" + Config.file().getInt("Version"),
                 "&fScoreboard refresh: &7" + Config.file().getInt("Config.Scoreboard-Refresh"),

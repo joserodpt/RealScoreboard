@@ -12,8 +12,8 @@ import java.util.HashMap;
 
 public class AnimationManager {
 
-    static HashMap<String, TextLooper> titleAnim = new HashMap<>();
-    static HashMap<String, TextLooper> loopAnimations = new HashMap<>();
+    private HashMap<String, TextLooper> titleAnimations = new HashMap<>();
+    private HashMap<String, TextLooper> loopAnimations = new HashMap<>();
 
     private JavaPlugin plugin;
 
@@ -33,14 +33,14 @@ public class AnimationManager {
     private void loadAnimations() {
         //titles
         for (String path : Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false)) {
-            titleAnim.put(path, new TextLooper(path, Config.file().getStringList("Config.Scoreboard." + path + ".Title")));
+            titleAnimations.put(path, new TextLooper(path, Config.file().getStringList("Config.Scoreboard." + path + ".Title")));
         }
         //loops
         loopAnimations.put("rainbow", new TextLooper("rainbow", Arrays.asList("&c", "&6", "&e", "&a", "&b", "&9", "&3", "&d")));
     }
 
     public String getTitleAnimation(String s) {
-        return titleAnim.containsKey(s) ? titleAnim.get(s).get() : titleAnim.get(Data.getRegisteredWorlds().get(0)).get();
+        return titleAnimations.containsKey(s) ? titleAnimations.get(s).get() : titleAnimations.get(Data.getRegisteredWorlds().get(0)).get();
     }
 
     public String getLoopAnimation(String s) {
@@ -50,7 +50,7 @@ public class AnimationManager {
     public void stop() {
         cancelAnimationTasks();
 
-        titleAnim.clear();
+        titleAnimations.clear();
         loopAnimations.clear();
     }
 
@@ -66,7 +66,7 @@ public class AnimationManager {
     private void runLoopers() {
         title = new BukkitRunnable() {
             public void run() {
-                titleAnim.forEach((s, textLooper) -> textLooper.next());
+                titleAnimations.forEach((s, textLooper) -> textLooper.next());
             }
         }.runTaskTimerAsynchronously(plugin, 0L, Config.file().getInt("Config.Animations.Title-Delay"));
         looper = new BukkitRunnable() {

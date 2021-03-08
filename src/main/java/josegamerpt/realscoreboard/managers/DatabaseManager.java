@@ -20,7 +20,6 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class DatabaseManager {
-    private final ConnectionSource connectionSource;
 
     private final Dao<PlayerData, UUID> playerDataDao;
 
@@ -32,7 +31,7 @@ public class DatabaseManager {
         this.javaPlugin = javaPlugin;
         String databaseURL = getDatabaseURL();
 
-        connectionSource = new JdbcConnectionSource(
+        ConnectionSource connectionSource = new JdbcConnectionSource(
                 databaseURL,
                 Config.getSql().getString("username"),
                 Config.getSql().getString("password"),
@@ -66,11 +65,9 @@ public class DatabaseManager {
 
     private void getPlayerData() {
         try {
-            playerDataDao.queryForAll().forEach(playerData -> {
-                playerDataCache.put(playerData.getUuid(), playerData);
-            });
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            playerDataDao.queryForAll().forEach(playerData -> playerDataCache.put(playerData.getUuid(), playerData));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 
