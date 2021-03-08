@@ -1,4 +1,4 @@
-package josegamerpt.realscoreboard;
+package josegamerpt.realscoreboard.classes;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

@@ -53,6 +53,7 @@ public class Configer {
                     newconfig = 5;
                     Config.file().set("Version", newconfig);
                     Config.file().set("Config.Use-Placeholders-In-Scoreboard-Titles", false);
+                    Config.file().set("PlayerData", null);
                     Config.save();
                     break;
             }

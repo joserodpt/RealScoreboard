@@ -73,6 +73,11 @@ public class Placeholders {
         return Bukkit.getBukkitVersion();
     }
 
+    private static String getVersionShort() {
+        String a = Bukkit.getServer().getClass().getPackage().getName();
+        return a.substring(a.lastIndexOf('.') + 1);
+    }
+
     private static String getWorldName(Player p) {
         return p.getLocation().getWorld().getName();
     }
@@ -182,6 +187,7 @@ public class Placeholders {
                     .replaceAll("%day%", day())
                     .replaceAll("%serverip%", serverIP())
                     .replaceAll("%version%", getVersion())
+                    .replaceAll("%versionshort%", getVersionShort())
                     .replaceAll("%ping%", ping(p) + " ms")
                     .replaceAll("%ram%", ram())
                     .replaceAll("%jumps%", "" + stats(p, Statistic.JUMP))

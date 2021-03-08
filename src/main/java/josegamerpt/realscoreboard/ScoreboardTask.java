@@ -1,6 +1,7 @@
 package josegamerpt.realscoreboard;
 
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import josegamerpt.realscoreboard.classes.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Data;
 import josegamerpt.realscoreboard.fastscoreboard.FastBoard;

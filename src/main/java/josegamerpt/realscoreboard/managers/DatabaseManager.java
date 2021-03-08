@@ -6,7 +6,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.jdbc.db.DatabaseTypeUtils;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import josegamerpt.realscoreboard.PlayerData;
+import josegamerpt.realscoreboard.classes.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,7 +16,6 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 
 public class DatabaseManager {

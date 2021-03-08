@@ -1,5 +1,6 @@
 package josegamerpt.realscoreboard;
 
+import josegamerpt.realscoreboard.classes.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.utils.Text;
 import me.mattstudios.mf.annotations.*;
