@@ -21,14 +21,14 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 public class RealScoreboard extends JavaPlugin {
-    public static boolean placeholderAPI = false;
-    private static Permission perms = null;
-    private static Economy economy = null;
-    private static Chat chat = null;
+    public boolean placeholderAPI = false;
+    private Permission perms = null;
+    private Economy economy = null;
+    private Chat chat = null;
     private static RealScoreboard instance;
 
-    private static AnimationManager animationManager;
-    private static DatabaseManager databaseManager;
+    private AnimationManager animationManager;
+    private DatabaseManager databaseManager;
     private ScoreboardTask sbTask;
 
 

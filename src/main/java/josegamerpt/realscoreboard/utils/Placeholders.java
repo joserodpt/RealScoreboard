@@ -203,6 +203,6 @@ public class Placeholders {
 
 
     private static String placeholderAPI(Player p, String placeholders) {
-        return RealScoreboard.placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
+        return RealScoreboard.getInstance().placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
     }
 }
