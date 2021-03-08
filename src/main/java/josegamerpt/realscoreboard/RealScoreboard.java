@@ -19,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.logging.Level;
 
 public class RealScoreboard extends JavaPlugin {
     public static boolean placeholderAPI = false;
@@ -37,20 +36,20 @@ public class RealScoreboard extends JavaPlugin {
         instance = this;
 
         String header = "------------------- RealScoreboard -------------------";
-        log(Level.INFO, header);
+        getLogger().info(header);
 
-        log(Level.INFO, "Checking the server version.");
+        getLogger().info("Checking the server version.");
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             setupEconomy();
             setupPermissions();
             setupChat();
         } else {
-            log(Level.WARNING, "Vault is not installed on the server.");
+            getLogger().warning("Vault is not installed on the server.");
         }
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             placeholderAPI = true;
         } else {
-            log(Level.WARNING, "PlaceholderAPI is not installed on the server.");
+            getLogger().warning("PlaceholderAPI is not installed on the server.");
         }
         Config.setup(this);
         try {
@@ -58,12 +57,12 @@ public class RealScoreboard extends JavaPlugin {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        log(Level.INFO, "Your config version is: " + Configer.getConfigVersion());
+        getLogger().info("Your config version is: " + Configer.getConfigVersion());
         Configer.updateConfig();
 
         if (Configer.checkForErrors()) {
             failMessage("There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.");
-            log(Level.INFO, header);
+            getLogger().info(header);
             disablePlugin();
         } else {
 
@@ -71,16 +70,16 @@ public class RealScoreboard extends JavaPlugin {
 
             CommandManager commandManager = new CommandManager(this);
             commandManager.hideTabComplete(true);
-            commandManager.register(new Commands(this));
+            commandManager.register(new Commands());
 
-            animationManager = new AnimationManager(this);
+            animationManager = new AnimationManager();
             new Metrics(this, 10080);
 
             Bukkit.getOnlinePlayers().forEach(PlayerManager::load);
 
             runTask();
-            Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> log(Level.INFO, s));
-            log(Level.INFO, header);
+            Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
+            getLogger().info(header);
         }
     }
 
@@ -118,9 +117,9 @@ public class RealScoreboard extends JavaPlugin {
         }
     }
 
-    static void failMessage(String reason) {
+    public void failMessage(String reason) {
         Arrays.asList("Failed to load RealScoreboard.", reason,
-                "If you think this is a bug, please contact JoseGamer_PT.", "https://www.spigotmc.org/members/josegamer_pt.40267/").forEach(s -> log(Level.INFO, s));
+                "If you think this is a bug, please contact JoseGamer_PT.", "https://www.spigotmc.org/members/josegamer_pt.40267/").forEach(s -> getLogger().info(s));
     }
 
     // Vault
@@ -147,38 +146,36 @@ public class RealScoreboard extends JavaPlugin {
         }
     }
 
-
-    public static void log(Level level, String string) {
-        instance.getLogger().log(level, string);
-    }
-
-    public static String getServerVersion() {
+    public String getServerVersion() {
         String s = Bukkit.getServer().getClass().getPackage().getName();
         return s.substring(s.lastIndexOf(".") + 1).trim();
     }
 
-    public static Economy getEconomy() {
+    public Economy getEconomy() {
         return economy;
     }
 
-    public static Chat getChat() {
+    public Chat getChat() {
         return chat;
     }
 
-    public static Permission getPerms() {
+    public Permission getPerms() {
         return perms;
     }
 
-    public static String getVersion() {
+    public String getVersion() {
         return instance.getDescription().getVersion();
     }
 
-    public static AnimationManager getAnimationManager() {
+    public AnimationManager getAnimationManager() {
         return animationManager;
     }
 
-    public static DatabaseManager getDatabaseManager() {
+    public DatabaseManager getDatabaseManager() {
         return databaseManager;
     }
 
+    public static RealScoreboard getInstance() {
+        return instance;
+    }
 }

@@ -1,9 +1,9 @@
 package josegamerpt.realscoreboard.managers;
 
+import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.classes.TextLooper;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Data;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -12,16 +12,13 @@ import java.util.HashMap;
 
 public class AnimationManager {
 
-    private HashMap<String, TextLooper> titleAnimations = new HashMap<>();
-    private HashMap<String, TextLooper> loopAnimations = new HashMap<>();
-
-    private JavaPlugin plugin;
+    private final HashMap<String, TextLooper> titleAnimations = new HashMap<>();
+    private final HashMap<String, TextLooper> loopAnimations = new HashMap<>();
 
     private BukkitTask title;
     private BukkitTask looper;
 
-    public AnimationManager(JavaPlugin jp) {
-        this.plugin = jp;
+    public AnimationManager() {
         start();
     }
 
@@ -68,12 +65,12 @@ public class AnimationManager {
             public void run() {
                 titleAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimerAsynchronously(plugin, 0L, Config.file().getInt("Config.Animations.Title-Delay"));
+        }.runTaskTimerAsynchronously(RealScoreboard.getInstance(), 0L, Config.file().getInt("Config.Animations.Title-Delay"));
         looper = new BukkitRunnable() {
             public void run() {
                 loopAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimerAsynchronously(plugin, 0L, Config.file().getInt("Config.Animations.Loop-Delay"));
+        }.runTaskTimerAsynchronously(RealScoreboard.getInstance(), 0L, Config.file().getInt("Config.Animations.Loop-Delay"));
     }
 
     public void reload() {

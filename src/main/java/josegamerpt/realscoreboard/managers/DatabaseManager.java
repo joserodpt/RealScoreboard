@@ -16,7 +16,6 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 
 public class DatabaseManager {

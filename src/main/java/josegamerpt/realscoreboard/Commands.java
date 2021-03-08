@@ -13,15 +13,9 @@ import java.util.Arrays;
 @Alias({"rsb", "sb"})
 public class Commands extends CommandBase {
 
-    private RealScoreboard realScoreboard;
-
-    public Commands(RealScoreboard r) {
-        this.realScoreboard = r;
-    }
-
     @Default
     public void defaultCommand(final CommandSender commandSender) {
-        Text.send(commandSender, Arrays.asList("&7", Text.getPrefix() + "&a" + RealScoreboard.getVersion() + " &bHelp",
+        Text.send(commandSender, Arrays.asList("&7", Text.getPrefix() + "&a" + RealScoreboard.getInstance().getVersion() + " &bHelp",
                 "&f/realscoreboard toggle",
                 "&7"));
     }
@@ -29,7 +23,7 @@ public class Commands extends CommandBase {
     @SubCommand("reload")
     @Permission("realscoreboard.admin")
     public void reloadCommand(final CommandSender commandSender) {
-        realScoreboard.reload(commandSender);
+        RealScoreboard.getInstance().reload(commandSender);
         Text.send(commandSender, Config.file().getString("Config.Reloaded"));
     }
 
@@ -39,9 +33,9 @@ public class Commands extends CommandBase {
     public void toggleCommand(final CommandSender commandSender) {
         if (commandSender instanceof Player) {
             Player p = (Player) commandSender;
-            PlayerData playerData = RealScoreboard.getDatabaseManager().getPlayerData(p.getUniqueId());
+            PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
             playerData.setScoreboardON(!playerData.isScoreboardON());
-            RealScoreboard.getDatabaseManager().savePlayerData(playerData, false);
+            RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, false);
             Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle." + (playerData.isScoreboardON() ? "ON" : "OFF")));
         }
     }

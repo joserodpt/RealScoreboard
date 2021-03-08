@@ -18,7 +18,7 @@ public class Placeholders {
 
     public static int ping(Player p) {
         try {
-            CPClass = Class.forName("org.bukkit.craftbukkit." + RealScoreboard.getServerVersion() + ".entity.CraftPlayer");
+            CPClass = Class.forName("org.bukkit.craftbukkit." + RealScoreboard.getInstance().getServerVersion() + ".entity.CraftPlayer");
             Object CraftPlayer = CPClass.cast(p);
 
             Method getHandle = CraftPlayer.getClass().getMethod("getHandle");
@@ -78,9 +78,9 @@ public class Placeholders {
     }
 
     private static String getGroup(Player p) {
-        if (RealScoreboard.getPerms() != null) {
+        if (RealScoreboard.getInstance().getPerms() != null) {
             try {
-                String w = RealScoreboard.getPerms().getPrimaryGroup(p);
+                String w = RealScoreboard.getInstance().getPerms().getPrimaryGroup(p);
                 if (w == null) {
                     return "None";
                 }
@@ -95,9 +95,9 @@ public class Placeholders {
     }
 
     private static String prefix(Player p) {
-        if (RealScoreboard.getChat() != null) {
-            String grupo = RealScoreboard.getChat().getPrimaryGroup(p);
-            String prefix = RealScoreboard.getChat().getGroupPrefix(p.getWorld(), grupo);
+        if (RealScoreboard.getInstance().getChat() != null) {
+            String grupo = RealScoreboard.getInstance().getChat().getPrimaryGroup(p);
+            String prefix = RealScoreboard.getInstance().getChat().getGroupPrefix(p.getWorld(), grupo);
             if (grupo == null) {
                 return "None";
             }
@@ -111,9 +111,9 @@ public class Placeholders {
     }
 
     private static String sufix(Player p) {
-        if (RealScoreboard.getChat() != null) {
-            String grupo = RealScoreboard.getChat().getPrimaryGroup(p);
-            String prefix = RealScoreboard.getChat().getGroupSuffix(p.getWorld(), grupo);
+        if (RealScoreboard.getInstance().getChat() != null) {
+            String grupo = RealScoreboard.getInstance().getChat().getPrimaryGroup(p);
+            String prefix = RealScoreboard.getInstance().getChat().getGroupSuffix(p.getWorld(), grupo);
             if (grupo == null) {
                 return "None";
             }
@@ -127,10 +127,10 @@ public class Placeholders {
     }
 
     private static double money(Player p) {
-        if (RealScoreboard.getEconomy() == null) {
+        if (RealScoreboard.getInstance().getEconomy() == null) {
             return -1D;
         }
-        return RealScoreboard.getEconomy().getBalance(p);
+        return RealScoreboard.getInstance().getEconomy().getBalance(p);
     }
 
     private static int stats(Player p, Statistic s) {
@@ -196,7 +196,7 @@ public class Placeholders {
                 .replaceAll("%x%", p.getLocation().getBlockX() + "")
                 .replaceAll("%y%", p.getLocation().getBlockY() + "")
                 .replaceAll("%z%", p.getLocation().getBlockZ() + "")
-                .replaceAll("%rainbow%", RealScoreboard.getAnimationManager().getLoopAnimation("rainbow"))
+                .replaceAll("%rainbow%", RealScoreboard.getInstance().getAnimationManager().getLoopAnimation("rainbow"))
                 .replaceAll("%playtime%", Text.formatTime(stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
         return placeholderAPI(p, placeholders);
     }
