@@ -32,24 +32,6 @@ public class RealScoreboard extends JavaPlugin {
     private static DatabaseManager databaseManager;
     private ScoreboardTask sbTask;
 
-    public void reload(CommandSender cs) {
-        stopTask();
-        Config.reload();
-
-        if (Configer.checkForErrors()) {
-            String msg = "There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.";
-            Text.send(cs, msg);
-        } else {
-            animationManager.reload();
-            runTask();
-        }
-    }
-
-    static void failMessage(String reason) {
-        Arrays.asList("Failed to load RealScoreboard.", reason,
-                "If you think this is a bug, please contact JoseGamer_PT.", "https://www.spigotmc.org/members/josegamer_pt.40267/").forEach(s -> log(Level.INFO, s));
-    }
-
 
     public void onEnable() {
         instance = this;
@@ -123,8 +105,22 @@ public class RealScoreboard extends JavaPlugin {
         Bukkit.getPluginManager().disablePlugin(this);
     }
 
-    public void onDisable() {
+    public void reload(CommandSender cs) {
+        stopTask();
+        Config.reload();
 
+        if (Configer.checkForErrors()) {
+            String msg = "There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.";
+            Text.send(cs, msg);
+        } else {
+            animationManager.reload();
+            runTask();
+        }
+    }
+
+    static void failMessage(String reason) {
+        Arrays.asList("Failed to load RealScoreboard.", reason,
+                "If you think this is a bug, please contact JoseGamer_PT.", "https://www.spigotmc.org/members/josegamer_pt.40267/").forEach(s -> log(Level.INFO, s));
     }
 
     // Vault
