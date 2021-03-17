@@ -30,8 +30,7 @@ public class ScoreboardTask extends BukkitRunnable {
                 if (!fastBoard.isDeleted() || fastBoard.getLines().size() != 0) {
                     fastBoard.updateLines();
                 }
-                return;
-            }
+                return; }
 
             try {
                 List<String> scoreboardLines = Config.file().getStringList("Config.Scoreboard." + Data.getCorrectPlace(player) + ".Lines").stream().map(string -> {
