@@ -3,11 +3,11 @@ package josegamerpt.realscoreboard.config;
 import josegamerpt.realscoreboard.RealScoreboard;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
+import java.util.Collections;
 
 public class Configer {
 
-    private final static int latest = 5;
+    private final static int latest = 6;
     private static String errors;
 
     public static int getConfigVersion() {
@@ -56,6 +56,13 @@ public class Configer {
                     Config.file().set("PlayerData", null);
                     Config.save();
                     break;
+                case 5:
+                    //update to 5
+                    newconfig = 6;
+                    Config.file().set("Version", newconfig);
+                    Config.file().set("Config.Bypass-Worlds", Collections.singletonList("skywarsLobby"));
+                    Config.save();
+                    break;
             }
             RealScoreboard.getInstance().getLogger().info("Config file updated to version " + newconfig + ".");
         }
@@ -72,6 +79,9 @@ public class Configer {
         ArrayList<String> errs = new ArrayList<>();
         if (!Config.file().contains("Config.Disabled-Worlds")) {
             errs.add("Missing Disabled-Worlds Section on config.yml | Please look at the original config.yml");
+        }
+        if (!Config.file().contains("Config.Bypass-Worlds")) {
+            errs.add("Missing Bypassed-Worlds Section on config.yml | Please look at the original config.yml");
         }
 
         errors = String.join(", ", errs);

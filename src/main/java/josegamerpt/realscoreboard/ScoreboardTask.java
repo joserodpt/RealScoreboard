@@ -11,8 +11,10 @@ import josegamerpt.realscoreboard.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class ScoreboardTask extends BukkitRunnable {
@@ -20,9 +22,10 @@ public class ScoreboardTask extends BukkitRunnable {
     @Override
     public void run() {
         for (Map.Entry<Player, FastBoard> playerFastBoardEntry : PlayerManager.sb.entrySet()) {
-            Player player = playerFastBoardEntry.getKey();
-            FastBoard fastBoard = playerFastBoardEntry.getValue();
+            Player player = (Player) ((Map.Entry) playerFastBoardEntry).getKey();
+            FastBoard fastBoard = (FastBoard) ((Map.Entry) playerFastBoardEntry).getValue();
             PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(player.getUniqueId());
+
             if (Config.file().getList("Config.Disabled-Worlds").contains(player.getWorld().getName()) || !playerData.isScoreboardON()) {
                 if (!fastBoard.isDeleted() || fastBoard.getLines().size() != 0) {
                     fastBoard.updateLines();
@@ -50,6 +53,7 @@ public class ScoreboardTask extends BukkitRunnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
     }
 }

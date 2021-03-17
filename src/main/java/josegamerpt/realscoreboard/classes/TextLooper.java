@@ -1,9 +1,10 @@
 package josegamerpt.realscoreboard.classes;
 
 import com.google.common.base.Strings;
-import josegamerpt.realscoreboard.utils.Text;
+import josegamerpt.realscoreboard.RealScoreboard;
 
 import java.util.List;
+import java.util.logging.Level;
 
 public class TextLooper {
 
@@ -18,11 +19,16 @@ public class TextLooper {
     }
 
     public void next() {
-        if (this.i >= this.list.size()) {
-            this.i = 0;
+        try {
+            if (this.i >= this.list.size()) {
+                this.i = 0;
+            }
+            this.get = list.get(i);
+            this.i++;
+        } catch (Exception e)
+        {
+            RealScoreboard.getInstance().getLogger().log(Level.WARNING, "There is something wrong with this text loop: " + this.id);
         }
-        this.get = list.get(i);
-        this.i++;
     }
 
     public String get() {
