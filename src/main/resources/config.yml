@@ -3,6 +3,7 @@ Config:
   Prefix: '&bReal&9Scoreboard &7| &r'
   Reloaded: '&fThe config has been &areloaded&f.'
   Use-Placeholders-In-Scoreboard-Titles: false
+  RealScoreboard-Disabled-By-Default: false
   Messages:
     Scoreboard-Toggle:
       'ON': '&fScoreboard turned &aON&f.'

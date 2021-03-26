@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class Configer {
 
-    private final static int latest = 6;
+    private final static int latest = 7;
     private static String errors;
 
     public static int getConfigVersion() {
@@ -57,10 +57,17 @@ public class Configer {
                     Config.save();
                     break;
                 case 5:
-                    //update to 5
+                    //update to 6
                     newconfig = 6;
                     Config.file().set("Version", newconfig);
                     Config.file().set("Config.Bypass-Worlds", Collections.singletonList("skywarsLobby"));
+                    Config.save();
+                    break;
+                case 6:
+                    //update to 7
+                    newconfig = 7;
+                    Config.file().set("Version", newconfig);
+                    Config.file().set("Config.RealScoreboard-Disabled-By-Default", false);
                     Config.save();
                     break;
             }

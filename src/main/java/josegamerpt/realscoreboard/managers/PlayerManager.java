@@ -1,7 +1,10 @@
 package josegamerpt.realscoreboard.managers;
 
+import josegamerpt.realscoreboard.RealScoreboard;
+import josegamerpt.realscoreboard.classes.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.fastscoreboard.FastBoard;
+import josegamerpt.realscoreboard.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,6 +30,9 @@ public class PlayerManager implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void join(PlayerJoinEvent e) {
         load(e.getPlayer());
+        if (e.getPlayer().isOp() && RealScoreboard.newUpdate) {
+            Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard!");
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -46,6 +52,12 @@ public class PlayerManager implements Listener {
             sb.get(p).delete();
             unload(p);
         } else {
+            if (Config.file().getBoolean("Config.RealScoreboard-Disabled-By-Default"))
+            {
+                PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+                playerData.setScoreboardON(false);
+                RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+            }
             sb.put(p, new FastBoard(p));
         }
     }

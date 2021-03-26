@@ -195,6 +195,7 @@ public class Placeholders {
                 .replaceAll("%deaths%", String.valueOf(stats(p, Statistic.DEATHS)))
                 .replaceAll("%kd%", getKD(p))
                 .replaceAll("%pitch%", String.valueOf(p.getLocation().getPitch()))
+                .replaceAll("%playerfood%", String.valueOf(p.getFoodLevel()))
                 .replaceAll("%group%", getGroup(p))
                 .replaceAll("%money%", Text.formatMoney(money(p)))
                 .replaceAll("%moneylong%", Text.formatMoneyLong(money(p)))

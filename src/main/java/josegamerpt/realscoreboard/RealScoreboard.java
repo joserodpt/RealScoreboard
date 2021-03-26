@@ -21,7 +21,9 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 public class RealScoreboard extends JavaPlugin {
+
     public boolean placeholderAPI = false;
+    public static Boolean newUpdate = false;
     private Permission perms = null;
     private Economy economy = null;
     private Chat chat = null;
@@ -65,7 +67,6 @@ public class RealScoreboard extends JavaPlugin {
             getLogger().info(header);
             disablePlugin();
         } else {
-
             Bukkit.getPluginManager().registerEvents(new PlayerManager(), this);
 
             CommandManager commandManager = new CommandManager(this);
@@ -76,6 +77,17 @@ public class RealScoreboard extends JavaPlugin {
             new Metrics(this, 10080);
 
             Bukkit.getOnlinePlayers().forEach(PlayerManager::load);
+
+            new UpdateChecker(this, 22928).getVersion(version -> {
+                getLogger().info(this.getDescription().getVersion());
+                getLogger().info(version);
+                if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                    getLogger().info("There is not a new update available.");
+                } else {
+                    newUpdate = true;
+                    getLogger().info("There is a new update available!");
+                }
+            });
 
             runTask();
             Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));

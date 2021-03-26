@@ -36,7 +36,7 @@ public class Commands extends CommandBase {
             Player p = (Player) commandSender;
             PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
             playerData.setScoreboardON(!playerData.isScoreboardON());
-            RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, false);
+            RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
             Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle." + (playerData.isScoreboardON() ? "ON" : "OFF")));
         }
     }
