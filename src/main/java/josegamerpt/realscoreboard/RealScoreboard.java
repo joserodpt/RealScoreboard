@@ -37,7 +37,7 @@ public class RealScoreboard extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        String header = "------------------- RealScoreboard -------------------";
+        String header = "------------------- RealScoreboard PT -------------------".replace("PT", this.getDescription().getVersion());
         getLogger().info(header);
 
         getLogger().info("Checking the server version.");
@@ -79,10 +79,8 @@ public class RealScoreboard extends JavaPlugin {
             Bukkit.getOnlinePlayers().forEach(PlayerManager::load);
 
             new UpdateChecker(this, 22928).getVersion(version -> {
-                getLogger().info(this.getDescription().getVersion());
-                getLogger().info(version);
                 if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                    getLogger().info("There is not a new update available.");
+                    getLogger().info("The plugin is updated to the latest version.");
                 } else {
                     newUpdate = true;
                     getLogger().info("There is a new update available!");

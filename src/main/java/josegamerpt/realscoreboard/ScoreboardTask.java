@@ -11,6 +11,7 @@ import josegamerpt.realscoreboard.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,7 +20,8 @@ public class ScoreboardTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Map.Entry<Player, FastBoard> playerFastBoardEntry : PlayerManager.sb.entrySet()) {
+       HashMap<Player, FastBoard> tmp = new HashMap<>(PlayerManager.sb);
+        for (Map.Entry<Player, FastBoard> playerFastBoardEntry : tmp.entrySet()) {
             Player player = playerFastBoardEntry.getKey();
             FastBoard fastBoard = playerFastBoardEntry.getValue();
             PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(player.getUniqueId());
