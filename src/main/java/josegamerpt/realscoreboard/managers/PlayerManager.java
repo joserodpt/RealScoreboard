@@ -1,9 +1,9 @@
 package josegamerpt.realscoreboard.managers;
 
 import josegamerpt.realscoreboard.RealScoreboard;
-import josegamerpt.realscoreboard.classes.PlayerData;
+import josegamerpt.realscoreboard.scoreboard.ScoreboardTask;
+import josegamerpt.realscoreboard.config.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
-import josegamerpt.realscoreboard.fastscoreboard.FastBoard;
 import josegamerpt.realscoreboard.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,55 +11,50 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class PlayerManager implements Listener {
 
-    public static HashMap<Player, FastBoard> sb = new HashMap<>();
+    private RealScoreboard rs;
 
-    public static void load(Player p) {
-       check(p);
+    public PlayerManager(RealScoreboard rs)
+    {
+        this.rs = rs;
     }
 
-    public static void unload(Player p) {
-        sb.remove(p);
+    private HashMap<UUID, ScoreboardTask> tasks = new HashMap<>();
+
+    public void check(Player p) {
+        if (Config.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName())) {
+            this.tasks.get(p.getUniqueId()).cancel();
+            this.tasks.remove(p.getUniqueId());
+        } else {
+            if (Config.file().getBoolean("Config.RealScoreboard-Disabled-By-Default")) {
+                PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+                playerData.setScoreboardON(false);
+                RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+            }
+            this.tasks.put(p.getUniqueId(), new ScoreboardTask(p, this.rs));
+            this.tasks.get(p.getUniqueId()).runTaskTimerAsynchronously(RealScoreboard.getInstance(), Config.file().getInt("Config.Scoreboard-Refresh"), Config.file().getInt("Config.Scoreboard-Refresh"));
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void join(PlayerJoinEvent e) {
-        load(e.getPlayer());
+        check(e.getPlayer());
         if (e.getPlayer().isOp() && RealScoreboard.newUpdate) {
             Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard!");
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void leave(PlayerQuitEvent e) {
-        unload(e.getPlayer());
-    }
-
     @EventHandler(priority = EventPriority.HIGH)
-    public void changeWorld(PlayerChangedWorldEvent e)
-    {
+    public void changeWorld(PlayerChangedWorldEvent e) {
         check(e.getPlayer());
     }
 
-    public static void check(Player p)
-    {
-        if (Config.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName())) {
-            sb.get(p).delete();
-            unload(p);
-        } else {
-            if (Config.file().getBoolean("Config.RealScoreboard-Disabled-By-Default"))
-            {
-                PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
-                playerData.setScoreboardON(false);
-                RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
-            }
-            sb.put(p, new FastBoard(p));
-        }
+    public HashMap<UUID, ScoreboardTask> getTasks() {
+        return this.tasks;
     }
-
 }

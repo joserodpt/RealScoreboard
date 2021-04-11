@@ -11,7 +11,7 @@ Config:
   Animations:
     Title-Delay: 20
     Loop-Delay: 20
-  Scoreboard-Refresh: 20
+  Scoreboard-Refresh: 10
   Disabled-Worlds:
     - testWorld
     - ExampleWorld2
@@ -19,42 +19,39 @@ Config:
     - skywarsLobby
   Scoreboard:
     world:
-      Lines:
-        - '%blank%'
-        - ' &7Name: &f%playername% &8| &f%ping%'
-        - ' &f%day% &8| &f%time%'
-        - ' &7Money: &f%money% &8| &7XP: &f%xp%'
-        - ' &7Location:'
-        - ' &fX %x% Y %y% Z %z%'
-        - ' &7Stats'
-        - '  &fKills: %kills% &7| &fKD: %kd%'
-        - '  Mob Kills: %mobkills%'
-        - '  Deaths: %deaths%'
-        - '  Jumps: %jumps%'
-        - '%blank%'
-        - ' &7RAM: &f%ram%'
-        - ' &7Online: &f%online%&8/&f%maxplayers%'
-        - '%blank%'
-      Title:
-        - '&bRealScoreBoard'
-        - '&6> &9RealScoreBoard &6<'
-        - '&a>&6> &bRealScoreBoard &6<&a<'
-        - '&6> &9RealScoreBoard &6<'
-    test:
-      Lines:
-        - '%blank%'
-        - ' &7Hello, &f%playername%'
-        - ' &fWelcome to the server!'
-        - '%blank%'
-        - ' &fYou are on: &f%world%'
-        - '%blank%'
-      Title:
-        - '&aFlat &bWorld'
-    world3:
-      Lines:
-        - '&8%rainbow%&l&m------------------------'
-        - '&7Third scoreboard'
-        - '%rainbow%&l&m------------------------'
-      Title:
-        - '&6This is the Third scoreboard.'
-Version: 5
+      Switch-Timer: 35
+      Boards:
+        Board1:
+          Title:
+            - '&bRealScoreBoard'
+            - '&6> &9RealScoreBoard &6<'
+            - '&a>&6> &bRealScoreBoard &6<&a<'
+            - '&6> &9RealScoreBoard &6<'
+          Lines:
+            - '%blank%'
+            - ' &7Name: &f%playername% &8| &f%ping%'
+            - ' &f%day% &8| &f%time%'
+            - ' &7Money: &f%money% &8| &7XP: &f%xp%'
+            - ' &7Location:'
+            - ' &fX %x% Y %y% Z %z%'
+            - '%blank%'
+            - '  &fThis is Board &e#1'
+            - '%blank%'
+            - ' &7RAM: &f%ram%'
+            - ' &7Online: &f%online%&8/&f%maxplayers%'
+            - '%blank%'
+        Board2:
+          Title:
+            - '&bStatistics &aBoard'
+            - '&aStatistics &bBoard'
+          Lines:
+            - '%blank%'
+            - ' &7Stats'
+            - '  &fKills: %kills% &7| &fKD: %kd%'
+            - '  Mob Kills: %mobkills%'
+            - '  Deaths: %deaths%'
+            - '  Jumps: %jumps%'
+            - '%blank%'
+            - ' &fThis is Board &e#2'
+            - '%blank%'
+Version: 8

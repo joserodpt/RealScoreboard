@@ -1,4 +1,4 @@
-package josegamerpt.realscoreboard.fastscoreboard;
+package josegamerpt.realscoreboard.scoreboard.fastscoreboard;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

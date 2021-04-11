@@ -1,11 +1,11 @@
 package josegamerpt.realscoreboard;
 
-import josegamerpt.realscoreboard.classes.Metrics;
+import josegamerpt.realscoreboard.animation.AnimationManager;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Configer;
-import josegamerpt.realscoreboard.managers.AnimationManager;
 import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
+import josegamerpt.realscoreboard.managers.ScoreboardManager;
 import josegamerpt.realscoreboard.utils.Text;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.chat.Chat;
@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 public class RealScoreboard extends JavaPlugin {
 
@@ -31,8 +32,8 @@ public class RealScoreboard extends JavaPlugin {
 
     private AnimationManager animationManager;
     private DatabaseManager databaseManager;
-    private ScoreboardTask sbTask;
-
+    private ScoreboardManager scoreboardManager;
+    private PlayerManager playerManager;
 
     public void onEnable() {
         instance = this;
@@ -40,7 +41,6 @@ public class RealScoreboard extends JavaPlugin {
         String header = "------------------- RealScoreboard PT -------------------".replace("PT", this.getDescription().getVersion());
         getLogger().info(header);
 
-        getLogger().info("Checking the server version.");
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             setupEconomy();
             setupPermissions();
@@ -60,23 +60,27 @@ public class RealScoreboard extends JavaPlugin {
             throwables.printStackTrace();
         }
         getLogger().info("Your config version is: " + Configer.getConfigVersion());
-        Configer.updateConfig();
 
         if (Configer.checkForErrors()) {
             failMessage("There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.");
             getLogger().info(header);
             disablePlugin();
         } else {
-            Bukkit.getPluginManager().registerEvents(new PlayerManager(), this);
+            Configer.updateConfig();
+            Bukkit.getPluginManager().registerEvents(new PlayerManager(this), this);
 
             CommandManager commandManager = new CommandManager(this);
             commandManager.hideTabComplete(true);
             commandManager.register(new Commands());
 
-            animationManager = new AnimationManager();
+            this.animationManager = new AnimationManager();
+            this.playerManager = new PlayerManager(this);
+            this.scoreboardManager = new ScoreboardManager();
             new Metrics(this, 10080);
 
-            Bukkit.getOnlinePlayers().forEach(PlayerManager::load);
+            this.scoreboardManager.loadScoreboards();
+
+            Bukkit.getOnlinePlayers().forEach(this.playerManager::check);
 
             new UpdateChecker(this, 22928).getVersion(version -> {
                 if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
@@ -87,20 +91,8 @@ public class RealScoreboard extends JavaPlugin {
                 }
             });
 
-            runTask();
             Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
             getLogger().info(header);
-        }
-    }
-
-    public void runTask() {
-        sbTask = new ScoreboardTask();
-        sbTask.runTaskTimerAsynchronously(this, Config.file().getInt("Config.Scoreboard-Refresh"), Config.file().getInt("Config.Scoreboard-Refresh"));
-    }
-
-    public void stopTask() {
-        if (sbTask != null) {
-            sbTask.cancel();
         }
     }
 
@@ -110,20 +102,22 @@ public class RealScoreboard extends JavaPlugin {
         }
 
         HandlerList.unregisterAll(this);
-
         Bukkit.getPluginManager().disablePlugin(this);
     }
 
     public void reload(CommandSender cs) {
-        stopTask();
         Config.reload();
+        this.playerManager.getTasks().forEach((uuid, scoreboardTask) -> scoreboardTask.cancel());
+        this.playerManager.getTasks().clear();
+        this.scoreboardManager.reload();
 
         if (Configer.checkForErrors()) {
-            String msg = "There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.";
+            String msg = "There are some problems with your config:\n" + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.";
             Text.send(cs, msg);
         } else {
-            animationManager.reload();
-            runTask();
+            this.animationManager.reload();
+
+            Bukkit.getOnlinePlayers().forEach(player -> this.playerManager.check(player));
         }
     }
 
@@ -187,5 +181,13 @@ public class RealScoreboard extends JavaPlugin {
 
     public static RealScoreboard getInstance() {
         return instance;
+    }
+
+    public ScoreboardManager getScoreboardManager() {
+        return this.scoreboardManager;
+    }
+
+    public PlayerManager getPlayerManager() {
+        return this.playerManager;
     }
 }

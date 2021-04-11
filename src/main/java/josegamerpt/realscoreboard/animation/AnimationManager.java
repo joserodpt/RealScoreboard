@@ -1,9 +1,7 @@
-package josegamerpt.realscoreboard.managers;
+package josegamerpt.realscoreboard.animation;
 
 import josegamerpt.realscoreboard.RealScoreboard;
-import josegamerpt.realscoreboard.classes.TextLooper;
 import josegamerpt.realscoreboard.config.Config;
-import josegamerpt.realscoreboard.config.Data;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -28,16 +26,8 @@ public class AnimationManager {
     }
 
     private void loadAnimations() {
-        //titles
-        for (String path : Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false)) {
-            titleAnimations.put(path, new TextLooper(path, Config.file().getStringList("Config.Scoreboard." + path + ".Title")));
-        }
         //loops
         loopAnimations.put("rainbow", new TextLooper("rainbow", Arrays.asList("&c", "&6", "&e", "&a", "&b", "&9", "&3", "&d")));
-    }
-
-    public String getTitleAnimation(String s) {
-        return titleAnimations.containsKey(s) ? titleAnimations.get(s).get() : titleAnimations.get(Data.getRegisteredWorlds().get(0)).get();
     }
 
     public String getLoopAnimation(String s) {

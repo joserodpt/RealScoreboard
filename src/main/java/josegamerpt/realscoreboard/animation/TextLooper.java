@@ -1,4 +1,4 @@
-package josegamerpt.realscoreboard.classes;
+package josegamerpt.realscoreboard.animation;
 
 import com.google.common.base.Strings;
 import josegamerpt.realscoreboard.RealScoreboard;
@@ -9,13 +9,14 @@ import java.util.logging.Level;
 public class TextLooper {
 
     private List<String> list;
-    private String id;
     private String get;
+    private String id;
 
     private int i = 0;
 
     public TextLooper(String id, List<String> s) {
-        this.id = id; this.list = s;
+        this.id = id;
+        this.list = s;
     }
 
     public void next() {
@@ -32,7 +33,7 @@ public class TextLooper {
     }
 
     public String get() {
-        return Strings.isNullOrEmpty(this.get) ? id + " err" : this.get;
+        return Strings.isNullOrEmpty(this.get) ? this.id + " err" : this.get;
     }
 
 }
