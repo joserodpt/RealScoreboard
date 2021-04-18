@@ -7,6 +7,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,19 +19,12 @@ public class Placeholders {
 
     public static int ping(Player p) {
         try {
-            CPClass = Class.forName("org.bukkit.craftbukkit." + RealScoreboard.getInstance().getServerVersion() + ".entity.CraftPlayer");
-            Object CraftPlayer = CPClass.cast(p);
-
-            Method getHandle = CraftPlayer.getClass().getMethod("getHandle");
-            Object EntityPlayer = getHandle.invoke(CraftPlayer);
-
-            Field ping = EntityPlayer.getClass().getDeclaredField("ping");
-
-            return ping.getInt(EntityPlayer);
-        } catch (Exception e) {
+            Object entityPlayer = p.getClass().getMethod("getHandle").invoke(p);
+            return (int) entityPlayer.getClass().getField("ping").get(entityPlayer);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
             e.printStackTrace();
+            return -1;
         }
-        return -1;
     }
 
     private static String ram() {

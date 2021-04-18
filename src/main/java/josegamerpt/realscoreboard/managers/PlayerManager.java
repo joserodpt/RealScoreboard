@@ -28,7 +28,9 @@ public class PlayerManager implements Listener {
 
     public void check(Player p) {
         if (Config.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName())) {
-            this.tasks.get(p.getUniqueId()).cancel();
+            if (this.tasks.containsKey(p.getUniqueId())) {
+                this.tasks.get(p.getUniqueId()).cancel();
+            }
             this.tasks.remove(p.getUniqueId());
         } else {
             if (Config.file().getBoolean("Config.RealScoreboard-Disabled-By-Default")) {
