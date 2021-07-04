@@ -48,14 +48,14 @@ public class ScoreboardTask extends BukkitRunnable {
                 if (string.equalsIgnoreCase("%blank%")) {
                     return Text.randomColor() + "§r" + Text.randomColor();
                 } else {
-                    return Placeholders.setPlaceHolders(player, string);
+                    return rs.getPlaceholders().setPlaceHolders(player, string);
                 }
             }).collect(Collectors.toList());
 
             String title = this.rs.getScoreboardManager().getScoreboard(Data.getCorrectPlace(player)).getTitle();
 
             if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
-                title = Placeholders.setPlaceHolders(player, title);
+                title = rs.getPlaceholders().setPlaceHolders(player, title);
             }
 
             fastBoard.updateTitle(IridiumColorAPI.process(title));

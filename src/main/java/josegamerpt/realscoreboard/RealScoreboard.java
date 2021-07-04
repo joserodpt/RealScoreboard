@@ -6,6 +6,7 @@ import josegamerpt.realscoreboard.config.Configer;
 import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.managers.ScoreboardManager;
+import josegamerpt.realscoreboard.utils.Placeholders;
 import josegamerpt.realscoreboard.utils.Text;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.chat.Chat;
@@ -34,6 +35,7 @@ public class RealScoreboard extends JavaPlugin {
     private DatabaseManager databaseManager;
     private ScoreboardManager scoreboardManager;
     private PlayerManager playerManager;
+    public Placeholders placeholders = new Placeholders();
 
     public void onEnable() {
         instance = this;
@@ -187,7 +189,7 @@ public class RealScoreboard extends JavaPlugin {
         return this.scoreboardManager;
     }
 
-    public PlayerManager getPlayerManager() {
-        return this.playerManager;
+    public Placeholders getPlaceholders() {
+        return this.placeholders;
     }
 }

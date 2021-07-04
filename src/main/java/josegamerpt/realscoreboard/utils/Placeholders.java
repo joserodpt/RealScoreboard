@@ -16,79 +16,78 @@ import java.util.Date;
 
 public class Placeholders {
 
-    private static Class<?> CPClass;
+    private Method getHandleMethod;
+    private Field pingField;
 
-    public static int ping(Player p) {
-        String v = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        if (!p.getClass().getName().equals("org.bukkit.craftbukkit." + v + ".entity.CraftPlayer")) { //compatibility with some plugins
-            p = Bukkit.getPlayer(p.getUniqueId()); //cast to org.bukkit.entity.Player
-        }
+    public int getPing(Player player) {
         try {
-            Class<?> CraftPlayerClass = Class.forName("org.bukkit.craftbukkit." + v + ".entity.CraftPlayer");
-            Object CraftPlayer = CraftPlayerClass.cast(p);
-            Method getHandle = CraftPlayer.getClass().getMethod("getHandle");
-            Object EntityPlayer = getHandle.invoke(CraftPlayer);
-            Field ping = EntityPlayer.getClass().getDeclaredField("ping");
-            return ping.getInt(EntityPlayer);
-        } catch (Exception e) {
-            if (Config.file().getBoolean("Debug")) {
-                e.printStackTrace();
+            if (this.getHandleMethod == null) {
+                this.getHandleMethod = player.getClass().getDeclaredMethod("getHandle");
+                this.getHandleMethod.setAccessible(true);
             }
-            return 0;
+            Object entityPlayer = this.getHandleMethod.invoke(player);
+            if (this.pingField == null) {
+                this.pingField = entityPlayer.getClass().getDeclaredField("ping");
+                this.pingField.setAccessible(true);
+            }
+            int ping = this.pingField.getInt(entityPlayer);
+            return Math.max(ping, 0);
+        } catch (Exception e) {
+            return 1;
         }
     }
 
-    private static String ram() {
+    private String ram() {
         Runtime r = Runtime.getRuntime();
         return ((r.totalMemory() - r.freeMemory()) / 1048576) + "MB";
     }
 
-    private static int port() {
+    private int port() {
         return Bukkit.getPort();
     }
 
-    private static String serverIP() {
+    private String serverIP() {
         return Bukkit.getIp();
     }
 
-    private static String time() {
+    private String time() {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         return dateFormat.format(new Date());
     }
 
-    private static String day() {
+    private String day() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         return dateFormat.format(new Date());
     }
 
-    private static String cords(Player player) {
+    private String cords(Player player) {
         return "X: " + player.getLocation().getBlockX() + " Y: " + player.getLocation().getBlockY() + " Z: "
                 + player.getLocation().getBlockZ();
     }
 
-    private static int onlinePlayers() {
+    private int onlinePlayers() {
         return Bukkit.getOnlinePlayers().size();
     }
 
-    private static int maxPlayers() {
+    private int maxPlayers() {
         return Bukkit.getMaxPlayers();
     }
 
-    private static String getVersion() {
+    private String getVersion() {
         return Bukkit.getBukkitVersion();
     }
 
-    private static String getVersionShort() {
+    private String getVersionShort() {
         String a = Bukkit.getServer().getClass().getPackage().getName();
         return a.substring(a.lastIndexOf('.') + 1);
     }
 
 
-    private static String getWorldName(Player p) {
+    private String getWorldName(Player p) {
         return p.getLocation().getWorld().getName();
     }
 
-    private static String getGroup(Player p) {
+    private String getGroup(Player p) {
         if (RealScoreboard.getInstance().getPerms() != null) {
             try {
                 String w = RealScoreboard.getInstance().getPerms().getPrimaryGroup(p);
@@ -105,7 +104,7 @@ public class Placeholders {
 
     }
 
-    private static String prefix(Player p) {
+    private String prefix(Player p) {
         if (RealScoreboard.getInstance().getChat() != null) {
             String grupo = RealScoreboard.getInstance().getChat().getPrimaryGroup(p);
             String prefix = RealScoreboard.getInstance().getChat().getGroupPrefix(p.getWorld(), grupo);
@@ -121,7 +120,7 @@ public class Placeholders {
         }
     }
 
-    private static String sufix(Player p) {
+    private String sufix(Player p) {
         if (RealScoreboard.getInstance().getChat() != null) {
             String grupo = RealScoreboard.getInstance().getChat().getPrimaryGroup(p);
             String prefix = RealScoreboard.getInstance().getChat().getGroupSuffix(p.getWorld(), grupo);
@@ -137,18 +136,18 @@ public class Placeholders {
         }
     }
 
-    private static double money(Player p) {
+    private double money(Player p) {
         if (RealScoreboard.getInstance().getEconomy() == null) {
             return -1D;
         }
         return RealScoreboard.getInstance().getEconomy().getBalance(p);
     }
 
-    private static int stats(Player p, Statistic s) {
+    private int stats(Player p, Statistic s) {
         return p.getStatistic(s);
     }
 
-    private static String getKD(Player p) {
+    private String getKD(Player p) {
         int kills = p.getStatistic(Statistic.PLAYER_KILLS);
         int deaths = p.getStatistic(Statistic.DEATHS);
 
@@ -159,7 +158,7 @@ public class Placeholders {
         return "0";
     }
 
-    private static String lifeHeart(long round) {
+    private String lifeHeart(long round) {
         String heart = "❤";
         if (round <= 5) {
             return "&c" + heart;
@@ -176,8 +175,7 @@ public class Placeholders {
         return heart;
     }
 
-
-    public static String setPlaceHolders(Player p, String s) {
+    public String setPlaceHolders(Player p, String s) {
         String placeholders = s.replaceAll("%playername%", p.getName())
                 .replaceAll("%loc%", cords(p))
                 .replaceAll("%life%", Math.round(p.getHealth()) + "")
@@ -187,7 +185,7 @@ public class Placeholders {
                 .replaceAll("%serverip%", serverIP())
                 .replaceAll("%version%", getVersion())
                 .replaceAll("%versionshort%", getVersion())
-                .replaceAll("%ping%", ping(p) + " ms")
+                .replaceAll("%ping%", getPing(p) + " ms")
                 .replaceAll("%ram%", ram())
                 .replaceAll("%jumps%", "" + stats(p, Statistic.JUMP))
                 .replaceAll("%mobkills%", "" + stats(p, Statistic.MOB_KILLS))
@@ -215,7 +213,7 @@ public class Placeholders {
     }
 
 
-    private static String placeholderAPI(Player p, String placeholders) {
+    private String placeholderAPI(Player p, String placeholders) {
         return RealScoreboard.getInstance().placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
     }
 }
