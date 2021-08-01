@@ -5,7 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.UUID;
 
-@DatabaseTable(tableName = "playerdata")
+@DatabaseTable(tableName = "realscoreboard_playerdata")
 public class PlayerData {
     @DatabaseField(columnName = "uuid", canBeNull = false, id = true)
     private UUID uuid;
