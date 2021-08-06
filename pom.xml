@@ -6,7 +6,7 @@
 
     <groupId>josegamerpt</groupId>
     <artifactId>RealScoreboard</artifactId>
-    <version>4-7-2021 Build 1</version>
+    <version>6-8-2021 Build 1</version>
     <packaging>jar</packaging>
 
     <name>RealScoreboard</name>
@@ -97,7 +97,7 @@
         <dependency>
             <groupId>me.mattstudios.utils</groupId>
             <artifactId>matt-framework</artifactId>
-            <version>1.4</version>
+            <version>1.4.6</version>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
@@ -114,12 +114,12 @@
         <dependency>
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-core</artifactId>
-            <version>5.3</version>
+            <version>5.6</version>
         </dependency>
         <dependency>
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-jdbc</artifactId>
-            <version>5.3</version>
+            <version>5.6</version>
         </dependency>
     </dependencies>
 </project>
