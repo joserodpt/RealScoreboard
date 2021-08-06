@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.UUID;
 
 
@@ -50,12 +51,14 @@ public class DatabaseManager {
      * @return The database URL String
      */
     private @NotNull String getDatabaseURL() {
-        switch (Config.getSql().getString("driver")) {
-            case "MYSQL":
-            case "MARIADB":
-            case "POSTGRESQL":
-                return "jdbc:" + Config.getSql().getString("driver") + "://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
-            case "SQLSERVER":
+        final String driver = Config.getSql().getString("driver").toLowerCase(Locale.ROOT);
+
+        switch (driver) {
+            case "mysql":
+            case "mariadb":
+            case "postgresql":
+                return "jdbc:" + driver + "://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
+            case "sqlserver":
                 return "jdbc:sqlserver://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + ";databaseName=" + Config.getSql().getString("database");
             default:
                 return "jdbc:sqlite:" + new File(javaPlugin.getDataFolder(), Config.getSql().getString("database") + ".db");
