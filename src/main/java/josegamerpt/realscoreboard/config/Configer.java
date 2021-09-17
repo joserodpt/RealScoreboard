@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class Configer {
 
-    private final static int latest = 8;
+    private final static int latest = 10;
     private static String errors;
 
     public static int getConfigVersion() {
@@ -75,6 +75,14 @@ public class Configer {
                     //major breaking config
                     newconfig = 8;
                     break;
+                case 8:
+                    //update to 8
+                    //major breaking config
+                    newconfig = 10;
+                    break;
+                case 10:
+
+                    break;
             }
             RealScoreboard.getInstance().getLogger().info("Config file updated to version " + newconfig + ".");
         }
@@ -95,8 +103,12 @@ public class Configer {
         if (!Config.file().contains("Config.Bypass-Worlds")) {
             errs.add("Missing Bypassed-Worlds Section on config.yml | Please look at the original config.yml");
         }
-        if (Config.file().getInt("Version") == 7) {
-            errs.add("The new config model is required for the latest version to work without problems. Please backup your current config and delete it to generate a new file.");
+        switch (Config.file().getInt("Version"))
+        {
+            case 7:
+            case 8:
+                errs.add("The new config model is required for the latest version to work without problems. Please backup your current config and delete it to generate a new file.");
+                break;
         }
 
         errors = String.join(", ", errs);

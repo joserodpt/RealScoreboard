@@ -4,9 +4,7 @@ import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.config.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
-import josegamerpt.realscoreboard.config.Data;
 import josegamerpt.realscoreboard.scoreboard.fastscoreboard.FastBoard;
-import josegamerpt.realscoreboard.utils.Placeholders;
 import josegamerpt.realscoreboard.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,23 +26,23 @@ public class ScoreboardTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (!player.isOnline())
+        if (!this.player.isOnline())
         {
             this.cancel();
             return;
         }
 
-        PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(player.getUniqueId());
+        PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(this.player.getUniqueId());
 
-        if (Config.file().getList("Config.Disabled-Worlds").contains(player.getWorld().getName()) || !playerData.isScoreboardON()) {
-            if (!fastBoard.isDeleted() || fastBoard.getLines().size() != 0) {
-                fastBoard.updateLines();
+        if (Config.file().getList("Config.Disabled-Worlds").contains(this.player.getWorld().getName()) || !playerData.isScoreboardON()) {
+            if (!this.fastBoard.isDeleted() || this.fastBoard.getLines().size() != 0) {
+                this.fastBoard.updateLines();
             }
             return;
         }
 
         try {
-            List<String> scoreboardLines = this.rs.getScoreboardManager().getScoreboard(Data.getCorrectPlace(player)).getLines().stream().map(string -> {
+            List<String> scoreboardLines = this.rs.getScoreboardManager().getScoreboard(this.player).getLines().stream().map(string -> {
                 if (string.equalsIgnoreCase("%blank%")) {
                     return Text.randomColor() + "§r" + Text.randomColor();
                 } else {
@@ -52,14 +50,14 @@ public class ScoreboardTask extends BukkitRunnable {
                 }
             }).collect(Collectors.toList());
 
-            String title = this.rs.getScoreboardManager().getScoreboard(Data.getCorrectPlace(player)).getTitle();
+            String title = this.rs.getScoreboardManager().getScoreboard(this.player).getTitle();
 
             if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
-                title = rs.getPlaceholders().setPlaceHolders(player, title);
+                title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);
             }
 
-            fastBoard.updateTitle(IridiumColorAPI.process(title));
-            fastBoard.updateLines(IridiumColorAPI.process(scoreboardLines));
+            this.fastBoard.updateTitle(IridiumColorAPI.process(title));
+            this.fastBoard.updateLines(IridiumColorAPI.process(scoreboardLines));
         } catch (Exception e) {
             e.printStackTrace();
         }

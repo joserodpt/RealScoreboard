@@ -100,7 +100,6 @@ public class Placeholders {
         } else {
             return "Missing Vault";
         }
-
     }
 
     private String prefix(Player p) {

@@ -12,6 +12,7 @@ import java.util.*;
 public class RScoreboard {
 
     String world;
+    String permission;
     int interval;
     List<RBoard> boards = new ArrayList<>();
 
@@ -19,11 +20,13 @@ public class RScoreboard {
     private final HashMap<String, TextLooper> loopAnimations = new HashMap<>();
     private BoardLooper bp;
 
-    public RScoreboard(String world, int interv)
+    public RScoreboard(String world, String perm, int interv)
     {
         this.world = world;
         this.interval = interv;
-        Config.file().getConfigurationSection("Config.Scoreboard." + this.world + ".Boards").getKeys(false).forEach(s -> this.boards.add(new RBoard(s, Config.file().getStringList("Config.Scoreboard." + this.world + ".Boards." + s + ".Title"), Config.file().getStringList("Config.Scoreboard." + this.world + ".Boards." + s + ".Lines"))));
+        this.permission = perm;
+        Config.file().getConfigurationSection("Config.Scoreboard." + this.world + "." + this.permission + ".Boards")
+                .getKeys(false).forEach(s -> this.boards.add(new RBoard(s, Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Title"), Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Lines"))));
 
         this.bp = new BoardLooper(world, this.boards);
         this.boards.forEach(rBoard -> this.titleAnimations.put(rBoard.getWorldBoard(), new TextLooper(rBoard.getWorldBoard(), rBoard.getTitle())));
@@ -38,6 +41,16 @@ public class RScoreboard {
     public RBoard getBoard()
     {
         return this.bp.getBoard();
+    }
+
+    public String getInternalPermission()
+    {
+        return this.permission;
+    }
+
+    public String getPermission()
+    {
+        return this.world + "." + this.permission;
     }
 
     public List<String> getLines() {
@@ -59,8 +72,8 @@ public class RScoreboard {
     public void stop() {
         cancelAnimationTasks();
 
-        titleAnimations.clear();
-        loopAnimations.clear();
+        this.titleAnimations.clear();
+        this.loopAnimations.clear();
     }
 
     public void cancelAnimationTasks() {

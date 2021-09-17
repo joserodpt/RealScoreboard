@@ -20,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.logging.Level;
 
 public class RealScoreboard extends JavaPlugin {
 

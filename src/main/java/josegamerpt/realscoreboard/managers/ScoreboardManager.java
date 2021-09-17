@@ -1,8 +1,11 @@
 package josegamerpt.realscoreboard.managers;
 
+import josegamerpt.realscoreboard.config.Data;
 import josegamerpt.realscoreboard.scoreboard.RScoreboard;
 import josegamerpt.realscoreboard.scoreboard.RBoard;
 import josegamerpt.realscoreboard.config.Config;
+import josegamerpt.realscoreboard.scoreboard.ScoreboardGroup;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,30 +13,47 @@ import java.util.List;
 
 public class ScoreboardManager {
 
-    private HashMap<String, RScoreboard> scoreboardList = new HashMap<>();
+    private HashMap<String, ScoreboardGroup> scoreboardList = new HashMap<>();
 
     public void loadScoreboards() {
-        Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false)
-                .forEach(s -> scoreboardList.put(s, new RScoreboard(s, Config.file().getInt("Config.Scoreboard." + s + ".Switch-Timer"))));
+
+        for (String world : Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false)) {
+            //world
+            List<RScoreboard> sbs = new ArrayList<>();
+
+            for (String perm : Config.file().getConfigurationSection("Config.Scoreboard." + world).getKeys(false)) {
+                //perm
+
+                sbs.add(new RScoreboard(world, perm, Config.file().getInt("Config.Scoreboard." + world + "." + perm + ".Switch-Timer")));
+            }
+
+            this.scoreboardList.put(world, new ScoreboardGroup(world, sbs));
+        }
     }
 
     public void reload() {
-        this.scoreboardList.forEach((s, rScoreboard) -> rScoreboard.stop());
+        this.scoreboardList.forEach((s, rScoreboard) -> rScoreboard.getScoreboards().forEach(RScoreboard::stop));
         this.scoreboardList.clear();
         this.loadScoreboards();
     }
 
-    public RScoreboard getScoreboard(String s) {
-        return this.scoreboardList.get(s);
+    public RScoreboard getScoreboard(Player p) {
+        ScoreboardGroup sg = this.scoreboardList.get(Data.getCorrectPlace(p));
+        return sg.getScoreboard(p);
     }
 
-    public HashMap<String, RScoreboard> getScoreboards() {
+    public HashMap<String, ScoreboardGroup> getScoreboards() {
         return this.scoreboardList;
     }
 
     public List<RBoard> getBoards() {
         List<RBoard> boards = new ArrayList<>();
-        this.scoreboardList.forEach((s, rScoreboard) -> boards.addAll(rScoreboard.getBoards()));
+        List<ScoreboardGroup> tmp = new ArrayList<>();
+        this.scoreboardList.forEach((s, scoreboardGroup) -> tmp.add(scoreboardGroup));
+        for (ScoreboardGroup scoreboardGroup : tmp) {
+            scoreboardGroup.getScoreboards().forEach(rScoreboard -> boards.addAll(rScoreboard.getBoards()));
+        }
+
         return boards;
     }
 }
