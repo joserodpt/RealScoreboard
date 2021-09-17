@@ -20,7 +20,7 @@ Config:
   Scoreboard:
     world:
       special:
-        Switch-Timer: 10
+        Switch-Timer: 50
         Boards:
           Board1:
             Title:
