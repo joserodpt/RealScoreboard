@@ -4,6 +4,9 @@ Config:
   Reloaded: '&fThe config has been &areloaded&f.'
   Use-Placeholders-In-Scoreboard-Titles: false
   RealScoreboard-Disabled-By-Default: false
+  Hours:
+    Formatting: 'HH:mm:ss'
+    Offset: 0
   Messages:
     Scoreboard-Toggle:
       'ON': '&fScoreboard turned &aON&f.'
@@ -68,4 +71,4 @@ Config:
               - '%blank%'
               - ' &fThis is Board &e#2'
               - '%blank%'
-Version: 10
+Version: 11

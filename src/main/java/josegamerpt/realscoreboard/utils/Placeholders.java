@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Placeholders {
@@ -50,8 +51,12 @@ public class Placeholders {
     }
 
     private String time() {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        return dateFormat.format(new Date());
+        DateFormat dateFormat = new SimpleDateFormat(Config.file().getString("Config.Hours.Formatting"));
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.HOUR_OF_DAY, Config.file().getInt("Config.Hours.Offset"));
+        cal.getTime();
+        return dateFormat.format(cal.getTime());
     }
 
     private String day() {

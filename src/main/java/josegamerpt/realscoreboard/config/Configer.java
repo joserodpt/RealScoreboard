@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class Configer {
 
-    private final static int latest = 10;
+    private final static int latest = 11;
     private static String errors;
 
     public static int getConfigVersion() {
@@ -76,12 +76,17 @@ public class Configer {
                     newconfig = 8;
                     break;
                 case 8:
-                    //update to 8
+                    //update to 9
                     //major breaking config
                     newconfig = 10;
                     break;
                 case 10:
-
+                    //update to 11
+                    newconfig = 11;
+                    Config.file().set("Version", newconfig);
+                    Config.file().set("Config.Hours.Formatting", "HH:mm:ss");
+                    Config.file().set("Config.Hours.Offset", 0);
+                    Config.save();
                     break;
             }
             RealScoreboard.getInstance().getLogger().info("Config file updated to version " + newconfig + ".");
