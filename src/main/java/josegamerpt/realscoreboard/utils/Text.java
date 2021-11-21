@@ -1,6 +1,6 @@
 package josegamerpt.realscoreboard.utils;
 
-import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import josegamerpt.iridiumapi.IridiumAPI;
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.config.Config;
 import org.bukkit.ChatColor;
@@ -17,7 +17,7 @@ public class Text {
     static String[] money = {"", "k", "m", "b", "t", "q", "qi", "s", "sep", "OC", "N", "DEC", "UN", "DUO", "TRE"};
 
     public static String color(final String message) {
-        return IridiumColorAPI.process(message);
+        return IridiumAPI.process(message);
     }
 
     public static String formatMoney(double value) {

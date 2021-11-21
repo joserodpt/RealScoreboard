@@ -6,7 +6,7 @@
 
     <groupId>josegamerpt</groupId>
     <artifactId>RealScoreboard</artifactId>
-    <version>31-10-2021 Build 1</version>
+    <version>21-11-2021 Build 1</version>
     <packaging>jar</packaging>
 
     <name>RealScoreboard</name>
@@ -39,16 +39,11 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>me.mattstudios.mf</pattern>
-                            <shadedPattern>josegamerpt.realscoreboard.mf</shadedPattern> <!-- Replace package here here -->
-                        </relocation>
-                    </relocations>
-                </configuration>
             </plugin>
         </plugins>
         <resources>
@@ -86,13 +81,8 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.iridium</groupId>
-            <artifactId>IridiumColorAPI</artifactId>
-            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>me.mattstudios.utils</groupId>
@@ -114,12 +104,12 @@
         <dependency>
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-core</artifactId>
-            <version>5.6</version>
+            <version>5.7</version>
         </dependency>
         <dependency>
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-jdbc</artifactId>
-            <version>5.6</version>
+            <version>5.7</version>
         </dependency>
     </dependencies>
 </project>
