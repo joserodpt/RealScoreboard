@@ -1,11 +1,11 @@
 package josegamerpt.realscoreboard.scoreboard;
 
-import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.config.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.scoreboard.fastscoreboard.FastBoard;
 import josegamerpt.realscoreboard.utils.Text;
+import josegamerpt.realscoreboard.utils.iridiumcolorapi.IridiumAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -56,8 +56,8 @@ public class ScoreboardTask extends BukkitRunnable {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);
             }
 
-            this.fastBoard.updateTitle(IridiumColorAPI.process(title));
-            this.fastBoard.updateLines(IridiumColorAPI.process(scoreboardLines));
+            this.fastBoard.updateTitle(IridiumAPI.process(title));
+            this.fastBoard.updateLines(IridiumAPI.process(scoreboardLines));
         } catch (Exception e) {
             e.printStackTrace();
         }

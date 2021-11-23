@@ -1,23 +1,28 @@
 package josegamerpt.realscoreboard.utils;
 
-import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.config.Config;
+import josegamerpt.realscoreboard.utils.iridiumcolorapi.IridiumAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Text {
     static final String[] time = {"s", "m", "h", "h", "h", "h", "h", "h", "h"};
     static String[] money = {"", "k", "m", "b", "t", "q", "qi", "s", "sep", "OC", "N", "DEC", "UN", "DUO", "TRE"};
 
-    public static String color(final String message) {
-        return IridiumColorAPI.process(message);
+    static Pattern pattern = Pattern.compile("<G:([0-9A-Fa-f]{6})>(.*?)</G:([0-9A-Fa-f]{6})>");
+
+    public static String color(String string) {
+        return IridiumAPI.process(string);
     }
 
     public static String formatMoney(double value) {
