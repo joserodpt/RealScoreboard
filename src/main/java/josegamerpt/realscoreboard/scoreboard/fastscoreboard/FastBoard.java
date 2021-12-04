@@ -1,5 +1,3 @@
-package josegamerpt.realscoreboard.scoreboard.fastscoreboard;
-
 /*
  * This file is part of FastBoard, licensed under the MIT License.
  *
@@ -23,6 +21,7 @@ package josegamerpt.realscoreboard.scoreboard.fastscoreboard;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package josegamerpt.realscoreboard.scoreboard.fastscoreboard;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -32,6 +31,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +51,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * The project is on <a href="https://github.com/MrMicky-FR/FastBoard">GitHub</a>.
  *
  * @author MrMicky
- * @version 1.2.0-SNAPSHOT
+ * @version 1.2.1
  */
 public class FastBoard {
 
@@ -111,6 +111,9 @@ public class FastBoard {
             Field playerConnectionField = Arrays.stream(entityPlayerClass.getFields())
                     .filter(field -> field.getType().isAssignableFrom(playerConnectionClass))
                     .findFirst().orElseThrow(NoSuchFieldException::new);
+            Method sendPacketMethod = Arrays.stream(playerConnectionClass.getMethods())
+                    .filter(m -> m.getParameterCount() == 1 && m.getParameterTypes()[0] == packetClass)
+                    .findFirst().orElseThrow(NoSuchMethodException::new);
 
             MESSAGE_FROM_STRING = lookup.unreflect(craftChatMessageClass.getMethod("fromString", String.class));
             CHAT_COMPONENT_CLASS = FastReflection.nmsClass("network.chat", "IChatBaseComponent");
@@ -119,7 +122,7 @@ public class FastBoard {
             RESET_FORMATTING = FastReflection.enumValueOf(CHAT_FORMAT_ENUM, "RESET", 21);
             PLAYER_GET_HANDLE = lookup.findVirtual(craftPlayerClass, "getHandle", MethodType.methodType(entityPlayerClass));
             PLAYER_CONNECTION = lookup.unreflectGetter(playerConnectionField);
-            SEND_PACKET = lookup.findVirtual(playerConnectionClass, "sendPacket", MethodType.methodType(void.class, packetClass));
+            SEND_PACKET = lookup.unreflect(sendPacketMethod);
             PACKET_SB_OBJ = FastReflection.findPacketConstructor(packetSbObjClass, lookup);
             PACKET_SB_DISPLAY_OBJ = FastReflection.findPacketConstructor(packetSbDisplayObjClass, lookup);
             PACKET_SB_SCORE = FastReflection.findPacketConstructor(packetSbScoreClass, lookup);
@@ -438,7 +441,7 @@ public class FastBoard {
         }
 
         if (checkMax && line >= COLOR_CODES.length - 1) {
-            throw new IllegalArgumentException("Line number is too high: " + this.lines.size());
+            throw new IllegalArgumentException("Line number is too high: " + line);
         }
     }
 
