@@ -41,6 +41,30 @@ public class Commands extends CommandBase {
         }
     }
 
+    @SubCommand("off")
+    @Permission("realscoreboard.toggle")
+    public void offCommand(final CommandSender commandSender) {
+        if (commandSender instanceof Player) {
+            Player p = (Player) commandSender;
+            PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+            playerData.setScoreboardON(false);
+            RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
+        }
+    }
+
+    @SubCommand("on")
+    @Permission("realscoreboard.toggle")
+    public void onCommand(final CommandSender commandSender) {
+        if (commandSender instanceof Player) {
+            Player p = (Player) commandSender;
+            PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+            playerData.setScoreboardON(true);
+            RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
+        }
+    }
+
     @SubCommand("config")
     @Permission("realscoreboard.admin")
     public void configCommand(final CommandSender commandSender) {
