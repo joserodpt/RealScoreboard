@@ -1,5 +1,5 @@
 package josegamerpt.realscoreboard.utils.iridiumcolorapi.patterns;
 
-public interface Patterns {
+public interface Pattern {
     String process(String string);
 }
