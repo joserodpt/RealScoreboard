@@ -15,8 +15,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Placeholders {
-
+    private String nmsVersion;
     private Method getHandleMethod;
+    private Method getPingMethod;
     private Field pingField;
 
     public int getPing(Player player) {
@@ -26,11 +27,23 @@ public class Placeholders {
                 this.getHandleMethod.setAccessible(true);
             }
             Object entityPlayer = this.getHandleMethod.invoke(player);
-            if (this.pingField == null) {
-                this.pingField = entityPlayer.getClass().getDeclaredField("ping");
-                this.pingField.setAccessible(true);
+            if (this.pingField == null && this.getPingMethod == null) {
+                try {
+                    this.pingField = entityPlayer.getClass().getDeclaredField("ping");
+                } catch (NoSuchFieldError | NoSuchFieldException e) {
+                    this.getPingMethod = Class.forName("org.bukkit.craftbukkit." + this.getNmsVersion() + ".entity.CraftPlayer").getDeclaredMethod("getPing");
+                }
+                if (this.pingField != null)
+                    this.pingField.setAccessible(true);
             }
-            int ping = this.pingField.getInt(entityPlayer);
+
+            int ping;
+
+            if (this.getPingMethod != null)
+                ping = (int) this.getPingMethod.invoke(player);
+            else
+                ping = this.pingField.getInt(entityPlayer);
+
             return Math.max(ping, 0);
         } catch (Exception e) {
             return 1;
@@ -92,57 +105,38 @@ public class Placeholders {
     }
 
     private String getGroup(Player p) {
-        if (RealScoreboard.getInstance().getPerms() != null) {
-            try {
-                String w = RealScoreboard.getInstance().getPerms().getPrimaryGroup(p);
-                if (w == null) {
-                    return "None";
-                }
-                return w;
-            } catch (UnsupportedOperationException e) {
-                return "No Perm Plugin";
-            }
-        } else {
-            return "Missing Vault";
+        if (RealScoreboard.getInstance().getPerms() != null) try {
+            String w = RealScoreboard.getInstance().getPerms().getPrimaryGroup(p);
+            if (w == null) return "None";
+            return w;
+        } catch (UnsupportedOperationException e) {
+            return "No Perm Plugin";
         }
+        else return "Missing Vault";
     }
 
     private String prefix(Player p) {
         if (RealScoreboard.getInstance().getChat() != null) {
             String grupo = RealScoreboard.getInstance().getChat().getPrimaryGroup(p);
             String prefix = RealScoreboard.getInstance().getChat().getGroupPrefix(p.getWorld(), grupo);
-            if (grupo == null) {
-                return "None";
-            }
-            if (prefix == null) {
-                return "None";
-            }
+            if (grupo == null) return "None";
+            if (prefix == null) return "None";
             return prefix;
-        } else {
-            return "Missing Vault";
-        }
+        } else return "Missing Vault";
     }
 
     private String sufix(Player p) {
         if (RealScoreboard.getInstance().getChat() != null) {
             String grupo = RealScoreboard.getInstance().getChat().getPrimaryGroup(p);
             String prefix = RealScoreboard.getInstance().getChat().getGroupSuffix(p.getWorld(), grupo);
-            if (grupo == null) {
-                return "None";
-            }
-            if (prefix == null) {
-                return "None";
-            }
+            if (grupo == null) return "None";
+            if (prefix == null) return "None";
             return prefix;
-        } else {
-            return "Missing Vault";
-        }
+        } else return "Missing Vault";
     }
 
     private double money(Player p) {
-        if (RealScoreboard.getInstance().getEconomy() == null) {
-            return -1D;
-        }
+        if (RealScoreboard.getInstance().getEconomy() == null) return -1D;
         return RealScoreboard.getInstance().getEconomy().getBalance(p);
     }
 
@@ -163,60 +157,58 @@ public class Placeholders {
 
     private String lifeHeart(long round) {
         String heart = "❤";
-        if (round <= 5) {
-            return "&c" + heart;
-        }
-        if (round <= 10) {
-            return "&e" + heart;
-        }
-        if (round <= 15) {
-            return "&6" + heart;
-        }
-        if (round <= 20) {
-            return "&a" + heart;
-        }
+        if (round <= 5) return "&c" + heart;
+        if (round <= 10) return "&e" + heart;
+        if (round <= 15) return "&6" + heart;
+        if (round <= 20) return "&a" + heart;
         return heart;
     }
 
     public String setPlaceHolders(Player p, String s) {
         String placeholders = s.replaceAll("%playername%", p.getName())
-                .replaceAll("%loc%", cords(p))
+                .replaceAll("%loc%", this.cords(p))
                 .replaceAll("%life%", Math.round(p.getHealth()) + "")
-                .replaceAll("%lifeheart%", lifeHeart(Math.round(p.getHealth())) + "")
-                .replaceAll("%time%", time())
-                .replaceAll("%day%", day())
-                .replaceAll("%serverip%", serverIP())
-                .replaceAll("%version%", getVersion())
-                .replaceAll("%versionshort%", getVersion())
-                .replaceAll("%ping%", getPing(p) + " ms")
-                .replaceAll("%ram%", ram())
-                .replaceAll("%jumps%", "" + stats(p, Statistic.JUMP))
-                .replaceAll("%mobkills%", "" + stats(p, Statistic.MOB_KILLS))
-                .replaceAll("%world%", getWorldName(p)).replaceAll("%port%", String.valueOf(port()))
-                .replaceAll("%maxplayers%", String.valueOf(maxPlayers()))
-                .replaceAll("%online%", String.valueOf(onlinePlayers()))
-                .replaceAll("%prefix%", prefix(p))
-                .replaceAll("%suffix%", sufix(p)).replaceAll("%yaw%", String.valueOf(p.getLocation().getYaw()))
-                .replaceAll("%kills%", String.valueOf(stats(p, Statistic.PLAYER_KILLS)))
-                .replaceAll("%deaths%", String.valueOf(stats(p, Statistic.DEATHS)))
-                .replaceAll("%kd%", getKD(p))
+                .replaceAll("%lifeheart%", this.lifeHeart(Math.round(p.getHealth())) + "")
+                .replaceAll("%time%", this.time())
+                .replaceAll("%day%", this.day())
+                .replaceAll("%serverip%", this.serverIP())
+                .replaceAll("%version%", this.getVersion())
+                .replaceAll("%versionshort%", this.getVersion())
+                .replaceAll("%ping%", this.getPing(p) + " ms")
+                .replaceAll("%ram%", this.ram())
+                .replaceAll("%jumps%", "" + this.stats(p, Statistic.JUMP))
+                .replaceAll("%mobkills%", "" + this.stats(p, Statistic.MOB_KILLS))
+                .replaceAll("%world%", this.getWorldName(p)).replaceAll("%port%", String.valueOf(this.port()))
+                .replaceAll("%maxplayers%", String.valueOf(this.maxPlayers()))
+                .replaceAll("%online%", String.valueOf(this.onlinePlayers()))
+                .replaceAll("%prefix%", this.prefix(p))
+                .replaceAll("%suffix%", this.sufix(p)).replaceAll("%yaw%", String.valueOf(p.getLocation().getYaw()))
+                .replaceAll("%kills%", String.valueOf(this.stats(p, Statistic.PLAYER_KILLS)))
+                .replaceAll("%deaths%", String.valueOf(this.stats(p, Statistic.DEATHS)))
+                .replaceAll("%kd%", this.getKD(p))
                 .replaceAll("%pitch%", String.valueOf(p.getLocation().getPitch()))
                 .replaceAll("%playerfood%", String.valueOf(p.getFoodLevel()))
-                .replaceAll("%group%", getGroup(p))
-                .replaceAll("%money%", Text.formatMoney(money(p)))
-                .replaceAll("%moneylong%", Text.formatMoneyLong(money(p)))
+                .replaceAll("%group%", this.getGroup(p))
+                .replaceAll("%money%", Text.formatMoney(this.money(p)))
+                .replaceAll("%moneylong%", Text.formatMoneyLong(this.money(p)))
                 .replaceAll("%displayname%", p.getDisplayName())
                 .replaceAll("%xp%", p.getTotalExperience() + "")
                 .replaceAll("%x%", p.getLocation().getBlockX() + "")
                 .replaceAll("%y%", p.getLocation().getBlockY() + "")
                 .replaceAll("%z%", p.getLocation().getBlockZ() + "")
                 .replaceAll("%rainbow%", RealScoreboard.getInstance().getAnimationManager().getLoopAnimation("rainbow"))
-                .replaceAll("%playtime%", Text.formatTime(stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
-        return placeholderAPI(p, placeholders);
+                .replaceAll("%playtime%", Text.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
+        return this.placeholderAPI(p, placeholders);
     }
 
 
     private String placeholderAPI(Player p, String placeholders) {
         return RealScoreboard.getInstance().placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
+    }
+
+    private String getNmsVersion() {
+        if (this.nmsVersion == null)
+            this.nmsVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+        return this.nmsVersion;
     }
 }
