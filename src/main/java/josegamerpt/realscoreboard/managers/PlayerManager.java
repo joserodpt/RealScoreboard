@@ -10,7 +10,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.metadata.MetadataValue;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -51,9 +53,38 @@ public class PlayerManager implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void changeWorld(PlayerChangedWorldEvent e) {
         check(e.getPlayer());
+    }
+
+    private String[] vanishCommands = {"/pv", "/vanish", "/premiumvanish"};
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onCommand(PlayerCommandPreprocessEvent e) {
+        Player p = e.getPlayer();
+
+        for (String cmd : vanishCommands) {
+            if (e.getMessage().toLowerCase().startsWith(cmd)) {
+                if (isVanished(p))
+                {
+                    PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+                    playerData.setScoreboardON(false);
+                    RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+                } else {
+                    PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+                    playerData.setScoreboardON(true);
+                    RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+                }
+            }
+        }
+    }
+
+    private boolean isVanished(Player player) {
+        for (MetadataValue meta : player.getMetadata("vanished")) {
+            if (meta.asBoolean()) return true;
+        }
+        return false;
     }
 
     public HashMap<UUID, ScoreboardTask> getTasks() {
