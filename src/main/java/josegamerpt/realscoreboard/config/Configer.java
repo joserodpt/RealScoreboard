@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class Configer {
 
-    private final static int latest = 11;
+    private final static int latest = 12;
     private static String errors;
 
     public static int getConfigVersion() {
@@ -86,6 +86,11 @@ public class Configer {
                     Config.file().set("Version", newconfig);
                     Config.file().set("Config.Hours.Formatting", "HH:mm:ss");
                     Config.file().set("Config.Hours.Offset", 0);
+                    Config.save();
+                    break;
+                case 11:
+                    newconfig = 12;
+                    Config.file().set("Config.Check-for-Updates", true);
                     Config.save();
                     break;
             }

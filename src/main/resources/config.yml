@@ -1,5 +1,6 @@
 Debug: false
 Config:
+  Check-for-Updates: true
   Prefix: '&bReal&9Scoreboard &7| &r'
   Reloaded: '&fThe config has been &areloaded&f.'
   Use-Placeholders-In-Scoreboard-Titles: false
@@ -71,4 +72,4 @@ Config:
               - '%blank%'
               - ' &fThis is Board &e#2'
               - '%blank%'
-Version: 11
+Version: 12

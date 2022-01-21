@@ -83,14 +83,19 @@ public class RealScoreboard extends JavaPlugin {
 
             Bukkit.getOnlinePlayers().forEach(this.playerManager::check);
 
-            new UpdateChecker(this, 22928).getVersion(version -> {
-                if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                    getLogger().info("The plugin is updated to the latest version.");
-                } else {
-                    newUpdate = true;
-                    getLogger().info("There is a new update available!");
-                }
-            });
+            if (Config.file().getBoolean("Config.Check-for-Updates"))
+            {
+                new UpdateChecker(this, 22928).getVersion(version -> {
+                    if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                        getLogger().info("The plugin is updated to the latest version.");
+                    } else {
+                        newUpdate = true;
+                        getLogger().info("There is a new update available!");
+                    }
+                });
+            }
+
+
 
             Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
             getLogger().info(header);
