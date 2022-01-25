@@ -4,6 +4,7 @@ import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.animation.BoardLooper;
 import josegamerpt.realscoreboard.animation.TextLooper;
 import josegamerpt.realscoreboard.config.Config;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -20,6 +21,17 @@ public class RScoreboard {
     private final HashMap<String, TextLooper> loopAnimations = new HashMap<>();
     private BoardLooper bp;
 
+    //config error scoreboard.
+    public RScoreboard(Player p)
+    {
+        this.world = p.getWorld().getName();
+        this.interval = 100;
+        this.permission = "default";
+        this.boards.add(new RBoard(this.world, Arrays.asList("&c&LCONFIG ERROR"), Arrays.asList("&c&LCONFIG ERROR", "&6&LCHECK CONSOLE")));
+        this.bp = new BoardLooper(this.world, this.boards);
+        this.start();
+    }
+
     public RScoreboard(String world, String perm, int interv)
     {
         this.world = world;
@@ -28,9 +40,9 @@ public class RScoreboard {
         Config.file().getConfigurationSection("Config.Scoreboard." + this.world + "." + this.permission + ".Boards")
                 .getKeys(false).forEach(s -> this.boards.add(new RBoard(s, Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Title"), Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Lines"))));
 
-        this.bp = new BoardLooper(world, this.boards);
         this.boards.forEach(rBoard -> this.titleAnimations.put(rBoard.getWorldBoard(), new TextLooper(rBoard.getWorldBoard(), rBoard.getTitle())));
-        start();
+        this.bp = new BoardLooper(this.world, this.boards);
+        this.start();
     }
 
     public List<RBoard> getBoards()
@@ -50,7 +62,7 @@ public class RScoreboard {
 
     public String getPermission()
     {
-        return this.world + "." + this.permission;
+        return "realscoreboard." + this.world + "." + this.permission;
     }
 
     public List<String> getLines() {
@@ -66,11 +78,11 @@ public class RScoreboard {
     private BukkitTask looper;
 
     public void start() {
-        runLoopers();
+        this.runLoopers();
     }
 
     public void stop() {
-        cancelAnimationTasks();
+        this.cancelAnimationTasks();
 
         this.titleAnimations.clear();
         this.loopAnimations.clear();

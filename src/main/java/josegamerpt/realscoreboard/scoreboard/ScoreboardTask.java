@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class ScoreboardTask extends BukkitRunnable {
@@ -42,7 +43,9 @@ public class ScoreboardTask extends BukkitRunnable {
         }
 
         try {
-            List<String> scoreboardLines = this.rs.getScoreboardManager().getScoreboard(this.player).getLines().stream().map(string -> {
+            RScoreboard rsb = this.rs.getScoreboardManager().getScoreboard(this.player);
+
+            List<String> scoreboardLines = rsb.getLines().stream().map(string -> {
                 if (string.equalsIgnoreCase("%blank%")) {
                     return Text.randomColor() + "§r" + Text.randomColor();
                 } else {
@@ -50,8 +53,7 @@ public class ScoreboardTask extends BukkitRunnable {
                 }
             }).collect(Collectors.toList());
 
-            String title = this.rs.getScoreboardManager().getScoreboard(this.player).getTitle();
-
+            String title = rsb.getTitle();
             if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);
             }
@@ -59,6 +61,7 @@ public class ScoreboardTask extends BukkitRunnable {
             this.fastBoard.updateTitle(IridiumColorAPI.process(title));
             this.fastBoard.updateLines(IridiumColorAPI.process(scoreboardLines));
         } catch (Exception e) {
+            rs.getLogger().log(Level.SEVERE, "[ERROR] RealScoreboard threw an error while trying to display the scoreboard for " + this.player.getName());
             e.printStackTrace();
         }
     }

@@ -18,10 +18,6 @@ public class ScoreboardGroup {
         this.sbs = sbs;
     }
 
-    public String getWorld() {
-        return this.world;
-    }
-
     public RScoreboard getScoreboard(Player p) {
         for (RScoreboard sb : this.sbs) {
             if (p.hasPermission(sb.getPermission())) {
@@ -34,8 +30,8 @@ public class ScoreboardGroup {
         if (o.isPresent()) {
             return o.get();
         } else {
-            RealScoreboard.getInstance().getLogger().log(Level.SEVERE, "[ERROR] You must have the DEFAULT scoreboard permission node on the world " + world + ".\nPlease check your config and re-add it again!");
-            return null;
+            RealScoreboard.getInstance().getLogger().log(Level.SEVERE, "[ERROR] You must have the DEFAULT scoreboard permission node on the world " + this.world + ".\nPlease check your config and re-add it again!");
+            return new RScoreboard(p);
         }
     }
 
