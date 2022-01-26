@@ -21,9 +21,12 @@ public class RScoreboard {
     private final HashMap<String, TextLooper> loopAnimations = new HashMap<>();
     private BoardLooper bp;
 
+    private boolean valid = true;
+
     //config error scoreboard.
     public RScoreboard(Player p)
     {
+        this.valid = false;
         this.world = p.getWorld().getName();
         this.interval = 100;
         this.permission = "default";
@@ -66,11 +69,11 @@ public class RScoreboard {
     }
 
     public List<String> getLines() {
-        return this.bp.getBoard().getLines();
+        return this.valid ? this.bp.getBoard().getLines() : Arrays.asList("&c&LCONFIG ERROR", "&6&LCHECK CONSOLE");
     }
 
     public String getTitle() {
-        return this.titleAnimations.get(this.getBoard().getWorldBoard()).get();
+        return this.valid ? this.titleAnimations.get(this.getBoard().getWorldBoard()).get() : "&c&LCONFIG ERROR";
     }
 
     private BukkitTask switche;
