@@ -18,7 +18,7 @@ public class Commands extends CommandBase {
     @Default
     public void defaultCommand(final CommandSender commandSender) {
         Text.send(commandSender, Arrays.asList("&7", Text.getPrefix() + "&a" + RealScoreboard.getInstance().getVersion() + " &bHelp",
-                "&f/rsw toggle"));
+                "&f/rsb toggle"));
     }
 
     @SubCommand("reload")
