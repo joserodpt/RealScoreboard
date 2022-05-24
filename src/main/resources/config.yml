@@ -41,15 +41,14 @@ Config:
         Boards:
           Board1:
             Title:
-              - '&bRealScoreBoard'
-              - '&6> &9RealScoreBoard &6<'
-              - '&a>&6> &bRealScoreBoard &6<&a<'
-              - '&6> &9RealScoreBoard &6<'
+              - '&bWorldSMP'
+              - '&6> &9WorldSMP &6<'
+              - '&a>&6> &bWorldSMP &6<&a<'
+              - '&6> &9WorldSMP &6<'
             Lines:
               - '%blank%'
               - ' &7Name: &f%playername% &8| &f%ping%'
               - ' &f%day% &8| &f%time%'
-              - ' &7Money: &f%money% &8| &7XP: &f%xp%'
               - ' &7Location:'
               - ' &fX %x% Y %y% Z %z%'
               - '%blank%'
