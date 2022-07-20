@@ -17,20 +17,21 @@ public class RScoreboard {
     int interval;
     List<RBoard> boards = new ArrayList<>();
 
-    private final HashMap<String, TextLooper> titleAnimations = new HashMap<>();
-    private final HashMap<String, TextLooper> loopAnimations = new HashMap<>();
-    private BoardLooper bp;
+    private final HashMap<String, TextLooper>
+            titleAnimations = new HashMap<>(),
+            loopAnimations = new HashMap<>();
+
+    private final BoardLooper bp;
 
     private boolean valid = true;
 
     //config error scoreboard.
-    public RScoreboard(Player p)
-    {
+    public RScoreboard(Player p) {
         this.valid = false;
         this.world = p.getWorld().getName();
         this.interval = 100;
         this.permission = "default";
-        this.boards.add(new RBoard(this.world, Arrays.asList("&c&LCONFIG ERROR"), Arrays.asList("&c&LCONFIG ERROR", "&6&LCHECK CONSOLE")));
+        this.boards.add(new RBoard(this.world, Collections.singletonList("&c&LCONFIG ERROR"), Arrays.asList("&c&LCONFIG ERROR", "&6&LCHECK CONSOLE")));
         this.bp = new BoardLooper(this.world, this.boards);
         this.start();
     }
@@ -76,7 +77,7 @@ public class RScoreboard {
         return this.valid ? this.titleAnimations.get(this.getBoard().getWorldBoard()).get() : "&c&LCONFIG ERROR";
     }
 
-    private BukkitTask switche;
+    private BukkitTask switches;
     private BukkitTask title;
     private BukkitTask looper;
 
@@ -92,8 +93,8 @@ public class RScoreboard {
     }
 
     public void cancelAnimationTasks() {
-        if (this.switche != null && !this.switche.isCancelled()) {
-            this.switche.cancel();
+        if (this.switches != null && !this.switches.isCancelled()) {
+            this.switches.cancel();
         }
         if (this.title != null && !this.title.isCancelled()) {
             this.title.cancel();
@@ -104,7 +105,7 @@ public class RScoreboard {
     }
 
     private void runLoopers() {
-        this.switche = new BukkitRunnable() {
+        this.switches = new BukkitRunnable() {
             public void run() {
                 bp.next();
             }

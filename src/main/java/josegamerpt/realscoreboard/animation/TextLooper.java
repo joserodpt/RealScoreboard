@@ -8,9 +8,9 @@ import java.util.logging.Level;
 
 public class TextLooper {
 
-    private List<String> list;
+    private final List<String> list;
+    private final String id;
     private String get;
-    private String id;
 
     private int i = 0;
 
