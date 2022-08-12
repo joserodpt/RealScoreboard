@@ -16,7 +16,6 @@ public class Config implements Listener {
 
     private static FileConfiguration data;
     private static File dfile;
-
     private static File sqlFile;
     private static FileConfiguration sql;
 

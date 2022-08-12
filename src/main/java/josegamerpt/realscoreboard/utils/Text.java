@@ -2,7 +2,7 @@ package josegamerpt.realscoreboard.utils;
 
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.config.Config;
-import me.croabeast.iridiumapi.IridiumAPI;
+import josegamerpt.realscoreboard.iridumapi.IridiumAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

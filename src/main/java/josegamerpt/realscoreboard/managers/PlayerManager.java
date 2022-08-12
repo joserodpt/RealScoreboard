@@ -49,7 +49,7 @@ public class PlayerManager implements Listener {
     public void join(PlayerJoinEvent e) {
         check(e.getPlayer());
         if (e.getPlayer().isOp() && RealScoreboard.newUpdate) {
-            Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-18-1.22928/");
+            Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/");
         }
     }
 

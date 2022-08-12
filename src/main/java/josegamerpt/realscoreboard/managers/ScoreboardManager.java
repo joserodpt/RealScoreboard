@@ -23,7 +23,6 @@ public class ScoreboardManager {
 
             for (String perm : Config.file().getConfigurationSection("Config.Scoreboard." + world).getKeys(false)) {
                 //perm
-
                 sbs.add(new RScoreboard(world, perm, Config.file().getInt("Config.Scoreboard." + world + "." + perm + ".Switch-Timer")));
             }
 

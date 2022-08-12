@@ -57,8 +57,8 @@ public class RealScoreboard extends JavaPlugin {
         Config.setup(this);
         try {
             databaseManager = new DatabaseManager(this);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException s) {
+            s.printStackTrace();
         }
         getLogger().info("Your config version is: " + Configer.getConfigVersion());
 
@@ -90,12 +90,10 @@ public class RealScoreboard extends JavaPlugin {
                         getLogger().info("The plugin is updated to the latest version.");
                     } else {
                         newUpdate = true;
-                        getLogger().info("There is a new update available!");
+                        getLogger().info("There is a new update available! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/");
                     }
                 });
             }
-
-
 
             Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
             getLogger().info(header);
@@ -118,11 +116,9 @@ public class RealScoreboard extends JavaPlugin {
         this.scoreboardManager.reload();
 
         if (Configer.checkForErrors()) {
-            String msg = "There are some problems with your config:\n" + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.";
-            Text.send(cs, msg);
+            Text.send(cs, "There are some problems with your config:\n" + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.");
         } else {
             this.animationManager.reload();
-
             Bukkit.getOnlinePlayers().forEach(player -> this.playerManager.check(player));
         }
     }

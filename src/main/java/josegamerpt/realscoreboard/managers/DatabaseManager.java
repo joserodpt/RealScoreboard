@@ -4,13 +4,14 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.jdbc.db.DatabaseTypeUtils;
+import com.j256.ormlite.logger.LoggerFactory;
+import com.j256.ormlite.logger.NullLogBackend;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import josegamerpt.realscoreboard.config.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -28,6 +29,8 @@ public class DatabaseManager {
     private final HashMap<UUID, PlayerData> playerDataCache = new HashMap<>();
 
     public DatabaseManager(JavaPlugin javaPlugin) throws SQLException {
+        LoggerFactory.setLogBackendFactory(new NullLogBackend.NullLogBackendFactory());
+
         this.javaPlugin = javaPlugin;
         String databaseURL = getDatabaseURL();
 
@@ -50,7 +53,7 @@ public class DatabaseManager {
      *
      * @return The database URL String
      */
-    private @NotNull String getDatabaseURL() {
+    private  String getDatabaseURL() {
         final String driver = Config.getSql().getString("driver").toLowerCase(Locale.ROOT);
 
         switch (driver) {

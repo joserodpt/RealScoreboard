@@ -1,11 +1,11 @@
 package josegamerpt.realscoreboard.scoreboard;
 
 import josegamerpt.realscoreboard.RealScoreboard;
-import josegamerpt.realscoreboard.config.PlayerData;
 import josegamerpt.realscoreboard.config.Config;
+import josegamerpt.realscoreboard.config.PlayerData;
+import josegamerpt.realscoreboard.iridumapi.IridiumAPI;
 import josegamerpt.realscoreboard.scoreboard.fastscoreboard.FastBoard;
 import josegamerpt.realscoreboard.utils.Text;
-import me.croabeast.iridiumapi.IridiumAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -51,7 +51,7 @@ public class ScoreboardTask extends BukkitRunnable {
                 s = s.matches("(?i)%blank%") ?
                         (Text.randomColor() + "§r" + Text.randomColor()) :
                         rs.getPlaceholders().setPlaceHolders(player, s);
-                return IridiumAPI.process(player, s);
+                return IridiumAPI.process(s);
             }).collect(Collectors.toList());
 
             String title = rsb.getTitle();
