@@ -1,5 +1,6 @@
 Debug: false
 Config:
+  ItemAdder-Support: true
   Check-for-Updates: true
   Prefix: '&bReal&9Scoreboard &7| &r'
   Reloaded: '&fThe config has been &areloaded&f.'
