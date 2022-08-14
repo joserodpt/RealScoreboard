@@ -6,6 +6,7 @@ import josegamerpt.realscoreboard.config.PlayerData;
 import josegamerpt.realscoreboard.iridumapi.IridiumAPI;
 import josegamerpt.realscoreboard.scoreboard.fastscoreboard.FastBoard;
 import josegamerpt.realscoreboard.utils.Text;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -28,8 +29,7 @@ public class ScoreboardTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (!this.player.isOnline())
-        {
+        if (!this.player.isOnline()) {
             this.cancel();
             return;
         }
@@ -54,6 +54,26 @@ public class ScoreboardTask extends BukkitRunnable {
                 return IridiumAPI.process(s);
             }).collect(Collectors.toList());
 
+            if (Config.file().getBoolean("Config.ItemAdder-Support")) {
+                list = list.stream().map(s -> {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String[] split = s.split(" ");
+                    for (int i = 0; i < split.length; i++) {
+                        String space = " ";
+                        if (i == split.length - 1) space = "";
+                        String splitWord = split[i];
+                        String[] splitWordSplit = splitWord.split(":");
+                        if (splitWordSplit.length < 2) {
+                            stringBuilder.append(splitWord).append(space);
+                            continue;
+                        }
+                        stringBuilder.append("§f%img_").append(splitWordSplit[1]).append("%").append(space);
+                    }
+                    return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
+                }).collect(Collectors.toList());
+            }
+
+
             String title = rsb.getTitle();
             if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);
@@ -61,7 +81,8 @@ public class ScoreboardTask extends BukkitRunnable {
 
             this.fastBoard.updateTitle(IridiumAPI.process(title));
             this.fastBoard.updateLines(list);
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             rs.getLogger().log(Level.SEVERE, "[ERROR] RealScoreboard threw an error while trying to display the scoreboard for " + this.player.getName());
             e.printStackTrace();
         }

@@ -7,7 +7,7 @@ import java.util.Collections;
 
 public class Configer {
 
-    private final static int latest = 12;
+    private final static int latest = 13;
     private static String errors;
 
     public static int getConfigVersion() {
@@ -91,6 +91,12 @@ public class Configer {
                 case 11:
                     newconfig = 12;
                     Config.file().set("Config.Check-for-Updates", true);
+                    Config.save();
+                    break;
+                case 12:
+                    newconfig = 13;
+                    Config.file().set("Version", newconfig);
+                    Config.file().set("Config.ItemAdder-Support", true);
                     Config.save();
                     break;
             }
