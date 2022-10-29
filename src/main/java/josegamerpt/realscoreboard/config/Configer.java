@@ -99,6 +99,12 @@ public class Configer {
                     Config.file().set("Config.ItemAdder-Support", true);
                     Config.save();
                     break;
+                case 13:
+                    newconfig = 14;
+                    Config.file().set("Version", newconfig);
+                    Config.file().set("Config.mcMMO-Support", false);
+                    Config.save();
+                    break;
             }
             RealScoreboard.getInstance().getLogger().info("Config file updated to version " + newconfig + ".");
         }

@@ -1,0 +1,15 @@
+.idea/
+target/
+*.iml
+*.ipr
+*.iws
+*.class
+*.log
+*.ctxt
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+dependency-reduced-pom.xml

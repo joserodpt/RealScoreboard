@@ -1,6 +1,7 @@
 Debug: false
 Config:
   ItemAdder-Support: true
+  mcMMO-Support: false
   Check-for-Updates: true
   Prefix: '&bReal&9Scoreboard &7| &r'
   Reloaded: '&fThe config has been &areloaded&f.'
@@ -73,4 +74,4 @@ Config:
               - '%blank%'
               - ' &fThis is Board &e#2'
               - '%blank%'
-Version: 12
+Version: 13

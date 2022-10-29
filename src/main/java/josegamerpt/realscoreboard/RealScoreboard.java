@@ -3,6 +3,7 @@ package josegamerpt.realscoreboard;
 import josegamerpt.realscoreboard.animation.AnimationManager;
 import josegamerpt.realscoreboard.config.Config;
 import josegamerpt.realscoreboard.config.Configer;
+import josegamerpt.realscoreboard.listeners.McMMOScoreboardListener;
 import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.managers.ScoreboardManager;
@@ -82,6 +83,10 @@ public class RealScoreboard extends JavaPlugin {
             this.scoreboardManager.loadScoreboards();
 
             Bukkit.getOnlinePlayers().forEach(this.playerManager::check);
+
+            if (Config.file().getBoolean("Config.mcMMO-Support")) {
+                Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(), this);
+            }
 
             if (Config.file().getBoolean("Config.Check-for-Updates"))
             {
