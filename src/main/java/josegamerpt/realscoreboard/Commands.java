@@ -24,7 +24,7 @@ public class Commands extends CommandBase {
     @SubCommand("reload")
     @Permission("realscoreboard.admin")
     public void reloadCommand(final CommandSender commandSender) {
-        RealScoreboard.getInstance().reload(commandSender);
+        RealScoreboard.getInstance().reload();
         Text.send(commandSender, Config.file().getString("Config.Reloaded"));
     }
 

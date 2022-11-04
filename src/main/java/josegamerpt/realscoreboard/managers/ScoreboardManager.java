@@ -17,11 +17,11 @@ public class ScoreboardManager {
 
     public void loadScoreboards() {
 
-        for (String world : Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false)) {
+        for (String world : Config.file().getSection("Config.Scoreboard").getRoutesAsStrings(false)) {
             //world
             List<RScoreboard> sbs = new ArrayList<>();
 
-            for (String perm : Config.file().getConfigurationSection("Config.Scoreboard." + world).getKeys(false)) {
+            for (String perm : Config.file().getSection("Config.Scoreboard." + world).getRoutesAsStrings(false)) {
                 //perm
                 sbs.add(new RScoreboard(world, perm, Config.file().getInt("Config.Scoreboard." + world + "." + perm + ".Switch-Timer")));
             }

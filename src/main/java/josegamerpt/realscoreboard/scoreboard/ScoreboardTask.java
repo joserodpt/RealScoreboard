@@ -6,7 +6,6 @@ import josegamerpt.realscoreboard.config.PlayerData;
 import josegamerpt.realscoreboard.iridumapi.IridiumAPI;
 import josegamerpt.realscoreboard.scoreboard.fastscoreboard.FastBoard;
 import josegamerpt.realscoreboard.utils.Text;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
