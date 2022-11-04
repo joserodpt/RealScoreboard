@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 public class Data {
 
     public static ArrayList<String> getRegisteredWorlds() {
-        return new ArrayList<>(Config.file().getConfigurationSection("Config.Scoreboard").getKeys(false));
+        return new ArrayList<>(Config.file().getSection("Config.Scoreboard").getRoutesAsStrings(false));
     }
 
     public static String getCorrectPlace(Player p) {

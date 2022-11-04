@@ -41,8 +41,8 @@ public class RScoreboard {
         this.world = world;
         this.interval = interv;
         this.permission = perm;
-        Config.file().getConfigurationSection("Config.Scoreboard." + this.world + "." + this.permission + ".Boards")
-                .getKeys(false).forEach(s -> this.boards.add(new RBoard(s, Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Title"), Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Lines"))));
+        Config.file().getSection("Config.Scoreboard." + this.world + "." + this.permission + ".Boards")
+                .getRoutesAsStrings(false).forEach(s -> this.boards.add(new RBoard(s, Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Title"), Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Lines"))));
 
         this.boards.forEach(rBoard -> this.titleAnimations.put(rBoard.getWorldBoard(), new TextLooper(rBoard.getWorldBoard(), rBoard.getTitle())));
         this.bp = new BoardLooper(this.world, this.boards);

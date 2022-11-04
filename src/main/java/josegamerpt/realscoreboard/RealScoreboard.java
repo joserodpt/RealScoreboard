@@ -2,19 +2,16 @@ package josegamerpt.realscoreboard;
 
 import josegamerpt.realscoreboard.animation.AnimationManager;
 import josegamerpt.realscoreboard.config.Config;
-import josegamerpt.realscoreboard.config.Configer;
 import josegamerpt.realscoreboard.listeners.McMMOScoreboardListener;
 import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.managers.ScoreboardManager;
 import josegamerpt.realscoreboard.utils.Placeholders;
-import josegamerpt.realscoreboard.utils.Text;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -61,48 +58,41 @@ public class RealScoreboard extends JavaPlugin {
         } catch (SQLException s) {
             s.printStackTrace();
         }
-        getLogger().info("Your config version is: " + Configer.getConfigVersion());
+        getLogger().info("Your config version is: " + Config.file().getString("Version"));
 
-        if (Configer.checkForErrors()) {
-            failMessage("There are some problems with your config: " + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.");
-            getLogger().info(header);
-            disablePlugin();
-        } else {
-            Configer.updateConfig();
-            Bukkit.getPluginManager().registerEvents(new PlayerManager(this), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerManager(this), this);
 
-            CommandManager commandManager = new CommandManager(this);
-            commandManager.hideTabComplete(true);
-            commandManager.register(new Commands());
+        CommandManager commandManager = new CommandManager(this);
+        commandManager.hideTabComplete(true);
+        commandManager.register(new Commands());
 
-            this.animationManager = new AnimationManager();
-            this.playerManager = new PlayerManager(this);
-            this.scoreboardManager = new ScoreboardManager();
-            new Metrics(this, 10080);
+        this.animationManager = new AnimationManager();
+        this.playerManager = new PlayerManager(this);
+        this.scoreboardManager = new ScoreboardManager();
+        new Metrics(this, 10080);
 
-            this.scoreboardManager.loadScoreboards();
+        this.scoreboardManager.loadScoreboards();
 
-            Bukkit.getOnlinePlayers().forEach(this.playerManager::check);
+        Bukkit.getOnlinePlayers().forEach(this.playerManager::check);
 
-            if (Config.file().getBoolean("Config.mcMMO-Support")) {
-                Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(), this);
-            }
-
-            if (Config.file().getBoolean("Config.Check-for-Updates"))
-            {
-                new UpdateChecker(this, 22928).getVersion(version -> {
-                    if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                        getLogger().info("The plugin is updated to the latest version.");
-                    } else {
-                        newUpdate = true;
-                        getLogger().info("There is a new update available! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/");
-                    }
-                });
-            }
-
-            Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
-            getLogger().info(header);
+        if (Config.file().getBoolean("Config.mcMMO-Support")) {
+            Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(), this);
         }
+
+        if (Config.file().getBoolean("Config.Check-for-Updates"))
+        {
+            new UpdateChecker(this, 22928).getVersion(version -> {
+                if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                    getLogger().info("The plugin is updated to the latest version.");
+                } else {
+                    newUpdate = true;
+                    getLogger().info("There is a new update available! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/");
+                }
+            });
+        }
+
+        Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
+        getLogger().info(header);
     }
 
     private void disablePlugin() {
@@ -114,23 +104,13 @@ public class RealScoreboard extends JavaPlugin {
         Bukkit.getPluginManager().disablePlugin(this);
     }
 
-    public void reload(CommandSender cs) {
+    public void reload() {
         Config.reload();
         this.playerManager.getTasks().forEach((uuid, scoreboardTask) -> scoreboardTask.cancel());
         this.playerManager.getTasks().clear();
         this.scoreboardManager.reload();
-
-        if (Configer.checkForErrors()) {
-            Text.send(cs, "There are some problems with your config:\n" + Configer.getErrors() + "\nPlease check this errors. Plugin is disabled due to config errors.");
-        } else {
-            this.animationManager.reload();
-            Bukkit.getOnlinePlayers().forEach(player -> this.playerManager.check(player));
-        }
-    }
-
-    public void failMessage(String reason) {
-        Arrays.asList("Failed to load RealScoreboard.", reason,
-                "If you think this is a bug, please contact JoseGamer_PT.", "https://www.spigotmc.org/members/josegamer_pt.40267/").forEach(s -> getLogger().info(s));
+        this.animationManager.reload();
+        Bukkit.getOnlinePlayers().forEach(player -> this.playerManager.check(player));
     }
 
     // Vault
