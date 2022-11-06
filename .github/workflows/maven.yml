@@ -17,8 +17,8 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    - run: mvn --activate-profiles dist --no-transfer-progress package
+    - run: mvn clean package
     - uses: actions/upload-artifact@v3
       with:
         name: 'RealScoreboard (Dev Build)'
-        path: realscoreboard-plugin/target/RealScoreboard*.jar
+        path: ./realscoreboard-plugin/target/RealScoreboard*.jar
