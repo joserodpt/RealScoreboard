@@ -11,6 +11,13 @@
 	
 	<name>RealScoreboard-Parent</name>
 	<description>Parent project for all RealScoreboard modules.</description>
+
+    <distributionManagement>
+        <repository>
+            <id>neziw-repo</id>
+            <url>https://repo.neziw.xyz/releases</url>
+        </repository>
+    </distributionManagement>
 	
 	<modules>
 		<module>RealScoreboard-Plugin</module>
