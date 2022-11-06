@@ -22,4 +22,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: 'RealScoreboard (Dev Build)'
-        path: realscoreboard-plugin/target/BungeeCord.jar
+        path: realscoreboard-plugin/target/RealScoreboard*.jar
