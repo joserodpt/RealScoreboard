@@ -2,7 +2,7 @@ name: Publish and Build
 on: [push, pull_request]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
     steps:
@@ -17,8 +17,9 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+    - run: java -version && mvn --version
     - run: mvn --activate-profiles dist --no-transfer-progress package
     - uses: actions/upload-artifact@v3
       with:
         name: 'RealScoreboard (Dev Build)'
-        path: realscoreboard-plugin/target/RealScoreboard*.jar
+        path: realscoreboard-plugin/target/BungeeCord.jar
