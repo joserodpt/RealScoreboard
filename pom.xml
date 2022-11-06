@@ -20,8 +20,8 @@
     </distributionManagement>
 	
 	<modules>
-		<module>RealScoreboard-Plugin</module>
-		<module>RealScoreboard-API</module>
+		<module>realscoreboard-plugin</module>
+		<module>realscoreboard-api</module>
 	</modules>
 	
     <build>
