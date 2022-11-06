@@ -5,6 +5,7 @@ import josegamerpt.realscoreboard.api.Placeholders;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.managers.AbstractAnimationManager;
+import josegamerpt.realscoreboard.api.managers.AbstractDatabaseManager;
 import josegamerpt.realscoreboard.api.managers.AbstractPlayerManager;
 import josegamerpt.realscoreboard.api.managers.AbstractScoreboardManager;
 import josegamerpt.realscoreboard.managers.DatabaseManager;
@@ -31,6 +32,7 @@ public class RealScoreboard extends RealScoreboardAPI {
                           PlayerManager playerManager, DatabaseManager databaseManager,
                           ScoreboardManager scoreboardManager) {
         inst = this;
+        this.plugin = plugin;
         this.scoreboardManager = scoreboardManager;
         this.scoreboardManager.loadScoreboards();
         this.databaseManager = databaseManager;
@@ -38,7 +40,6 @@ public class RealScoreboard extends RealScoreboardAPI {
         this.animationManager = animationManager;
         this.logger = logger;
         this.placeholders = placeholders;
-        this.plugin = plugin;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class RealScoreboard extends RealScoreboardAPI {
     }
 
     @Override
-    public DatabaseManager getDatabaseManager() {
+    public AbstractDatabaseManager getDatabaseManager() {
         return this.databaseManager;
     }
 

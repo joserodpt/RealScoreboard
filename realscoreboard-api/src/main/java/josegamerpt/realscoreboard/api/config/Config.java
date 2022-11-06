@@ -6,7 +6,6 @@ import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +18,14 @@ public class Config {
     private static YamlDocument configFile;
     private static YamlDocument sqlConfigFile;
 
+    /**
+     * Configures configuration files for RealScoreboard
+     * <b>Note! You shouldn't call this method because
+     * RealScoreboard calls this itself unless you have real reason
+     * to do it (Probably you don't have)</b>
+     *
+     * @param javaPlugin plugin related to this method
+     */
     public static void setup(JavaPlugin javaPlugin) {
         try {
             configFile = YamlDocument.create(new File(javaPlugin.getDataFolder(), "config.yml"), javaPlugin.getResource("config.yml"),
@@ -32,14 +39,27 @@ public class Config {
         }
     }
 
+    /**
+     * Gets RealScoreboard configuration file
+     *
+     * @return yaml configuration file
+     */
     public static YamlDocument file() {
         return configFile;
     }
 
+    /**
+     * Gets RealScoreboard sql configuration file
+     *
+     * @return sql configuration file
+     */
     public static YamlDocument getSql() {
         return sqlConfigFile;
     }
 
+    /**
+     * Saves RealScoreboard configuration file
+     */
     public static void save() {
         try {
             configFile.save();
@@ -48,6 +68,11 @@ public class Config {
         }
     }
 
+    /**
+     * Reloads RealScoreboard configuration file
+     * <b>Note!</b> It's not possible to reload
+     * sql configuration file due to instability
+     */
     public static void reload() {
         try {
             configFile.reload();

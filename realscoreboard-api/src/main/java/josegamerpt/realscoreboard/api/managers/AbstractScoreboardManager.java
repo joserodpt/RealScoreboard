@@ -41,7 +41,7 @@ public abstract class AbstractScoreboardManager {
     /**
      * Gets list of RBoard instances
      *
-     * @return
+     * @return list of RBoard instances
      */
     public abstract List<RBoard> getBoards();
 }

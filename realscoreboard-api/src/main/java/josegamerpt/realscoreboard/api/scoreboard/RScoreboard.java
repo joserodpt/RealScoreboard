@@ -4,6 +4,7 @@ import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.animation.BoardLooper;
 import josegamerpt.realscoreboard.api.animation.TextLooper;
 import josegamerpt.realscoreboard.api.config.Config;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -31,7 +32,7 @@ public class RScoreboard {
         this.world = p.getWorld().getName();
         this.interval = 100;
         this.permission = "default";
-        this.boards.add(new RBoard(this.world, Collections.singletonList("&c&LCONFIG ERROR"), Arrays.asList("&c&LCONFIG ERROR", "&6&LCHECK CONSOLE")));
+        this.boards.add(new RBoard(this.world, Collections.singletonList("&c&lCONFIG ERROR"), Arrays.asList("&c&lCONFIG ERROR", "&6&lCHECK CONSOLE")));
         this.bp = new BoardLooper(this.world, this.boards);
         this.start();
     }
@@ -109,17 +110,17 @@ public class RScoreboard {
             public void run() {
                 bp.next();
             }
-        }.runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().getPlugin(), 0L, this.interval);
+        }.runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("RealScoreboard"), 0L, this.interval);
         this.title = new BukkitRunnable() {
             public void run() {
                 titleAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().getPlugin(), 0L, Config.file().getInt("Config.Animations.Title-Delay"));
+        }.runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("RealScoreboard"), 0L, Config.file().getInt("Config.Animations.Title-Delay"));
         this.looper = new BukkitRunnable() {
             public void run() {
                 loopAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().getPlugin(), 0L, Config.file().getInt("Config.Animations.Loop-Delay"));
+        }.runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("RealScoreboard"), 0L, Config.file().getInt("Config.Animations.Loop-Delay"));
     }
 
 }

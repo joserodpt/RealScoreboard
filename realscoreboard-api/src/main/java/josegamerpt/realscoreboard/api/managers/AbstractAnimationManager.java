@@ -1,5 +1,8 @@
 package josegamerpt.realscoreboard.api.managers;
 
+/**
+ * Abstraction class for AnimationManager
+ */
 public abstract class AbstractAnimationManager {
 
     public abstract void start();
