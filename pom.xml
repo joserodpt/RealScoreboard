@@ -12,7 +12,52 @@
 	<name>RealScoreboard-Parent</name>
 	<description>Parent project for all RealScoreboard modules.</description>
 
+    <developers>
+        <developer>
+            <id>JoseGamerPT</id>
+        </developer>
+        <developer>
+            <id>neziw</id>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>neziw</name>
+            <url>https://github.com/neziw</url>
+        </contributor>
+        <contributor>
+            <name>PeachesMLG</name>
+            <url>https://github.com/PeachesMLG</url>
+        </contributor>
+        <contributor>
+            <name>dlsf</name>
+            <url>https://github.com/dlsf</url>
+        </contributor>
+        <contributor>
+            <name>Seeloewen</name>
+            <url>https://github.com/Seeloewen</url>
+        </contributor>
+        <contributor>
+            <name>CroaBeast</name>
+            <url>https://github.com/CroaBeast</url>
+        </contributor>
+        <contributor>
+            <name>wordandahalf</name>
+            <url>https://github.com/wordandahalf</url>
+        </contributor>
+    </contributors>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/JoseGamerPT/RealScoreboard/issues</url>
+    </issueManagement>
+
     <distributionManagement>
+        <snapshotRepository>
+            <id>neziw-repo</id>
+            <url>https://repo.neziw.xyz/snapshots</url>
+        </snapshotRepository>
         <repository>
             <id>neziw-repo</id>
             <url>https://repo.neziw.xyz/releases</url>
