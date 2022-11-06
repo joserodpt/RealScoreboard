@@ -21,4 +21,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: 'RealScoreboard (Dev Build)'
-        path: target/RealScoreboard*.jar
+        path: realscoreboard-plugin/target/RealScoreboard*.jar
