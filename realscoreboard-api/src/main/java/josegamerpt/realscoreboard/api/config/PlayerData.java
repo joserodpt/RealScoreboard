@@ -15,14 +15,29 @@ public class PlayerData {
     @DatabaseField(columnName = "scoreboard_on")
     private boolean scoreboardON;
 
+    /**
+     * Gets boolean value of current scoreboard status
+     *
+     * @return true/false if scoreboard is ON
+     */
     public boolean isScoreboardON() {
         return scoreboardON;
     }
 
+    /**
+     * Gets saved UUID value in db
+     *
+     * @return registered UUID in database
+     */
     public UUID getUuid() {
         return uuid;
     }
 
+    /**
+     * Sets scoreboard status for playerdata
+     *
+     * @param scoreboardON scoreboard toggle status
+     */
     public void setScoreboardON(boolean scoreboardON) {
         ScoreboardToggleEvent event = new ScoreboardToggleEvent(this);
         Bukkit.getPluginManager().callEvent(event);

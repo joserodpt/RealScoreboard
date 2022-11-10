@@ -18,14 +18,18 @@ public class ScoreboardGroup {
         this.sbs = sbs;
     }
 
+    /**
+     * Gets RScoreboard instance for provided player
+     *
+     * @param p the player
+     * @return  RScoreboard instance
+     */
     public RScoreboard getScoreboard(Player p) {
         for (RScoreboard sb : this.sbs) {
             if (p.hasPermission(sb.getPermission())) {
                 return sb;
             }
         }
-
-
         Optional<RScoreboard> o = this.sbs.stream().filter(rScoreboard -> rScoreboard.getInternalPermission().equalsIgnoreCase("default")).findFirst();
         if (o.isPresent()) {
             return o.get();
@@ -35,6 +39,11 @@ public class ScoreboardGroup {
         }
     }
 
+    /**
+     * Gets list of RScoreboard instances
+     *
+     * @return list of RScoreboards
+     */
     public List<RScoreboard> getScoreboards() {
        return this.sbs;
     }

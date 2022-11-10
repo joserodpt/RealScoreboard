@@ -11,7 +11,17 @@ import java.util.UUID;
  */
 public abstract class AbstractPlayerManager {
 
+    /**
+     * Checks player
+     *
+     * @param p the player
+     */
     public abstract void check(Player p);
 
+    /**
+     * Gets hashmap of scoreboard tasks
+     *
+     * @return hashmap of tasks
+     */
     public abstract HashMap<UUID, ScoreboardTask> getTasks();
 }

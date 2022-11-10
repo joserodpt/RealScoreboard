@@ -9,6 +9,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
+/**
+ * RealScoreboard API implementation class
+ */
 public abstract class RealScoreboardAPI {
 
     private static RealScoreboardAPI instance;

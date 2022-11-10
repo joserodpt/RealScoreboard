@@ -12,6 +12,12 @@ public abstract class Placeholders {
      */
     public abstract int getPing(Player player);
 
-
+    /**
+     * Fixes placeholders in provided string
+     *
+     * @param p the player
+     * @param s the string message
+     * @return  fixed string with placeholders
+     */
     public abstract String setPlaceHolders(Player p, String s);
 }

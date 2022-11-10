@@ -15,15 +15,29 @@ public class RBoard {
         this.lines = lines;
     }
 
-    public String getWorldBoard()
-    {
+    /**
+     * Gets scoreboard world name
+     *
+     * @return value of world name
+     */
+    public String getWorldBoard() {
         return this.worldBoard;
     }
 
+    /**
+     * Gets list of scoreboard titles
+     *
+     * @return list of scoreboard titles
+     */
     public List<String> getTitle() {
         return this.title;
     }
 
+    /**
+     * Gets list of scoreboard lines
+     *
+     * @return list of scoreboard lines
+     */
     public List<String> getLines() {
         return this.lines;
     }

@@ -5,10 +5,21 @@ import org.bukkit.entity.Player;
 
 public class Data {
 
+    /**
+     * Gets list of registered worlds
+     *
+     * @return arraylist of registered worlds
+     */
     public static ArrayList<String> getRegisteredWorlds() {
         return new ArrayList<>(Config.file().getSection("Config.Scoreboard").getRoutesAsStrings(false));
     }
 
+    /**
+     * Gets correct scoreboard place for player
+     *
+     * @param p the player
+     * @return  correct scoreboard place
+     */
     public static String getCorrectPlace(Player p) {
         return checkSystem(p) ? p.getLocation().getWorld().getName() : Data.getRegisteredWorlds().get(0);
     }
