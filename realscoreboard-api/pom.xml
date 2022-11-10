@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>josegamerpt.realscoreboard</groupId>
 		<artifactId>RealScoreboard</artifactId>
-		<version>06-11-2022 Build 1</version>
+		<version>10-11-2022 Build 1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>	
 
@@ -68,6 +68,10 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>iridiumdevelopment</id>
+            <url>https://nexus.iridiumdevelopment.net/repository/maven-releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -91,6 +95,11 @@
             <groupId>com.j256.ormlite</groupId>
             <artifactId>ormlite-jdbc</artifactId>
             <version>6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.iridium</groupId>
+            <artifactId>IridiumColorAPI</artifactId>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 </project>

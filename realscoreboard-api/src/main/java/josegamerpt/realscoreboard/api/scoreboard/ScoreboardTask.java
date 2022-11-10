@@ -1,9 +1,9 @@
 package josegamerpt.realscoreboard.api.scoreboard;
 
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.config.PlayerData;
-import josegamerpt.realscoreboard.api.iridumapi.IridiumAPI;
 import josegamerpt.realscoreboard.api.utils.Text;
 import josegamerpt.realscoreboard.api.scoreboard.fastscoreboard.FastBoard;
 import org.bukkit.entity.Player;
@@ -50,7 +50,7 @@ public class ScoreboardTask extends BukkitRunnable {
                 s = s.matches("(?i)%blank%") ?
                         (Text.randomColor() + "§r" + Text.randomColor()) :
                         rs.getPlaceholders().setPlaceHolders(player, s);
-                return IridiumAPI.process(s);
+                return IridiumColorAPI.process(s);
             }).collect(Collectors.toList());
 
             if (Config.file().getBoolean("Config.ItemAdder-Support")) {
@@ -78,7 +78,7 @@ public class ScoreboardTask extends BukkitRunnable {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);
             }
 
-            this.fastBoard.updateTitle(IridiumAPI.process(title));
+            this.fastBoard.updateTitle(IridiumColorAPI.process(title));
             this.fastBoard.updateLines(list);
         } catch (
                 Exception e) {
