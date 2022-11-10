@@ -6,11 +6,11 @@
 [![Stars](https://img.shields.io/github/stars/JoseGamerPT/RealScoreboard)](https://github.com/JoseGamerPT/RealScoreboard/stargazers)
 [![Chat)](https://img.shields.io/discord/817810368649887744?logo=discord&logoColor=white)](https://discord.gg/t7gfnYZKy8) 
 
-</div>
-
 <a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/compact/supported/spigot_46h.png" height="35"></a>
 <a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/compact/supported/paper_46h.png" height="35"></a>
 <a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/compact/supported/purpur_46h.png" height="35"></a>
+
+</div>
 
 Welcome to **RealScoreboard!** This Scoreboard plugin was created to be efficient and to give the best possible experience possible to your players. Enjoy!
 
