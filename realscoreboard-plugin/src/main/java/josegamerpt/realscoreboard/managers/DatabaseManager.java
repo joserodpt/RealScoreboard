@@ -90,7 +90,7 @@ public class DatabaseManager extends AbstractDatabaseManager {
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) return;
         if (async) {
-            Bukkit.getScheduler().runTaskAsynchronously(javaPlugin, () -> savePlayerData(playerData, false));
+            saveDataAsync(playerData);
         } else {
             try {
                 playerDataDao.createOrUpdate(playerData);
@@ -98,5 +98,15 @@ public class DatabaseManager extends AbstractDatabaseManager {
                 throwables.printStackTrace();
             }
         }
+    }
+
+    private void saveDataAsync(PlayerData playerData) {
+        Bukkit.getScheduler().runTaskAsynchronously(javaPlugin, () -> {
+            try {
+                playerDataDao.createOrUpdate(playerData);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
     }
 }
