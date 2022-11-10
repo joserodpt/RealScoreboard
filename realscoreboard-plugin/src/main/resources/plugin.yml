@@ -2,6 +2,6 @@ name: RealScoreboard
 version: ${project.version}
 main: josegamerpt.realscoreboard.RealScoreboardPlugin
 api-version: 1.13
-softdepend: [ Vault, PlaceholderAPI ]
+softdepend: [ Vault, PlaceholderAPI, mcMMO ]
 authors: [ JoseGamer_PT ]
 description: Lightweight and efficient scoreboard manager.
