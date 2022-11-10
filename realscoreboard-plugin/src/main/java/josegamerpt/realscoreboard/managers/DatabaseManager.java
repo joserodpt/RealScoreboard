@@ -10,6 +10,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import josegamerpt.realscoreboard.api.config.PlayerData;
 import josegamerpt.realscoreboard.api.config.Config;
+import josegamerpt.realscoreboard.api.events.DataSaveEvent;
 import josegamerpt.realscoreboard.api.managers.AbstractDatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -85,6 +86,9 @@ public class DatabaseManager extends AbstractDatabaseManager {
     @Override
     public void savePlayerData(PlayerData playerData, boolean async) {
         playerDataCache.put(playerData.getUuid(), playerData);
+        DataSaveEvent event = new DataSaveEvent(playerData, async);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
         if (async) {
             Bukkit.getScheduler().runTaskAsynchronously(javaPlugin, () -> savePlayerData(playerData, false));
         } else {

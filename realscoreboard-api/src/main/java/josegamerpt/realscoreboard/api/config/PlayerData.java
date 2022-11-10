@@ -2,6 +2,8 @@ package josegamerpt.realscoreboard.api.config;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import josegamerpt.realscoreboard.api.events.ScoreboardToggleEvent;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
@@ -22,6 +24,9 @@ public class PlayerData {
     }
 
     public void setScoreboardON(boolean scoreboardON) {
+        ScoreboardToggleEvent event = new ScoreboardToggleEvent(this);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
         this.scoreboardON = scoreboardON;
     }
 
