@@ -21,7 +21,7 @@
 <dependency>
   <groupId>josegamerpt.realscoreboard</groupId>
   <artifactId>RealScoreboard-API</artifactId>
-  <version>06-11-2022 Build 1</version>
+  <version>10-11-2022 Build 5</version>
 </dependency>
 ```
 * Gradle (Groovy)
@@ -31,7 +31,7 @@ maven {
 }
 ```
 ```groovy
-implementation "josegamerpt.realscoreboard:RealScoreboard-API:06-11-2022 Build 1"
+implementation "josegamerpt.realscoreboard:RealScoreboard-API:10-11-2022 Build 5"
 ```
 
 ----
