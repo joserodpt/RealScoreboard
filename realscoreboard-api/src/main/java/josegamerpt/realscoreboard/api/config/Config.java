@@ -2,6 +2,7 @@ package josegamerpt.realscoreboard.api.config;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.route.Route;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
@@ -29,10 +30,10 @@ public class Config {
     public static void setup(JavaPlugin javaPlugin) {
         try {
             configFile = YamlDocument.create(new File(javaPlugin.getDataFolder(), "config.yml"), javaPlugin.getResource("config.yml"),
-                    GeneralSettings.DEFAULT,
+                    GeneralSettings.builder().setUseDefaults(false).build(),
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).build());
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).addIgnoredRoute("14", "Config.Scoreboard", '.').build());
             sqlConfigFile = YamlDocument.create(new File(javaPlugin.getDataFolder(), "sql.yml"), javaPlugin.getResource("sql.yml"));
         } catch (IOException e) {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't setup config files!");
