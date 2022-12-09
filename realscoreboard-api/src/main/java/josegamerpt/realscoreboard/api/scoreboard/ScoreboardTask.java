@@ -32,9 +32,7 @@ public class ScoreboardTask extends BukkitRunnable {
             this.cancel();
             return;
         }
-
         PlayerData playerData = RealScoreboardAPI.getInstance().getDatabaseManager().getPlayerData(this.player.getUniqueId());
-
         if (Objects.requireNonNull(Config.file().getList("Config.Disabled-Worlds")).
                 contains(this.player.getWorld().getName()) || !playerData.isScoreboardON()) {
             if (!this.fastBoard.isDeleted() || this.fastBoard.getLines().size() != 0) {
@@ -42,17 +40,14 @@ public class ScoreboardTask extends BukkitRunnable {
             }
             return;
         }
-
         try {
             RScoreboard rsb = this.rs.getScoreboardManager().getScoreboard(this.player);
-
             List<String> list = rsb.getLines().stream().map(s -> {
                 s = s.matches("(?i)%blank%") ?
                         (Text.randomColor() + "§r" + Text.randomColor()) :
                         rs.getPlaceholders().setPlaceHolders(player, s);
                 return IridiumColorAPI.process(s);
             }).collect(Collectors.toList());
-
             if (Config.file().getBoolean("Config.ItemAdder-Support")) {
                 list = list.stream().map(s -> {
                     StringBuilder stringBuilder = new StringBuilder();
@@ -71,17 +66,13 @@ public class ScoreboardTask extends BukkitRunnable {
                     return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
                 }).collect(Collectors.toList());
             }
-
-
             String title = rsb.getTitle();
             if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);
             }
-
             this.fastBoard.updateTitle(IridiumColorAPI.process(title));
             this.fastBoard.updateLines(list);
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             rs.getLogger().log(Level.SEVERE, "[ERROR] RealScoreboard threw an error while trying to display the scoreboard for " + this.player.getName());
             e.printStackTrace();
         }

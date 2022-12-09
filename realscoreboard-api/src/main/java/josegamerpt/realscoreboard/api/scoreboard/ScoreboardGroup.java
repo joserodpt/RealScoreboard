@@ -12,8 +12,7 @@ public class ScoreboardGroup {
     private String world;
     private List<RScoreboard> sbs;
 
-    public ScoreboardGroup(String world, List<RScoreboard> sbs)
-    {
+    public ScoreboardGroup(String world, List<RScoreboard> sbs) {
         this.world = world;
         this.sbs = sbs;
     }

@@ -2,6 +2,7 @@ package josegamerpt.realscoreboard.utils;
 
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.RealScoreboardPlugin;
+import josegamerpt.realscoreboard.api.IPlaceholders;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.utils.Text;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -16,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Placeholders extends josegamerpt.realscoreboard.api.Placeholders {
+public class Placeholders implements IPlaceholders {
     private String nmsVersion;
     private Method getHandleMethod;
     private Method getPingMethod;

@@ -2,7 +2,7 @@ package josegamerpt.realscoreboard.api;
 
 import org.bukkit.entity.Player;
 
-public abstract class Placeholders {
+public interface IPlaceholders {
 
     /**
      * Gets player ping value as integer
@@ -10,14 +10,14 @@ public abstract class Placeholders {
      * @param player the player related to thi method
      * @return       ping of provided player
      */
-    public abstract int getPing(Player player);
+    public int getPing(Player player);
 
     /**
      * Fixes placeholders in provided string
      *
-     * @param p the player
-     * @param s the string message
+     * @param player the player
+     * @param string the string message
      * @return  fixed string with placeholders
      */
-    public abstract String setPlaceHolders(Player p, String s);
+    public String setPlaceHolders(Player player, String string);
 }

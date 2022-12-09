@@ -1,7 +1,6 @@
 package josegamerpt.realscoreboard;
 
 import josegamerpt.realscoreboard.animation.AnimationManager;
-import josegamerpt.realscoreboard.api.Placeholders;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.managers.AbstractAnimationManager;

@@ -47,6 +47,7 @@ public class ScoreboardToggleEvent extends Event implements Cancellable {
         this.cancelled = cancelled;
     }
 
+    @SuppressWarnings("unused")
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }

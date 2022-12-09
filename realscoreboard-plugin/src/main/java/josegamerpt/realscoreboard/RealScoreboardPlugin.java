@@ -1,14 +1,10 @@
 package josegamerpt.realscoreboard;
 
-import josegamerpt.realscoreboard.animation.AnimationManager;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.listeners.McMMOScoreboardListener;
-import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
-import josegamerpt.realscoreboard.managers.ScoreboardManager;
 import josegamerpt.realscoreboard.utils.Metrics;
-import josegamerpt.realscoreboard.utils.Placeholders;
 import josegamerpt.realscoreboard.utils.UpdateChecker;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.chat.Chat;

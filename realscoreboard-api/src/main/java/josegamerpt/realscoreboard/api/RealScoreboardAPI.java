@@ -72,7 +72,7 @@ public abstract class RealScoreboardAPI {
      */
     public abstract Logger getLogger();
 
-    public abstract Placeholders getPlaceholders();
+    public abstract IPlaceholders getPlaceholders();
 
     /**
      * Gets JavaPlugin instance of RealScoreboard

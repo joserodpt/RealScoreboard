@@ -11,7 +11,6 @@ public class TextLooper {
     private final List<String> list;
     private final String id;
     private String get;
-
     private int i = 0;
 
     public TextLooper(String id, List<String> s) {
@@ -35,5 +34,4 @@ public class TextLooper {
     public String get() {
         return Strings.isNullOrEmpty(this.get) ? this.id + " err" : this.get;
     }
-
 }
