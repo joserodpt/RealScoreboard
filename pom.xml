@@ -6,7 +6,7 @@
 	
 	<groupId>josegamerpt.realscoreboard</groupId>
     <artifactId>RealScoreboard</artifactId>
-    <version>18-11-2022 Build 1</version>
+    <version>09-12-2022 Build 2</version>
     <packaging>pom</packaging>
 	
 	<name>RealScoreboard-Parent</name>

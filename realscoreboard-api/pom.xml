@@ -7,11 +7,11 @@
 	<parent>
 		<groupId>josegamerpt.realscoreboard</groupId>
 		<artifactId>RealScoreboard</artifactId>
-		<version>18-11-2022 Build 1</version>
+		<version>09-12-2022 Build 2</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-    <artifactId>RealScoreboard-API</artifactId>
+    <artifactId>realscoreboard-api</artifactId>
     <packaging>jar</packaging>
 
     <name>RealScoreboard-API</name>
@@ -31,6 +31,19 @@
                     <source>9</source>
                     <target>9</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>
