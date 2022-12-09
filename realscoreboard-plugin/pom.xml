@@ -41,7 +41,19 @@
                     <relocations>
                         <relocation>
                             <pattern>me.mattstudios.mf</pattern>
-                            <shadedPattern>josegamerpt.realscoreboard.mf</shadedPattern>
+                            <shadedPattern>shaded.rsb.mf</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>dev.dejvokep.boostedyaml</pattern>
+                            <shadedPattern>shaded.rsb.yaml</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>dev.dejvokep.boostedyaml</pattern>
+                            <shadedPattern>shaded.rsb.yaml</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>fr.mrmicky.fastboard</pattern>
+                            <shadedPattern>shaded.rsb.fastboard</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
