@@ -1,5 +1,6 @@
 package josegamerpt.realscoreboard.managers;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -20,20 +21,22 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class DatabaseManager extends AbstractDatabaseManager {
 
     private final Dao<PlayerData, UUID> playerDataDao;
-
     private final JavaPlugin javaPlugin;
-
     private final HashMap<UUID, PlayerData> playerDataCache = new HashMap<>();
+    private final ExecutorService executor;
 
     public DatabaseManager(JavaPlugin javaPlugin) throws SQLException {
         LoggerFactory.setLogBackendFactory(new NullLogBackend.NullLogBackendFactory());
 
         this.javaPlugin = javaPlugin;
+        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
+                new ThreadFactoryBuilder().setNameFormat("RealScoreboard-Pool-%d").build());
         String databaseURL = getDatabaseURL();
 
         ConnectionSource connectionSource = new JdbcConnectionSource(
@@ -101,11 +104,14 @@ public class DatabaseManager extends AbstractDatabaseManager {
     }
 
     private void saveDataAsync(PlayerData playerData) {
-        Bukkit.getScheduler().runTaskAsynchronously(javaPlugin, () -> {
-            try {
-                playerDataDao.createOrUpdate(playerData);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    playerDataDao.createOrUpdate(playerData);
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
     }
