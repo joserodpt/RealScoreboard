@@ -1,6 +1,7 @@
 package josegamerpt.realscoreboard;
 
 import josegamerpt.realscoreboard.animation.AnimationManager;
+import josegamerpt.realscoreboard.api.IPlaceholders;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.managers.AbstractAnimationManager;
@@ -78,7 +79,7 @@ public class RealScoreboard extends RealScoreboardAPI {
     }
 
     @Override
-    public Placeholders getPlaceholders() {
+    public IPlaceholders getPlaceholders() {
         return this.placeholders;
     }
 
