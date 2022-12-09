@@ -9,9 +9,8 @@
 		<artifactId>RealScoreboard</artifactId>
 		<version>18-11-2022 Build 1</version>
 		<relativePath>../pom.xml</relativePath>
-	</parent>	
+	</parent>
 
-    <groupId>josegamerpt.realscoreboard</groupId>
     <artifactId>RealScoreboard-API</artifactId>
     <packaging>jar</packaging>
 
