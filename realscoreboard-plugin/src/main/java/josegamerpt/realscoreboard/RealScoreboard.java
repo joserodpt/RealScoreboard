@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class RealScoreboard extends RealScoreboardAPI {
 
     private static RealScoreboard inst;
-    private final DatabaseManager databaseManager;
+    private DatabaseManager databaseManager;
     private final ScoreboardManager scoreboardManager;
     private final PlayerManager playerManager;
     private final AnimationManager animationManager;

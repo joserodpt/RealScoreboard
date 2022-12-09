@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+@SuppressWarnings("unused")
 @Command("realscoreboard")
 @Alias({"rsb", "sb"})
 public class Commands extends CommandBase {
@@ -75,6 +76,7 @@ public class Commands extends CommandBase {
                 "- &fTitle Delay: &b" + Config.file().getInt("Config.Animations.Title-Delay"),
                 "- &fLoop-Delay: &b" + Config.file().getInt("Config.Animations.Loop-Delay")));
     }
+
 
     @SubCommand("debug")
     @Permission("realscoreboard.admin")
