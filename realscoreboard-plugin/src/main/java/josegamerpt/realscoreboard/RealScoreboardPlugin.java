@@ -27,14 +27,10 @@ public class RealScoreboardPlugin extends JavaPlugin {
     private static RealScoreboardPlugin instance;
     private static RealScoreboard realScoreboard;
 
-    @Override
-    public void onLoad() {
-        realScoreboard = new RealScoreboard(this);
-    }
-
     public void onEnable() {
         instance = this;
-
+        Config.setup(this);
+        realScoreboard = new RealScoreboard(this);
         String header = "------------------- RealScoreboard PT -------------------".replace("PT", this.getDescription().getVersion());
         getLogger().info(header);
 
@@ -50,7 +46,6 @@ public class RealScoreboardPlugin extends JavaPlugin {
         } else {
             getLogger().warning("PlaceholderAPI is not installed on the server.");
         }
-        Config.setup(this);
         getLogger().info("Your config version is: " + Config.file().getString("Version"));
 
         Bukkit.getPluginManager().registerEvents(new PlayerManager(), this);
