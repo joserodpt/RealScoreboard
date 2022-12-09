@@ -64,8 +64,9 @@ public class DatabaseManager extends AbstractDatabaseManager {
         switch (driver) {
             case "mysql":
             case "mariadb":
+                return "jdbc:mysql://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
             case "postgresql":
-                return "jdbc:" + driver + "://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
+                return "jdbc:postgresql://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
             case "sqlserver":
                 return "jdbc:sqlserver://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + ";databaseName=" + Config.getSql().getString("database");
             default:
