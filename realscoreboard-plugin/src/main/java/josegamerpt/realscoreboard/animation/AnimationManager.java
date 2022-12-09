@@ -58,11 +58,13 @@ public class AnimationManager extends AbstractAnimationManager {
 
     private void runLoopers() {
         title = new BukkitRunnable() {
+            @Override
             public void run() {
                 titleAnimations.forEach((s, textLooper) -> textLooper.next());
             }
         }.runTaskTimerAsynchronously(RealScoreboardPlugin.getInstance(), 0L, Config.file().getInt("Config.Animations.Title-Delay"));
         looper = new BukkitRunnable() {
+            @Override
             public void run() {
                 loopAnimations.forEach((s, textLooper) -> textLooper.next());
             }

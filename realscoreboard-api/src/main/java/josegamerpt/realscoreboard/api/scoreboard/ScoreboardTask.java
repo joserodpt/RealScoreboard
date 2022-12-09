@@ -1,11 +1,11 @@
 package josegamerpt.realscoreboard.api.scoreboard;
 
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import fr.mrmicky.fastboard.FastBoard;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.config.PlayerData;
 import josegamerpt.realscoreboard.api.utils.Text;
-import josegamerpt.realscoreboard.api.scoreboard.fastscoreboard.FastBoard;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
