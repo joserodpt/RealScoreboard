@@ -14,6 +14,7 @@ import josegamerpt.realscoreboard.managers.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class RealScoreboard extends RealScoreboardAPI {
@@ -27,19 +28,20 @@ public class RealScoreboard extends RealScoreboardAPI {
     private final josegamerpt.realscoreboard.utils.Placeholders placeholders;
     private final JavaPlugin plugin;
 
-    // TODO: make this constructor better?
-    public RealScoreboard(JavaPlugin plugin, josegamerpt.realscoreboard.utils.Placeholders placeholders, Logger logger, AnimationManager animationManager,
-                          PlayerManager playerManager, DatabaseManager databaseManager,
-                          ScoreboardManager scoreboardManager) {
+    public RealScoreboard(JavaPlugin plugin) {
         inst = this;
         this.plugin = plugin;
-        this.scoreboardManager = scoreboardManager;
+        this.scoreboardManager = new ScoreboardManager();
         this.scoreboardManager.loadScoreboards();
-        this.databaseManager = databaseManager;
-        this.playerManager = playerManager;
-        this.animationManager = animationManager;
-        this.logger = logger;
-        this.placeholders = placeholders;
+        try {
+            this.databaseManager = new DatabaseManager(plugin);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        this.playerManager = new PlayerManager();
+        this.animationManager = new AnimationManager();
+        this.logger = plugin.getLogger();
+        this.placeholders = new josegamerpt.realscoreboard.utils.Placeholders();
     }
 
     @Override

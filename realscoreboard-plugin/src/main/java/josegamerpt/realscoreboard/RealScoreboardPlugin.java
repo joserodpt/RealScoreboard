@@ -31,6 +31,11 @@ public class RealScoreboardPlugin extends JavaPlugin {
     private static RealScoreboardPlugin instance;
     private static RealScoreboard realScoreboard;
 
+    @Override
+    public void onLoad() {
+        realScoreboard = new RealScoreboard(this);
+    }
+
     public void onEnable() {
         instance = this;
 
@@ -80,13 +85,6 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
         Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
         getLogger().info(header);
-
-        try {
-            // TODO: make this better?
-            realScoreboard = new RealScoreboard(this, new Placeholders(), getLogger(), new AnimationManager(), new PlayerManager(), new DatabaseManager(this), new ScoreboardManager());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         RealScoreboardAPI.setInstance(realScoreboard);
     }
 
