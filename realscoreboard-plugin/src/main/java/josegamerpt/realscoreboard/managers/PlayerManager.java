@@ -7,6 +7,7 @@ import josegamerpt.realscoreboard.api.scoreboard.ScoreboardTask;
 import josegamerpt.realscoreboard.api.config.PlayerData;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.utils.Text;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class PlayerManager extends AbstractPlayerManager implements Listener {
 
     private final RealScoreboard plugin;
+    @Getter
     private final HashMap<UUID, ScoreboardTask> tasks = new HashMap<>();
     private final String[] vanishCommands = {"/pv", "/vanish", "/premiumvanish"};
 
@@ -50,7 +52,7 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void join(PlayerJoinEvent e) {
         check(e.getPlayer());
-        if (e.getPlayer().isOp() && RealScoreboardPlugin.newUpdate) {
+        if (e.getPlayer().isOp() && RealScoreboardPlugin.getNewUpdate()) {
             Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/");
         }
     }
@@ -65,8 +67,7 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
         Player p = e.getPlayer();
         for (String cmd : vanishCommands) {
             if (e.getMessage().toLowerCase().startsWith(cmd)) {
-                if (isVanished(p))
-                {
+                if (isVanished(p)) {
                     PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(p.getUniqueId());
                     playerData.setScoreboardON(false);
                     this.plugin.getDatabaseManager().savePlayerData(playerData, true);
@@ -84,10 +85,5 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
             if (meta.asBoolean()) return true;
         }
         return false;
-    }
-
-    @Override
-    public HashMap<UUID, ScoreboardTask> getTasks() {
-        return this.tasks;
     }
 }

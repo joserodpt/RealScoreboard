@@ -4,17 +4,15 @@ import com.gmail.nossr50.events.scoreboard.McMMOScoreboardMakeboardEvent;
 import com.gmail.nossr50.events.scoreboard.McMMOScoreboardRevertEvent;
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.api.config.PlayerData;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@AllArgsConstructor
 public class McMMOScoreboardListener implements Listener {
 
     private final RealScoreboard plugin;
-
-    public McMMOScoreboardListener(RealScoreboard plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler
     public void onRevert(McMMOScoreboardRevertEvent event) {

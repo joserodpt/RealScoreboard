@@ -2,10 +2,12 @@ package josegamerpt.realscoreboard;
 
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
+import josegamerpt.realscoreboard.commands.Commands;
 import josegamerpt.realscoreboard.listeners.McMMOScoreboardListener;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.utils.Metrics;
 import josegamerpt.realscoreboard.utils.UpdateChecker;
+import lombok.Getter;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -18,19 +20,26 @@ import java.util.Arrays;
 
 public class RealScoreboardPlugin extends JavaPlugin {
 
-    public boolean placeholderAPI = false;
-    public static Boolean newUpdate = false;
+    @Getter
     private Permission perms;
+    @Getter
     private Economy economy;
+    @Getter
     private Chat chat;
+    @Getter
     private static RealScoreboardPlugin instance;
     private static RealScoreboard realScoreboard;
+    @Getter
+    private boolean placeholderAPI = false;
+    @Getter
+    private static Boolean newUpdate = false;
 
     @Override
     public void onEnable() {
         instance = this;
         Config.setup(this);
         realScoreboard = new RealScoreboard(this);
+        RealScoreboardAPI.setInstance(realScoreboard);
         String header = "------------------- RealScoreboard PT -------------------".replace("PT", this.getDescription().getVersion());
         getLogger().info(header);
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
@@ -49,7 +58,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerManager(realScoreboard), this);
         CommandManager commandManager = new CommandManager(this);
         commandManager.hideTabComplete(true);
-        commandManager.register(new Commands());
+        commandManager.register(new Commands(this, realScoreboard));
         new Metrics(this, 10080);
         Bukkit.getOnlinePlayers().forEach(player -> new PlayerManager(realScoreboard).check(player));
         if (Config.file().getBoolean("Config.mcMMO-Support")) {
@@ -67,7 +76,6 @@ public class RealScoreboardPlugin extends JavaPlugin {
         }
         Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
         getLogger().info(header);
-        RealScoreboardAPI.setInstance(realScoreboard);
     }
 
     private void setupEconomy() {
@@ -98,23 +106,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
         return s.substring(s.lastIndexOf(".") + 1).trim();
     }
 
-    public Economy getEconomy() {
-        return this.economy;
-    }
-
-    public Chat getChat() {
-        return this.chat;
-    }
-
-    public Permission getPerms() {
-        return this.perms;
-    }
-
     public String getVersion() {
         return getDescription().getVersion();
-    }
-
-    public static RealScoreboardPlugin getInstance() {
-        return instance;
     }
 }

@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 
 public class RealScoreboard extends RealScoreboardAPI {
 
-    private static RealScoreboard inst;
     private DatabaseManager databaseManager;
     private final ScoreboardManager scoreboardManager;
     private final PlayerManager playerManager;
@@ -30,7 +29,6 @@ public class RealScoreboard extends RealScoreboardAPI {
     private final JavaPlugin plugin;
 
     public RealScoreboard(JavaPlugin plugin) {
-        inst = this;
         this.plugin = plugin;
         this.scoreboardManager = new ScoreboardManager();
         this.scoreboardManager.loadScoreboards();
@@ -40,7 +38,7 @@ public class RealScoreboard extends RealScoreboardAPI {
             ex.printStackTrace();
         }
         this.playerManager = new PlayerManager(this);
-        this.animationManager = new AnimationManager();
+        this.animationManager = new AnimationManager(plugin);
         this.logger = plugin.getLogger();
         this.placeholders = new Placeholders();
     }
@@ -87,9 +85,5 @@ public class RealScoreboard extends RealScoreboardAPI {
     @Override
     public JavaPlugin getPlugin() {
         return this.plugin;
-    }
-
-    public static RealScoreboard inst() {
-        return inst;
     }
 }

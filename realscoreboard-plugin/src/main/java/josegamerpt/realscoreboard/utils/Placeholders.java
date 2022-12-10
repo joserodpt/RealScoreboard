@@ -200,7 +200,7 @@ public class Placeholders implements IPlaceholders {
 
 
     private String placeholderAPI(Player p, String placeholders) {
-        return RealScoreboardPlugin.getInstance().placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
+        return RealScoreboardPlugin.getInstance().isPlaceholderAPI() ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
     }
 
     private String getNmsVersion() {
