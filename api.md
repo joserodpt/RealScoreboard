@@ -20,8 +20,8 @@
 ```xml
 <dependency>
   <groupId>josegamerpt.realscoreboard</groupId>
-  <artifactId>RealScoreboard-API</artifactId>
-  <version>10-11-2022 Build 5</version>
+  <artifactId>realscoreboard-api</artifactId>
+  <version>10-12-2022 Build 2</version>
 </dependency>
 ```
 * Gradle (Groovy)
