@@ -1,5 +1,6 @@
 package josegamerpt.realscoreboard.managers;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -20,49 +21,41 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class DatabaseManager extends AbstractDatabaseManager {
 
     private final Dao<PlayerData, UUID> playerDataDao;
-
     private final JavaPlugin javaPlugin;
-
     private final HashMap<UUID, PlayerData> playerDataCache = new HashMap<>();
+    private final ExecutorService executor;
 
     public DatabaseManager(JavaPlugin javaPlugin) throws SQLException {
         LoggerFactory.setLogBackendFactory(new NullLogBackend.NullLogBackendFactory());
-
         this.javaPlugin = javaPlugin;
+        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
+                new ThreadFactoryBuilder().setNameFormat("RealScoreboard-Pool-%d").build());
         String databaseURL = getDatabaseURL();
-
         ConnectionSource connectionSource = new JdbcConnectionSource(
                 databaseURL,
                 Config.getSql().getString("username"),
                 Config.getSql().getString("password"),
                 DatabaseTypeUtils.createDatabaseType(databaseURL)
         );
-
         TableUtils.createTableIfNotExists(connectionSource, PlayerData.class);
-
         this.playerDataDao = DaoManager.createDao(connectionSource, PlayerData.class);
-
         getPlayerData();
     }
 
-    /**
-     * Database connection String used for establishing a connection.
-     *
-     * @return The database URL String
-     */
     private String getDatabaseURL() {
-        final String driver = Config.getSql().getString("driver").toLowerCase(Locale.ROOT);
-
+        String driver = Config.getSql().getString("driver").toLowerCase(Locale.ROOT);
         switch (driver) {
             case "mysql":
             case "mariadb":
+                return "jdbc:mysql://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
             case "postgresql":
-                return "jdbc:" + driver + "://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
+                return "jdbc:postgresql://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
             case "sqlserver":
                 return "jdbc:sqlserver://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + ";databaseName=" + Config.getSql().getString("database");
             default:
@@ -72,7 +65,7 @@ public class DatabaseManager extends AbstractDatabaseManager {
 
     private void getPlayerData() {
         try {
-            playerDataDao.queryForAll().forEach(playerData -> playerDataCache.put(playerData.getUuid(), playerData));
+            this.playerDataDao.queryForAll().forEach(playerData -> playerDataCache.put(playerData.getUuid(), playerData));
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -80,20 +73,20 @@ public class DatabaseManager extends AbstractDatabaseManager {
 
     @Override
     public PlayerData getPlayerData(UUID uuid) {
-        return playerDataCache.getOrDefault(uuid, new PlayerData(uuid));
+        return this.playerDataCache.getOrDefault(uuid, new PlayerData(uuid));
     }
 
     @Override
     public void savePlayerData(PlayerData playerData, boolean async) {
-        playerDataCache.put(playerData.getUuid(), playerData);
+        this.playerDataCache.put(playerData.getUuid(), playerData);
         DataSaveEvent event = new DataSaveEvent(playerData, async);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) return;
         if (async) {
-            saveDataAsync(playerData);
+            this.saveDataAsync(playerData);
         } else {
             try {
-                playerDataDao.createOrUpdate(playerData);
+                this.playerDataDao.createOrUpdate(playerData);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -101,9 +94,9 @@ public class DatabaseManager extends AbstractDatabaseManager {
     }
 
     private void saveDataAsync(PlayerData playerData) {
-        Bukkit.getScheduler().runTaskAsynchronously(javaPlugin, () -> {
+        this.executor.execute(() -> {
             try {
-                playerDataDao.createOrUpdate(playerData);
+                this.playerDataDao.createOrUpdate(playerData);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

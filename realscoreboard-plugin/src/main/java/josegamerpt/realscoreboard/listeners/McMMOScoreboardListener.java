@@ -4,27 +4,29 @@ import com.gmail.nossr50.events.scoreboard.McMMOScoreboardMakeboardEvent;
 import com.gmail.nossr50.events.scoreboard.McMMOScoreboardRevertEvent;
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.api.config.PlayerData;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@AllArgsConstructor
 public class McMMOScoreboardListener implements Listener {
 
-    // Enable RealScoreboard for player on revert
+    private final RealScoreboard plugin;
+
     @EventHandler
     public void onRevert(McMMOScoreboardRevertEvent event) {
         Player player = event.getTargetPlayer();
-        PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(player.getUniqueId());
+        PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(player.getUniqueId());
         playerData.setScoreboardON(true);
-        RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+        this.plugin.getDatabaseManager().savePlayerData(playerData, true);
     }
 
-    // Disable RealScoreboard for player when McMMO creates its own
     @EventHandler
     public void onMake(McMMOScoreboardMakeboardEvent event) {
         Player player = event.getTargetPlayer();
-        PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(player.getUniqueId());
+        PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(player.getUniqueId());
         playerData.setScoreboardON(false);
-        RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+        this.plugin.getDatabaseManager().savePlayerData(playerData, true);
     }
 }

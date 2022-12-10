@@ -2,6 +2,7 @@ package josegamerpt.realscoreboard.utils;
 
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.RealScoreboardPlugin;
+import josegamerpt.realscoreboard.api.IPlaceholders;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.utils.Text;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -16,7 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Placeholders extends josegamerpt.realscoreboard.api.Placeholders {
+public class Placeholders implements IPlaceholders {
+
     private String nmsVersion;
     private Method getHandleMethod;
     private Method getPingMethod;
@@ -39,14 +41,11 @@ public class Placeholders extends josegamerpt.realscoreboard.api.Placeholders {
                 if (this.pingField != null)
                     this.pingField.setAccessible(true);
             }
-
             int ping;
-
             if (this.getPingMethod != null)
                 ping = (int) this.getPingMethod.invoke(player);
             else
                 ping = this.pingField.getInt(entityPlayer);
-
             return Math.max(ping, 0);
         } catch (Exception e) {
             return 1;
@@ -96,12 +95,6 @@ public class Placeholders extends josegamerpt.realscoreboard.api.Placeholders {
     private String getVersion() {
         return Bukkit.getBukkitVersion();
     }
-
-    private String getVersionShort() {
-        String a = Bukkit.getServer().getClass().getPackage().getName();
-        return a.substring(a.lastIndexOf('.') + 1);
-    }
-
 
     private String getWorldName(Player p) {
         return p.getLocation().getWorld().getName();
@@ -207,7 +200,7 @@ public class Placeholders extends josegamerpt.realscoreboard.api.Placeholders {
 
 
     private String placeholderAPI(Player p, String placeholders) {
-        return RealScoreboardPlugin.getInstance().placeholderAPI ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
+        return RealScoreboardPlugin.getInstance().isPlaceholderAPI() ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
     }
 
     private String getNmsVersion() {

@@ -26,8 +26,7 @@ public class BoardLooper {
             }
             this.get = list.get(i);
             this.i++;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             RealScoreboardAPI.getInstance().getLogger().log(Level.WARNING, "There is something wrong with this board loop: " + this.id);
         }
     }
@@ -35,6 +34,4 @@ public class BoardLooper {
     public RBoard getBoard() {
         return this.get;
     }
-
-
 }

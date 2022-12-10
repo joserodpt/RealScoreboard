@@ -1,5 +1,6 @@
 package josegamerpt.realscoreboard.utils;
 
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Consumer;
@@ -11,15 +12,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Scanner;
 
+@AllArgsConstructor
 public class UpdateChecker {
 
-    private JavaPlugin plugin;
-    private int resourceId;
-
-    public UpdateChecker(JavaPlugin plugin, int resourceId) {
-        this.plugin = plugin;
-        this.resourceId = resourceId;
-    }
+    private final JavaPlugin plugin;
+    private final int resourceId;
 
     public void getVersion(final Consumer<String> consumer) {
         Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {

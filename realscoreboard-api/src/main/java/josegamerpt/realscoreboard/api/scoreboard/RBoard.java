@@ -8,9 +8,8 @@ public class RBoard {
     private final List<String> title;
     private final List<String> lines;
 
-    public RBoard(String worldboard, List<String> title, List<String> lines)
-    {
-        this.worldBoard = worldboard;
+    public RBoard(String worldBoard, List<String> title, List<String> lines) {
+        this.worldBoard = worldBoard;
         this.title = title;
         this.lines = lines;
     }

@@ -1,15 +1,13 @@
 package josegamerpt.realscoreboard;
 
-import josegamerpt.realscoreboard.animation.AnimationManager;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
+import josegamerpt.realscoreboard.commands.Commands;
 import josegamerpt.realscoreboard.listeners.McMMOScoreboardListener;
-import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
-import josegamerpt.realscoreboard.managers.ScoreboardManager;
 import josegamerpt.realscoreboard.utils.Metrics;
-import josegamerpt.realscoreboard.utils.Placeholders;
 import josegamerpt.realscoreboard.utils.UpdateChecker;
+import lombok.Getter;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -18,25 +16,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.SQLException;
 import java.util.Arrays;
 
 public class RealScoreboardPlugin extends JavaPlugin {
 
-    public boolean placeholderAPI = false;
-    public static Boolean newUpdate = false;
-    private Permission perms = null;
-    private Economy economy = null;
-    private Chat chat = null;
+    @Getter
+    private Permission perms;
+    @Getter
+    private Economy economy;
+    @Getter
+    private Chat chat;
+    @Getter
     private static RealScoreboardPlugin instance;
     private static RealScoreboard realScoreboard;
+    @Getter
+    private boolean placeholderAPI = false;
+    @Getter
+    private static Boolean newUpdate = false;
 
+    @Override
     public void onEnable() {
         instance = this;
-
+        Config.setup(this);
+        realScoreboard = new RealScoreboard(this);
+        RealScoreboardAPI.setInstance(realScoreboard);
         String header = "------------------- RealScoreboard PT -------------------".replace("PT", this.getDescription().getVersion());
         getLogger().info(header);
-
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             setupEconomy();
             setupPermissions();
@@ -45,29 +50,21 @@ public class RealScoreboardPlugin extends JavaPlugin {
             getLogger().warning("Vault is not installed on the server.");
         }
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            placeholderAPI = true;
+            this.placeholderAPI = true;
         } else {
             getLogger().warning("PlaceholderAPI is not installed on the server.");
         }
-        Config.setup(this);
         getLogger().info("Your config version is: " + Config.file().getString("Version"));
-
-        Bukkit.getPluginManager().registerEvents(new PlayerManager(), this);
-
+        Bukkit.getPluginManager().registerEvents(new PlayerManager(realScoreboard), this);
         CommandManager commandManager = new CommandManager(this);
         commandManager.hideTabComplete(true);
-        commandManager.register(new Commands());
-
+        commandManager.register(new Commands(this, realScoreboard));
         new Metrics(this, 10080);
-
-        Bukkit.getOnlinePlayers().forEach(player -> new PlayerManager().check(player));
-
+        Bukkit.getOnlinePlayers().forEach(player -> new PlayerManager(realScoreboard).check(player));
         if (Config.file().getBoolean("Config.mcMMO-Support")) {
-            Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(), this);
+            Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(realScoreboard), this);
         }
-
-        if (Config.file().getBoolean("Config.Check-for-Updates"))
-        {
+        if (Config.file().getBoolean("Config.Check-for-Updates")) {
             new UpdateChecker(this, 22928).getVersion(version -> {
                 if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                     getLogger().info("The plugin is updated to the latest version.");
@@ -77,40 +74,30 @@ public class RealScoreboardPlugin extends JavaPlugin {
                 }
             });
         }
-
         Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
         getLogger().info(header);
-
-        try {
-            // TODO: make this better?
-            realScoreboard = new RealScoreboard(this, new Placeholders(), getLogger(), new AnimationManager(), new PlayerManager(), new DatabaseManager(this), new ScoreboardManager());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        RealScoreboardAPI.setInstance(realScoreboard);
     }
 
-    // Vault
     private void setupEconomy() {
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
             return;
         }
-        economy = rsp.getProvider();
+        this.economy = rsp.getProvider();
     }
 
     private void setupPermissions() {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager()
                 .getRegistration(Permission.class);
         if (permissionProvider != null) {
-            perms = permissionProvider.getProvider();
+            this.perms = permissionProvider.getProvider();
         }
     }
 
     private void setupChat() {
         RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(Chat.class);
         if (chatProvider != null) {
-            chat = chatProvider.getProvider();
+            this.chat = chatProvider.getProvider();
         }
     }
 
@@ -119,23 +106,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
         return s.substring(s.lastIndexOf(".") + 1).trim();
     }
 
-    public Economy getEconomy() {
-        return economy;
-    }
-
-    public Chat getChat() {
-        return chat;
-    }
-
-    public Permission getPerms() {
-        return perms;
-    }
-
     public String getVersion() {
-        return instance.getDescription().getVersion();
-    }
-
-    public static RealScoreboardPlugin getInstance() {
-        return instance;
+        return getDescription().getVersion();
     }
 }

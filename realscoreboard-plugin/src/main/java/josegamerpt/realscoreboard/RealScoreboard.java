@@ -1,7 +1,7 @@
 package josegamerpt.realscoreboard;
 
 import josegamerpt.realscoreboard.animation.AnimationManager;
-import josegamerpt.realscoreboard.api.Placeholders;
+import josegamerpt.realscoreboard.api.IPlaceholders;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.managers.AbstractAnimationManager;
@@ -11,35 +11,36 @@ import josegamerpt.realscoreboard.api.managers.AbstractScoreboardManager;
 import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.managers.ScoreboardManager;
+import josegamerpt.realscoreboard.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class RealScoreboard extends RealScoreboardAPI {
 
-    private static RealScoreboard inst;
-    private final DatabaseManager databaseManager;
+    private DatabaseManager databaseManager;
     private final ScoreboardManager scoreboardManager;
     private final PlayerManager playerManager;
     private final AnimationManager animationManager;
     private final Logger logger;
-    private final josegamerpt.realscoreboard.utils.Placeholders placeholders;
+    private final IPlaceholders placeholders;
     private final JavaPlugin plugin;
 
-    // TODO: make this constructor better?
-    public RealScoreboard(JavaPlugin plugin, josegamerpt.realscoreboard.utils.Placeholders placeholders, Logger logger, AnimationManager animationManager,
-                          PlayerManager playerManager, DatabaseManager databaseManager,
-                          ScoreboardManager scoreboardManager) {
-        inst = this;
+    public RealScoreboard(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.scoreboardManager = scoreboardManager;
+        this.scoreboardManager = new ScoreboardManager();
         this.scoreboardManager.loadScoreboards();
-        this.databaseManager = databaseManager;
-        this.playerManager = playerManager;
-        this.animationManager = animationManager;
-        this.logger = logger;
-        this.placeholders = placeholders;
+        try {
+            this.databaseManager = new DatabaseManager(plugin);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        this.playerManager = new PlayerManager(this);
+        this.animationManager = new AnimationManager(plugin);
+        this.logger = plugin.getLogger();
+        this.placeholders = new Placeholders();
     }
 
     @Override
@@ -77,16 +78,12 @@ public class RealScoreboard extends RealScoreboardAPI {
     }
 
     @Override
-    public Placeholders getPlaceholders() {
+    public IPlaceholders getPlaceholders() {
         return this.placeholders;
     }
 
     @Override
     public JavaPlugin getPlugin() {
         return this.plugin;
-    }
-
-    public static RealScoreboard inst() {
-        return inst;
     }
 }

@@ -6,13 +6,12 @@
 	
 	<parent>
 		<groupId>josegamerpt.realscoreboard</groupId>
-		<artifactId>RealScoreboard</artifactId>
-		<version>18-11-2022 Build 1</version>
+		<artifactId>realscoreboard-parent</artifactId>
+		<version>10-12-2022 Build 2</version>
 		<relativePath>../pom.xml</relativePath>
-	</parent>	
+	</parent>
 
-    <groupId>josegamerpt.realscoreboard</groupId>
-    <artifactId>RealScoreboard-API</artifactId>
+    <artifactId>realscoreboard-api</artifactId>
     <packaging>jar</packaging>
 
     <name>RealScoreboard-API</name>
@@ -35,21 +34,13 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>dev.dejvokep.boostedyaml</pattern>
-                            <shadedPattern>josegamerpt.realmines.yaml</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>attach-javadocs</id>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -97,9 +88,14 @@
             <version>6.1</version>
         </dependency>
         <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>fastboard</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.iridium</groupId>
             <artifactId>IridiumColorAPI</artifactId>
-            <version>LATEST</version>
+            <version>1.0.6</version>
         </dependency>
     </dependencies>
 </project>

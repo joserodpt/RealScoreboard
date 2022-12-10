@@ -7,6 +7,7 @@ import josegamerpt.realscoreboard.api.scoreboard.ScoreboardTask;
 import josegamerpt.realscoreboard.api.config.PlayerData;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.utils.Text;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +22,14 @@ import java.util.UUID;
 
 public class PlayerManager extends AbstractPlayerManager implements Listener {
 
-    private HashMap<UUID, ScoreboardTask> tasks = new HashMap<>();
+    private final RealScoreboard plugin;
+    @Getter
+    private final HashMap<UUID, ScoreboardTask> tasks = new HashMap<>();
+    private final String[] vanishCommands = {"/pv", "/vanish", "/premiumvanish"};
+
+    public PlayerManager(RealScoreboard plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void check(Player p) {
@@ -32,19 +40,19 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
             this.tasks.remove(p.getUniqueId());
         } else {
             if (Config.file().getBoolean("Config.RealScoreboard-Disabled-By-Default")) {
-                PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+                PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(p.getUniqueId());
                 playerData.setScoreboardON(false);
-                RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+                this.plugin.getDatabaseManager().savePlayerData(playerData, true);
             }
-            this.tasks.put(p.getUniqueId(), new ScoreboardTask(p, RealScoreboard.inst()));
-            this.tasks.get(p.getUniqueId()).runTaskTimerAsynchronously(RealScoreboardPlugin.getInstance(), Config.file().getInt("Config.Scoreboard-Refresh"), Config.file().getInt("Config.Scoreboard-Refresh"));
+            this.tasks.put(p.getUniqueId(), new ScoreboardTask(p, this.plugin));
+            this.tasks.get(p.getUniqueId()).runTaskTimerAsynchronously(this.plugin.getPlugin(), Config.file().getInt("Config.Scoreboard-Refresh"), Config.file().getInt("Config.Scoreboard-Refresh"));
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void join(PlayerJoinEvent e) {
         check(e.getPlayer());
-        if (e.getPlayer().isOp() && RealScoreboardPlugin.newUpdate) {
+        if (e.getPlayer().isOp() && RealScoreboardPlugin.getNewUpdate()) {
             Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/");
         }
     }
@@ -54,23 +62,19 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
         check(e.getPlayer());
     }
 
-    private String[] vanishCommands = {"/pv", "/vanish", "/premiumvanish"};
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent e) {
         Player p = e.getPlayer();
-
         for (String cmd : vanishCommands) {
             if (e.getMessage().toLowerCase().startsWith(cmd)) {
-                if (isVanished(p))
-                {
-                    PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+                if (isVanished(p)) {
+                    PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(p.getUniqueId());
                     playerData.setScoreboardON(false);
-                    RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+                    this.plugin.getDatabaseManager().savePlayerData(playerData, true);
                 } else {
-                    PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+                    PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(p.getUniqueId());
                     playerData.setScoreboardON(true);
-                    RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+                    this.plugin.getDatabaseManager().savePlayerData(playerData, true);
                 }
             }
         }
@@ -81,10 +85,5 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
             if (meta.asBoolean()) return true;
         }
         return false;
-    }
-
-    @Override
-    public HashMap<UUID, ScoreboardTask> getTasks() {
-        return this.tasks;
     }
 }
