@@ -10,21 +10,25 @@ import org.bukkit.event.Listener;
 
 public class McMMOScoreboardListener implements Listener {
 
-    // Enable RealScoreboard for player on revert
+    private final RealScoreboard plugin;
+
+    public McMMOScoreboardListener(RealScoreboard plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onRevert(McMMOScoreboardRevertEvent event) {
         Player player = event.getTargetPlayer();
-        PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(player.getUniqueId());
+        PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(player.getUniqueId());
         playerData.setScoreboardON(true);
-        RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+        this.plugin.getDatabaseManager().savePlayerData(playerData, true);
     }
 
-    // Disable RealScoreboard for player when McMMO creates its own
     @EventHandler
     public void onMake(McMMOScoreboardMakeboardEvent event) {
         Player player = event.getTargetPlayer();
-        PlayerData playerData = RealScoreboard.getInstance().getDatabaseManager().getPlayerData(player.getUniqueId());
+        PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(player.getUniqueId());
         playerData.setScoreboardON(false);
-        RealScoreboard.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+        this.plugin.getDatabaseManager().savePlayerData(playerData, true);
     }
 }

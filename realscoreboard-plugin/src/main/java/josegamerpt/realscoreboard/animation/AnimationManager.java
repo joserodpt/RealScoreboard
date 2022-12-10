@@ -41,7 +41,6 @@ public class AnimationManager extends AbstractAnimationManager {
     @Override
     public void stop() {
         cancelAnimationTasks();
-
         titleAnimations.clear();
         loopAnimations.clear();
     }

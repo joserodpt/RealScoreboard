@@ -33,34 +33,23 @@ public class DatabaseManager extends AbstractDatabaseManager {
 
     public DatabaseManager(JavaPlugin javaPlugin) throws SQLException {
         LoggerFactory.setLogBackendFactory(new NullLogBackend.NullLogBackendFactory());
-
         this.javaPlugin = javaPlugin;
-        executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
+        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
                 new ThreadFactoryBuilder().setNameFormat("RealScoreboard-Pool-%d").build());
         String databaseURL = getDatabaseURL();
-
         ConnectionSource connectionSource = new JdbcConnectionSource(
                 databaseURL,
                 Config.getSql().getString("username"),
                 Config.getSql().getString("password"),
                 DatabaseTypeUtils.createDatabaseType(databaseURL)
         );
-
         TableUtils.createTableIfNotExists(connectionSource, PlayerData.class);
-
         this.playerDataDao = DaoManager.createDao(connectionSource, PlayerData.class);
-
         getPlayerData();
     }
 
-    /**
-     * Database connection String used for establishing a connection.
-     *
-     * @return The database URL String
-     */
     private String getDatabaseURL() {
-        final String driver = Config.getSql().getString("driver").toLowerCase(Locale.ROOT);
-
+        String driver = Config.getSql().getString("driver").toLowerCase(Locale.ROOT);
         switch (driver) {
             case "mysql":
             case "mariadb":
@@ -76,7 +65,7 @@ public class DatabaseManager extends AbstractDatabaseManager {
 
     private void getPlayerData() {
         try {
-            playerDataDao.queryForAll().forEach(playerData -> playerDataCache.put(playerData.getUuid(), playerData));
+            this.playerDataDao.queryForAll().forEach(playerData -> playerDataCache.put(playerData.getUuid(), playerData));
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -84,20 +73,20 @@ public class DatabaseManager extends AbstractDatabaseManager {
 
     @Override
     public PlayerData getPlayerData(UUID uuid) {
-        return playerDataCache.getOrDefault(uuid, new PlayerData(uuid));
+        return this.playerDataCache.getOrDefault(uuid, new PlayerData(uuid));
     }
 
     @Override
     public void savePlayerData(PlayerData playerData, boolean async) {
-        playerDataCache.put(playerData.getUuid(), playerData);
+        this.playerDataCache.put(playerData.getUuid(), playerData);
         DataSaveEvent event = new DataSaveEvent(playerData, async);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) return;
         if (async) {
-            saveDataAsync(playerData);
+            this.saveDataAsync(playerData);
         } else {
             try {
-                playerDataDao.createOrUpdate(playerData);
+                this.playerDataDao.createOrUpdate(playerData);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -105,14 +94,11 @@ public class DatabaseManager extends AbstractDatabaseManager {
     }
 
     private void saveDataAsync(PlayerData playerData) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    playerDataDao.createOrUpdate(playerData);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
+        this.executor.execute(() -> {
+            try {
+                this.playerDataDao.createOrUpdate(playerData);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
         });
     }

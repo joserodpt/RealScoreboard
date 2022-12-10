@@ -11,6 +11,7 @@ import josegamerpt.realscoreboard.api.managers.AbstractScoreboardManager;
 import josegamerpt.realscoreboard.managers.DatabaseManager;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.managers.ScoreboardManager;
+import josegamerpt.realscoreboard.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,7 +26,7 @@ public class RealScoreboard extends RealScoreboardAPI {
     private final PlayerManager playerManager;
     private final AnimationManager animationManager;
     private final Logger logger;
-    private final josegamerpt.realscoreboard.utils.Placeholders placeholders;
+    private final IPlaceholders placeholders;
     private final JavaPlugin plugin;
 
     public RealScoreboard(JavaPlugin plugin) {
@@ -38,10 +39,10 @@ public class RealScoreboard extends RealScoreboardAPI {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        this.playerManager = new PlayerManager();
+        this.playerManager = new PlayerManager(this);
         this.animationManager = new AnimationManager();
         this.logger = plugin.getLogger();
-        this.placeholders = new josegamerpt.realscoreboard.utils.Placeholders();
+        this.placeholders = new Placeholders();
     }
 
     @Override

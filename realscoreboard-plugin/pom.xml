@@ -6,8 +6,8 @@
 	
 	<parent>
 		<groupId>josegamerpt.realscoreboard</groupId>
-		<artifactId>RealScoreboard</artifactId>
-		<version>09-12-2022 Build 2</version>
+		<artifactId>realscoreboard-parent</artifactId>
+		<version>10-12-2022 Build 1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
