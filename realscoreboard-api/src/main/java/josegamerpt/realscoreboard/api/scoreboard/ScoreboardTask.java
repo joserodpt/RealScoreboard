@@ -49,9 +49,6 @@ public class ScoreboardTask extends BukkitRunnable {
                 return IridiumColorAPI.process(s);
             }).collect(Collectors.toList());
             if (Config.file().getBoolean("Config.ItemAdder-Support")) {
-                for (String ignored : list) {
-                    if (ignored.equalsIgnoreCase(":)")) return;
-                }
                 list = list.stream().map(s -> {
                     StringBuilder stringBuilder = new StringBuilder();
                     if (s.equalsIgnoreCase(":)")) return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
