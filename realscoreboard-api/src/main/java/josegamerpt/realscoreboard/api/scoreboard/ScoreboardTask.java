@@ -54,6 +54,7 @@ public class ScoreboardTask extends BukkitRunnable {
                 }
                 list = list.stream().map(s -> {
                     StringBuilder stringBuilder = new StringBuilder();
+                    if (s.equalsIgnoreCase(":)")) return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
                     String[] split = s.split(" ");
                     for (int i = 0; i < split.length; i++) {
                         String space = " ";
