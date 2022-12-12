@@ -43,7 +43,7 @@ public class Metrics {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, threadFactory);
     public static final int B_STATS_VERSION = 1;
     private static final String URL = "https://bStats.org/submitData/bukkit";
-    private boolean enabled;
+    private final boolean enabled;
     private static boolean logFailedRequests;
     private static boolean logSentData;
     private static boolean logResponseStatusText;
@@ -52,6 +52,7 @@ public class Metrics {
     private final int pluginId;
     private final List<CustomChart> charts = new ArrayList<>();
 
+    @SuppressWarnings("deprecation")
     public Metrics(Plugin plugin, int pluginId) {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null!");
@@ -177,6 +178,7 @@ public class Metrics {
         return data;
     }
 
+    @SuppressWarnings("deprecation")
     private void submitData() {
         final JsonObject data = getServerData();
         JsonArray pluginData = new JsonArray();

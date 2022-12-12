@@ -20,10 +20,12 @@ public class Data {
      * @param p the player
      * @return  correct scoreboard place
      */
+    @SuppressWarnings("ConstantConditions")
     public static String getCorrectPlace(Player p) {
         return checkSystem(p) ? p.getLocation().getWorld().getName() : Data.getRegisteredWorlds().get(0);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean checkSystem(Player p) {
         String world = p.getLocation().getWorld().getName();
         ArrayList<String> worlds = Data.getRegisteredWorlds();

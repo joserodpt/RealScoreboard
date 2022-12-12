@@ -12,10 +12,10 @@ import java.util.*;
 
 public class RScoreboard {
 
-    private String world;
-    private String permission;
-    private int interval;
-    private List<RBoard> boards = new ArrayList<>();
+    private final String world;
+    private final String permission;
+    private final int interval;
+    private final List<RBoard> boards = new ArrayList<>();
     private final HashMap<String, TextLooper>
             titleAnimations = new HashMap<>(),
             loopAnimations = new HashMap<>();
@@ -96,6 +96,7 @@ public class RScoreboard {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void runLoopers() {
         this.switches = new BukkitRunnable() {
             @Override

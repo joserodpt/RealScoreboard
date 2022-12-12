@@ -9,8 +9,8 @@ import java.util.logging.Level;
 
 public class ScoreboardGroup {
 
-    private String world;
-    private List<RScoreboard> sbs;
+    private final String world;
+    private final List<RScoreboard> sbs;
 
     public ScoreboardGroup(String world, List<RScoreboard> sbs) {
         this.world = world;

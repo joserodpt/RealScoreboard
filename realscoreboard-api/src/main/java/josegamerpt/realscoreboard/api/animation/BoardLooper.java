@@ -8,15 +8,16 @@ import java.util.logging.Level;
 
 public class BoardLooper {
 
-    private List<RBoard> list;
-    private String id;
-    private RBoard get;
+    private final RealScoreboardAPI instance = RealScoreboardAPI.getInstance();
 
+    private final List<RBoard> list;
+    private final String id;
+    private RBoard get;
     private int i = 0;
 
     public BoardLooper(String id, List<RBoard> s) {
         this.id = id;
-       this.list = s;
+        this.list = s;
     }
 
     public void next() {
@@ -27,7 +28,7 @@ public class BoardLooper {
             this.get = list.get(i);
             this.i++;
         } catch (Exception e) {
-            RealScoreboardAPI.getInstance().getLogger().log(Level.WARNING, "There is something wrong with this board loop: " + this.id);
+            instance.getLogger().log(Level.WARNING, "There is something wrong with this board loop: " + this.id);
         }
     }
 

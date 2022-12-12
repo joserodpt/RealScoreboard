@@ -26,6 +26,7 @@ public class Config {
      *
      * @param javaPlugin plugin related to this method
      */
+    @SuppressWarnings("ConstantConditions")
     public static void setup(JavaPlugin javaPlugin) {
         try {
             configFile = YamlDocument.create(new File(javaPlugin.getDataFolder(), "config.yml"), javaPlugin.getResource("config.yml"),
@@ -60,6 +61,7 @@ public class Config {
     /**
      * Saves RealScoreboard configuration file
      */
+    @SuppressWarnings("unused")
     public static void save() {
         try {
             configFile.save();

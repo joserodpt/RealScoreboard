@@ -8,6 +8,8 @@ import java.util.logging.Level;
 
 public class TextLooper {
 
+    private final RealScoreboardAPI instance = RealScoreboardAPI.getInstance();
+
     private final List<String> list;
     private final String id;
     private String get;
@@ -27,7 +29,7 @@ public class TextLooper {
             this.i++;
         } catch (Exception e)
         {
-            RealScoreboardAPI.getInstance().getLogger().log(Level.WARNING, "There is something wrong with this text loop: " + this.id);
+            instance.getLogger().log(Level.WARNING, "There is something wrong with this text loop: " + this.id);
         }
     }
 

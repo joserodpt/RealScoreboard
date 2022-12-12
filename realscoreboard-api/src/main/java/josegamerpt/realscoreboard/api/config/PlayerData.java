@@ -60,8 +60,7 @@ public class PlayerData {
         this.scoreboardON = true;
     }
 
-    // OrmLite needs a No Args constructor
+    @SuppressWarnings("unused")
     public PlayerData() {
     }
-
 }

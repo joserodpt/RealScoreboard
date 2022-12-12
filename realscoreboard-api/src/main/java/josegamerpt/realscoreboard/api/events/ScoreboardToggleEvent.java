@@ -4,6 +4,7 @@ import josegamerpt.realscoreboard.api.config.PlayerData;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when scoreboard status change
@@ -23,6 +24,7 @@ public class ScoreboardToggleEvent extends Event implements Cancellable {
      *
      * @return the playerdata instance
      */
+    @SuppressWarnings("unused")
     public PlayerData getPlayerData() {
         return playerData;
     }
@@ -52,6 +54,7 @@ public class ScoreboardToggleEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
+    @NotNull
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;

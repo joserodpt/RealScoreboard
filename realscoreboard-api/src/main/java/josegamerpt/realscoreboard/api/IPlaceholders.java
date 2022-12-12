@@ -10,7 +10,7 @@ public interface IPlaceholders {
      * @param player the player related to thi method
      * @return       ping of provided player
      */
-    public int getPing(Player player);
+    int getPing(Player player);
 
     /**
      * Fixes placeholders in provided string
@@ -19,5 +19,5 @@ public interface IPlaceholders {
      * @param string the string message
      * @return  fixed string with placeholders
      */
-    public String setPlaceHolders(Player player, String string);
+    String setPlaceHolders(Player player, String string);
 }

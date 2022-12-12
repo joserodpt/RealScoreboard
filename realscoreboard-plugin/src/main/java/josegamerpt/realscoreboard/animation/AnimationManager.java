@@ -1,6 +1,5 @@
 package josegamerpt.realscoreboard.animation;
 
-import josegamerpt.realscoreboard.RealScoreboardPlugin;
 import josegamerpt.realscoreboard.api.animation.TextLooper;
 import josegamerpt.realscoreboard.api.config.Config;
 import josegamerpt.realscoreboard.api.managers.AbstractAnimationManager;

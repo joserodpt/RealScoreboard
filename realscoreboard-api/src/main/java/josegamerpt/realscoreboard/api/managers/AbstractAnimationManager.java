@@ -25,5 +25,6 @@ public abstract class AbstractAnimationManager {
     /**
      * Restart animation manager (stop and start again)
      */
+    @SuppressWarnings("unused")
     public abstract void reload();
 }
