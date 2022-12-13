@@ -51,7 +51,6 @@ public class ScoreboardTask extends BukkitRunnable {
             if (Config.file().getBoolean("Config.ItemAdder-Support")) {
                 list = list.stream().map(s -> {
                     StringBuilder stringBuilder = new StringBuilder();
-                    if (s.equalsIgnoreCase(":)")) return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
                     String[] split = s.split(" ");
                     for (int i = 0; i < split.length; i++) {
                         String space = " ";
@@ -62,7 +61,12 @@ public class ScoreboardTask extends BukkitRunnable {
                             stringBuilder.append(splitWord).append(space);
                             continue;
                         }
-                        stringBuilder.append("§f%img_").append(splitWordSplit[1]).append("%").append(space);
+                        // TODO: find better fix in future since we can do better job :)
+                        if (!s.contains(":)")) {
+                            stringBuilder.append("§f%img_").append(splitWordSplit[1]).append("%").append(space);
+                        } else {
+                            stringBuilder.append(":)");
+                        }
                     }
                     return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
                 }).collect(Collectors.toList());
