@@ -18,7 +18,7 @@ public class PlayerData {
     @DatabaseField(columnName = "scoreboard_on")
     private boolean scoreboardON;
 
-    private final AbstractPlayerManager playerManager = RealScoreboardAPI.getInstance().getPlayerManager();
+    private static AbstractPlayerManager playerManager;
 
     /**
      * Gets boolean value of current scoreboard status
@@ -51,8 +51,12 @@ public class PlayerData {
         if (scoreboardON) {
             Player player = Bukkit.getPlayer(this.uuid);
             assert player != null;
-            this.playerManager.check(player);
+            playerManager.check(player);
         }
+    }
+
+    public static void setup(AbstractPlayerManager playerManager) {
+        PlayerData.playerManager = playerManager;
     }
 
     public PlayerData(UUID uuid) {
