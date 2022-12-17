@@ -48,6 +48,7 @@ public class ScoreboardTask extends BukkitRunnable {
                         rs.getPlaceholders().setPlaceHolders(player, s);
                 return IridiumColorAPI.process(s);
             }).collect(Collectors.toList());
+            /* TODO: complete this and add ItemsAdder support again
             if (Config.file().getBoolean("Config.ItemAdder-Support")) {
                 list = list.stream().map(s -> {
                     StringBuilder stringBuilder = new StringBuilder();
@@ -70,7 +71,7 @@ public class ScoreboardTask extends BukkitRunnable {
                     }
                     return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
                 }).collect(Collectors.toList());
-            }
+            } */
             String title = rsb.getTitle();
             if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);

@@ -11,7 +11,7 @@
 #API for Developers: https://github.com/JoseGamerPT/RealScoreboard/blob/master/api.md
 Debug: false
 Config:
-  ItemAdder-Support: true
+  ItemAdder-Support: false
   mcMMO-Support: false
   Check-for-Updates: true
   Prefix: '&bReal&9Scoreboard &7| &r'
