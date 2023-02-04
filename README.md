@@ -2,7 +2,7 @@
 
 ![Logo](https://i.imgur.com/nTk9ZGd.png)
 ## RealScoreboard - Best scoreboard plugin.
-[![Build](https://img.shields.io/github/workflow/status/JoseGamerPT/RealScoreboard/Publish%20and%20Build)](https://github.com/JoseGamerPT/RealScoreboard/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/joserodpt/RealScoreboard/maven.yml?branch=master)](https://github.com/JoseGamerPT/RealScoreboard/actions)
 ![Issues](https://img.shields.io/github/issues-raw/JoseGamerPT/RealScoreboard)
 [![Stars](https://img.shields.io/github/stars/JoseGamerPT/RealScoreboard)](https://github.com/JoseGamerPT/RealScoreboard/stargazers)
 [![Chat)](https://img.shields.io/discord/817810368649887744?logo=discord&logoColor=white)](https://discord.gg/t7gfnYZKy8) 
