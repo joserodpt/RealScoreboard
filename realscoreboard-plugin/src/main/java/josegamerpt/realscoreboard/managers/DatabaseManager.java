@@ -96,6 +96,8 @@ public class DatabaseManager extends AbstractDatabaseManager {
         }
     }
 
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.3")
     private void saveDataAsync(PlayerData playerData) {
         this.executor.execute(() -> {
             try {
