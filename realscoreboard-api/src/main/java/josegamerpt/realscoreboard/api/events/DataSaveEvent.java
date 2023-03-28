@@ -4,6 +4,7 @@ import josegamerpt.realscoreboard.api.config.PlayerData;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -36,7 +37,9 @@ public class DataSaveEvent extends Event implements Cancellable {
      *
      * @return true/false if save is asynchronous
      */
+    @Deprecated
     @SuppressWarnings("unused")
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.3")
     public boolean isAsync() {
         return async;
     }

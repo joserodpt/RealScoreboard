@@ -15,6 +15,7 @@ import josegamerpt.realscoreboard.api.events.DataSaveEvent;
 import josegamerpt.realscoreboard.api.managers.AbstractDatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -76,6 +77,8 @@ public class DatabaseManager extends AbstractDatabaseManager {
         return this.playerDataCache.getOrDefault(uuid, new PlayerData(uuid));
     }
 
+    @Deprecated
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.3")
     @Override
     public void savePlayerData(PlayerData playerData, boolean async) {
         this.playerDataCache.put(playerData.getUuid(), playerData);
