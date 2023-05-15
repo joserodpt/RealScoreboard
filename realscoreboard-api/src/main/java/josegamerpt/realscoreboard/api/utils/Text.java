@@ -1,8 +1,8 @@
 package josegamerpt.realscoreboard.api.utils;
 
-import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
+import net.melion.rgbchat.api.RGBApi;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +18,8 @@ public class Text {
     static String[] money = {"", "k", "m", "b", "t", "q", "qi", "s", "sep", "OC", "N", "DEC", "UN", "DUO", "TRE"};
 
     public static String color(String string) {
-        return IridiumColorAPI.process(string);
+        return ChatColor.translateAlternateColorCodes('&',
+                RGBApi.INSTANCE.toColoredMessage(string));
     }
 
     public static String formatMoney(double value) {

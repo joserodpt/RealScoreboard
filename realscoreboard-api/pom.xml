@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>josegamerpt.realscoreboard</groupId>
 		<artifactId>realscoreboard-parent</artifactId>
-		<version>1.0</version>
+		<version>1.1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -60,8 +60,8 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>iridiumdevelopment</id>
-            <url>https://nexus.iridiumdevelopment.net/repository/maven-releases/</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
@@ -93,9 +93,9 @@
             <version>1.2.1</version>
         </dependency>
         <dependency>
-            <groupId>com.iridium</groupId>
-            <artifactId>IridiumColorAPI</artifactId>
-            <version>1.0.6</version>
+            <groupId>com.github.CoasterFreakDE</groupId>
+            <artifactId>minecraft-spigot-rgb-chat-support</artifactId>
+            <version>1.0.5</version>
         </dependency>
     </dependencies>
 </project>
