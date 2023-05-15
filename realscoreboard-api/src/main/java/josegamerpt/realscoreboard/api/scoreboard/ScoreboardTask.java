@@ -1,6 +1,5 @@
 package josegamerpt.realscoreboard.api.scoreboard;
 
-import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import fr.mrmicky.fastboard.FastBoard;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
@@ -46,7 +45,7 @@ public class ScoreboardTask extends BukkitRunnable {
                 s = s.matches("(?i)%blank%") ?
                         (Text.randomColor() + "§r" + Text.randomColor()) :
                         rs.getPlaceholders().setPlaceHolders(player, s);
-                return IridiumColorAPI.process(s);
+                return Text.color(s);
             }).collect(Collectors.toList());
             /* TODO: complete this and add ItemsAdder support again
             if (Config.file().getBoolean("Config.ItemAdder-Support")) {
@@ -76,7 +75,7 @@ public class ScoreboardTask extends BukkitRunnable {
             if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);
             }
-            this.fastBoard.updateTitle(IridiumColorAPI.process(title));
+            this.fastBoard.updateTitle(Text.color(title));
             this.fastBoard.updateLines(list);
         } catch (Exception e) {
             rs.getLogger().log(Level.SEVERE, "[ERROR] RealScoreboard threw an error while trying to display the scoreboard for " + this.player.getName());
