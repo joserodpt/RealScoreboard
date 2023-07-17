@@ -25,15 +25,22 @@ public class ScoreboardTask extends BukkitRunnable {
         this.rs = rs;
     }
 
+
+
     @Override
     public void run() {
         if (!this.player.isOnline()) {
             this.cancel();
             return;
         }
+
         PlayerData playerData = RealScoreboardAPI.getInstance().getDatabaseManager().getPlayerData(this.player.getUniqueId());
+
+        //hide scoreboard if the player is in a world where it is disabled,
+        //or if the player has the scoreboard off (manually or automatically via vanish command)
         if (Objects.requireNonNull(Config.file().getList("Config.Disabled-Worlds")).
                 contains(this.player.getWorld().getName()) || !playerData.isScoreboardON()) {
+
             if (!this.fastBoard.isDeleted() || this.fastBoard.getLines().size() != 0) {
                 this.fastBoard.updateLines();
             }
@@ -47,30 +54,32 @@ public class ScoreboardTask extends BukkitRunnable {
                         rs.getPlaceholders().setPlaceHolders(player, s);
                 return Text.color(s);
             }).collect(Collectors.toList());
-            /* TODO: complete this and add ItemsAdder support again
-            if (Config.file().getBoolean("Config.ItemAdder-Support")) {
-                list = list.stream().map(s -> {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String[] split = s.split(" ");
-                    for (int i = 0; i < split.length; i++) {
-                        String space = " ";
-                        if (i == split.length - 1) space = "";
-                        String splitWord = split[i];
-                        String[] splitWordSplit = splitWord.split(":");
-                        if (splitWordSplit.length < 2) {
-                            stringBuilder.append(splitWord).append(space);
-                            continue;
-                        }
-                        // TODO: find better fix in future since we can do better job :)
-                        if (!s.contains(":)")) {
-                            stringBuilder.append("§f%img_").append(splitWordSplit[1]).append("%").append(space);
-                        } else {
-                            stringBuilder.append(":)");
-                        }
+
+        /* TODO: complete this and add ItemsAdder support again
+        if (Config.file().getBoolean("Config.ItemAdder-Support")) {
+            list = list.stream().map(s -> {
+                StringBuilder stringBuilder = new StringBuilder();
+                String[] split = s.split(" ");
+                for (int i = 0; i < split.length; i++) {
+                    String space = " ";
+                    if (i == split.length - 1) space = "";
+                    String splitWord = split[i];
+                    String[] splitWordSplit = splitWord.split(":");
+                    if (splitWordSplit.length < 2) {
+                        stringBuilder.append(splitWord).append(space);
+                        continue;
                     }
-                    return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
-                }).collect(Collectors.toList());
-            } */
+                    // TODO: find better fix in future since we can do better job :)
+                    if (!s.contains(":)")) {
+                        stringBuilder.append("§f%img_").append(splitWordSplit[1]).append("%").append(space);
+                    } else {
+                        stringBuilder.append(":)");
+                    }
+                }
+                return rs.getPlaceholders().setPlaceHolders(player, stringBuilder.toString());
+            }).collect(Collectors.toList());
+        } */
+
             String title = rsb.getTitle();
             if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);

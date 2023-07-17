@@ -70,7 +70,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
                     getLogger().info("The plugin is updated to the latest version.");
                 } else {
                     newUpdate = true;
-                    getLogger().info("There is a new update available! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/");
+                    getLogger().info("There is a new update available! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-20-1.22928/");
                 }
             });
         }

@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-	
-	<groupId>josegamerpt.realscoreboard</groupId>
+
+    <groupId>josegamerpt.realscoreboard</groupId>
     <artifactId>realscoreboard-parent</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>pom</packaging>
-	
-	<name>RealScoreboard-Parent</name>
-	<description>Parent project for all RealScoreboard modules.</description>
+
+    <name>RealScoreboard-Parent</name>
+    <description>Parent project for all RealScoreboard modules.</description>
 
     <developers>
         <developer>
@@ -63,17 +63,17 @@
             <url>https://repo.neziw.xyz/releases</url>
         </repository>
     </distributionManagement>
-	
-	<modules>
-		<module>realscoreboard-plugin</module>
-		<module>realscoreboard-api</module>
-	</modules>
-	
+
+    <modules>
+        <module>realscoreboard-plugin</module>
+        <module>realscoreboard-api</module>
+    </modules>
+
     <build>
         <defaultGoal>clean install</defaultGoal>
     </build>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>	
+    </properties>
 </project>

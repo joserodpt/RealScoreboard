@@ -53,7 +53,7 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
     public void join(PlayerJoinEvent e) {
         check(e.getPlayer());
         if (e.getPlayer().isOp() && RealScoreboardPlugin.getNewUpdate()) {
-            Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/");
+            Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-20-1.22928/");
         }
     }
 
@@ -64,16 +64,15 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent e) {
-        Player p = e.getPlayer();
-        for (String cmd : vanishCommands) {
-            if (e.getMessage().toLowerCase().startsWith(cmd)) {
-                if (isVanished(p)) {
+        //check if this hiding behaviour is hidden
+        if (Config.file().getBoolean("Config.Auto-Hide-In-Vanish")) {
+
+            Player p = e.getPlayer();
+            for (String cmd : vanishCommands) {
+                if (e.getMessage().toLowerCase().startsWith(cmd)) {
                     PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(p.getUniqueId());
-                    playerData.setScoreboardON(false);
-                    this.plugin.getDatabaseManager().savePlayerData(playerData, true);
-                } else {
-                    PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(p.getUniqueId());
-                    playerData.setScoreboardON(true);
+                    //before the command is processed, the vanish tag in the player is still the previous state, so we set it as the previous
+                    playerData.setScoreboardON(isVanished(p));
                     this.plugin.getDatabaseManager().savePlayerData(playerData, true);
                 }
             }

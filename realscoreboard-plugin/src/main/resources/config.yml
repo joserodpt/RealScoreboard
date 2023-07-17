@@ -18,6 +18,7 @@ Config:
   Reloaded: '&fThe config has been &areloaded&f.'
   Use-Placeholders-In-Scoreboard-Titles: false
   RealScoreboard-Disabled-By-Default: false
+  Auto-Hide-In-Vanish: true
   Hours:
     Formatting: 'HH:mm:ss'
     Offset: 0
@@ -85,4 +86,4 @@ Config:
               - '%blank%'
               - ' &fThis is Board &e#2'
               - '%blank%'
-Version: 14
+Version: 15
