@@ -1,5 +1,18 @@
 package josegamerpt.realscoreboard.api.scoreboard;
 
+/*
+ *   ____            _ ____                     _                         _
+ *  |  _ \ ___  __ _| / ___|  ___ ___  _ __ ___| |__   ___   __ _ _ __ __| |
+ *  | |_) / _ \/ _` | \___ \ / __/ _ \| '__/ _ \ '_ \ / _ \ / _` | '__/ _` |
+ *  |  _ <  __/ (_| | |___) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |
+ *  |_| \_\___|\__,_|_|____/ \___\___/|_|  \___|_.__/ \___/ \__,_|_|  \__,_|
+ *
+ *
+ * Licensed under the MIT License
+ * @author José Rodrigues
+ * @link https://github.com/joserodpt/RealScoreboard
+ */
+
 import fr.mrmicky.fastboard.FastBoard;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
@@ -25,8 +38,6 @@ public class ScoreboardTask extends BukkitRunnable {
         this.rs = rs;
     }
 
-
-
     @Override
     public void run() {
         if (!this.player.isOnline()) {
@@ -41,7 +52,7 @@ public class ScoreboardTask extends BukkitRunnable {
         if (Objects.requireNonNull(Config.file().getList("Config.Disabled-Worlds")).
                 contains(this.player.getWorld().getName()) || !playerData.isScoreboardON()) {
 
-            if (!this.fastBoard.isDeleted() || this.fastBoard.getLines().size() != 0) {
+            if (!this.fastBoard.isDeleted() || !this.fastBoard.getLines().isEmpty()) {
                 this.fastBoard.updateLines();
             }
             return;
@@ -88,7 +99,7 @@ public class ScoreboardTask extends BukkitRunnable {
             this.fastBoard.updateLines(list);
         } catch (Exception e) {
             rs.getLogger().log(Level.SEVERE, "[ERROR] RealScoreboard threw an error while trying to display the scoreboard for " + this.player.getName());
-            e.printStackTrace();
+            rs.getLogger().log(Level.SEVERE, e.getMessage());
         }
     }
 }

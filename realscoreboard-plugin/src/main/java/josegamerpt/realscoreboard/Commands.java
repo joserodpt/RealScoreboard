@@ -1,12 +1,27 @@
-package josegamerpt.realscoreboard.commands;
+package josegamerpt.realscoreboard;
 
-import josegamerpt.realscoreboard.RealScoreboard;
-import josegamerpt.realscoreboard.RealScoreboardPlugin;
-import josegamerpt.realscoreboard.api.config.PlayerData;
+/*
+ *   ____            _ ____                     _                         _
+ *  |  _ \ ___  __ _| / ___|  ___ ___  _ __ ___| |__   ___   __ _ _ __ __| |
+ *  | |_) / _ \/ _` | \___ \ / __/ _ \| '__/ _ \ '_ \ / _ \ / _` | '__/ _` |
+ *  |  _ <  __/ (_| | |___) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |
+ *  |_| \_\___|\__,_|_|____/ \___\___/|_|  \___|_.__/ \___/ \__,_|_|  \__,_|
+ *
+ *
+ * Licensed under the MIT License
+ * @author José Rodrigues
+ * @link https://github.com/joserodpt/RealScoreboard
+ */
+
 import josegamerpt.realscoreboard.api.config.Config;
+import josegamerpt.realscoreboard.api.config.PlayerData;
 import josegamerpt.realscoreboard.api.utils.Text;
 import lombok.AllArgsConstructor;
-import me.mattstudios.mf.annotations.*;
+import me.mattstudios.mf.annotations.Alias;
+import me.mattstudios.mf.annotations.Command;
+import me.mattstudios.mf.annotations.Default;
+import me.mattstudios.mf.annotations.Permission;
+import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

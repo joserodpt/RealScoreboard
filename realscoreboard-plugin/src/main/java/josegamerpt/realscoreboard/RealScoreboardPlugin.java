@@ -1,8 +1,21 @@
 package josegamerpt.realscoreboard;
 
+/*
+ *   ____            _ ____                     _                         _
+ *  |  _ \ ___  __ _| / ___|  ___ ___  _ __ ___| |__   ___   __ _ _ __ __| |
+ *  | |_) / _ \/ _` | \___ \ / __/ _ \| '__/ _ \ '_ \ / _ \ / _` | '__/ _` |
+ *  |  _ <  __/ (_| | |___) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |
+ *  |_| \_\___|\__,_|_|____/ \___\___/|_|  \___|_.__/ \___/ \__,_|_|  \__,_|
+ *
+ *
+ * Licensed under the MIT License
+ * @author José Rodrigues
+ * @link https://github.com/joserodpt/RealScoreboard
+ */
+
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
-import josegamerpt.realscoreboard.commands.Commands;
+import josegamerpt.realscoreboard.api.utils.Text;
 import josegamerpt.realscoreboard.listeners.McMMOScoreboardListener;
 import josegamerpt.realscoreboard.managers.PlayerManager;
 import josegamerpt.realscoreboard.utils.Metrics;
@@ -56,12 +69,18 @@ public class RealScoreboardPlugin extends JavaPlugin {
         }
         getLogger().info("Your config version is: " + Config.file().getString("Version"));
         Bukkit.getPluginManager().registerEvents(new PlayerManager(realScoreboard), this);
-        CommandManager commandManager = new CommandManager(this);
-        commandManager.hideTabComplete(true);
-        commandManager.register(new Commands(this, realScoreboard));
+        CommandManager cm = new CommandManager(this);
+
+        cm.getMessageHandler().register("cmd.no.permission", (sender) -> Text.send(sender, Text.getPrefix() + "&cYou don't have permission to execute this command!"));
+        cm.getMessageHandler().register("cmd.no.exists", (sender) -> Text.send(sender, Text.getPrefix() + "&cThe command you're trying to use doesn't exist."));
+        cm.getMessageHandler().register("cmd.wrong.usage", (sender) -> Text.send(sender, Text.getPrefix() + "&cWrong usage for the command!"));
+        cm.getMessageHandler().register("cmd.no.console", sender -> Text.send(sender, Text.getPrefix() + "&cCommand can only be executed by a player."));
+
+        cm.hideTabComplete(true);
+        cm.register(new Commands(this, realScoreboard));
         new Metrics(this, 10080);
         Bukkit.getOnlinePlayers().forEach(player -> new PlayerManager(realScoreboard).check(player));
-        if (Config.file().getBoolean("Config.mcMMO-Support")) {
+        if (Config.file().getBoolean("Config.xmcMMO-Support")) {
             Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(realScoreboard), this);
         }
         if (Config.file().getBoolean("Config.Check-for-Updates")) {

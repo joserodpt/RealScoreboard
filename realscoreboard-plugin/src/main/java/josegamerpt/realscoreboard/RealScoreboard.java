@@ -1,6 +1,19 @@
 package josegamerpt.realscoreboard;
 
-import josegamerpt.realscoreboard.animation.AnimationManager;
+/*
+ *   ____            _ ____                     _                         _
+ *  |  _ \ ___  __ _| / ___|  ___ ___  _ __ ___| |__   ___   __ _ _ __ __| |
+ *  | |_) / _ \/ _` | \___ \ / __/ _ \| '__/ _ \ '_ \ / _ \ / _` | '__/ _` |
+ *  |  _ <  __/ (_| | |___) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |
+ *  |_| \_\___|\__,_|_|____/ \___\___/|_|  \___|_.__/ \___/ \__,_|_|  \__,_|
+ *
+ *
+ * Licensed under the MIT License
+ * @author José Rodrigues
+ * @link https://github.com/joserodpt/RealScoreboard
+ */
+
+import josegamerpt.realscoreboard.managers.AnimationManager;
 import josegamerpt.realscoreboard.api.IPlaceholders;
 import josegamerpt.realscoreboard.api.RealScoreboardAPI;
 import josegamerpt.realscoreboard.api.config.Config;
@@ -38,7 +51,8 @@ public class RealScoreboard extends RealScoreboardAPI {
             this.databaseManager = new DatabaseManager(plugin);
             PlayerData.setup(this.playerManager); // Init PlayerManager into PlayerData to avoid NPE
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            this.getLogger().severe("Error while starting the Database Manager!");
+            this.getLogger().severe(ex.getMessage());
         }
         this.animationManager = new AnimationManager(plugin);
         this.logger = plugin.getLogger();

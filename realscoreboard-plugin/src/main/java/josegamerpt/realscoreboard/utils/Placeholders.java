@@ -1,5 +1,18 @@
 package josegamerpt.realscoreboard.utils;
 
+/*
+ *   ____            _ ____                     _                         _
+ *  |  _ \ ___  __ _| / ___|  ___ ___  _ __ ___| |__   ___   __ _ _ __ __| |
+ *  | |_) / _ \/ _` | \___ \ / __/ _ \| '__/ _ \ '_ \ / _ \ / _` | '__/ _` |
+ *  |  _ <  __/ (_| | |___) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |
+ *  |_| \_\___|\__,_|_|____/ \___\___/|_|  \___|_.__/ \___/ \__,_|_|  \__,_|
+ *
+ *
+ * Licensed under the MIT License
+ * @author José Rodrigues
+ * @link https://github.com/joserodpt/RealScoreboard
+ */
+
 import josegamerpt.realscoreboard.RealScoreboard;
 import josegamerpt.realscoreboard.RealScoreboardPlugin;
 import josegamerpt.realscoreboard.api.IPlaceholders;
@@ -152,12 +165,11 @@ public class Placeholders implements IPlaceholders {
     }
 
     private String lifeHeart(long round) {
-        String heart = "❤";
-        if (round <= 5) return "&c" + heart;
-        if (round <= 10) return "&e" + heart;
-        if (round <= 15) return "&6" + heart;
-        if (round <= 20) return "&a" + heart;
-        return heart;
+        if (round <= 5) return "&c❤";
+        if (round <= 10) return "&e❤";
+        if (round <= 15) return "&6❤";
+        if (round <= 20) return "&a❤";
+        return "❤";
     }
 
     @Override
@@ -165,7 +177,7 @@ public class Placeholders implements IPlaceholders {
         String placeholders = s.replaceAll("%playername%", p.getName())
                 .replaceAll("%loc%", this.cords(p))
                 .replaceAll("%life%", Math.round(p.getHealth()) + "")
-                .replaceAll("%lifeheart%", this.lifeHeart(Math.round(p.getHealth())) + "")
+                .replaceAll("%lifeheart%", this.lifeHeart(Math.round(p.getHealth())))
                 .replaceAll("%time%", this.time())
                 .replaceAll("%day%", this.day())
                 .replaceAll("%serverip%", this.serverIP())
@@ -194,7 +206,7 @@ public class Placeholders implements IPlaceholders {
                 .replaceAll("%y%", p.getLocation().getBlockY() + "")
                 .replaceAll("%z%", p.getLocation().getBlockZ() + "")
                 .replaceAll("%rainbow%", RealScoreboard.getInstance().getAnimationManager().getLoopAnimation("rainbow"))
-                .replaceAll("%playtime%", Text.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20) + "");
+                .replaceAll("%playtime%", Text.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20));
         return Text.color(this.placeholderAPI(p, placeholders));
     }
 
