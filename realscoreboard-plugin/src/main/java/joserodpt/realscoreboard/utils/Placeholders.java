@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -158,8 +159,11 @@ public class Placeholders implements IPlaceholders {
         int deaths = p.getStatistic(Statistic.DEATHS);
 
         if (deaths != 0) {
-            String send = (kills / deaths) + "";
-            return send.contains(".") ? send.substring(0, send.indexOf(".")) : send;
+            double kd = (double) kills / deaths;
+
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+            return decimalFormat.format(kd);
         }
         return "0";
     }
