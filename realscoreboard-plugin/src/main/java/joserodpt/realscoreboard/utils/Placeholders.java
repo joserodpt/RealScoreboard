@@ -33,6 +33,8 @@ import java.util.Date;
 
 public class Placeholders implements IPlaceholders {
 
+    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
     private String nmsVersion;
     private Method getHandleMethod;
     private Method getPingMethod;
@@ -160,8 +162,6 @@ public class Placeholders implements IPlaceholders {
 
         if (deaths != 0) {
             double kd = (double) kills / deaths;
-
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
             return decimalFormat.format(kd);
         }

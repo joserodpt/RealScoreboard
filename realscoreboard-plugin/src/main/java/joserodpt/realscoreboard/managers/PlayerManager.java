@@ -81,12 +81,14 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
         if (Config.file().getBoolean("Config.Auto-Hide-In-Vanish")) {
 
             Player p = e.getPlayer();
-            for (String cmd : vanishCommands) {
-                if (e.getMessage().toLowerCase().startsWith(cmd)) {
+            String cmd = e.getMessage().split(" ")[0];
+            for (String vanishCommand : vanishCommands) {
+                if (cmd.equalsIgnoreCase(vanishCommand)) {
                     PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(p.getUniqueId());
                     //before the command is processed, the vanish tag in the player is still the previous state, so we set it as the previous
                     playerData.setScoreboardON(isVanished(p));
                     this.plugin.getDatabaseManager().savePlayerData(playerData, true);
+                    break;
                 }
             }
         }
