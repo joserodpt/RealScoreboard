@@ -121,8 +121,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
     }
 
     public String getServerVersion() {
-        String s = Bukkit.getServer().getClass().getPackage().getName();
-        return s.substring(s.lastIndexOf(".") + 1).trim();
+        return Bukkit.getServer().getBukkitVersion();
     }
 
     public String getVersion() {
