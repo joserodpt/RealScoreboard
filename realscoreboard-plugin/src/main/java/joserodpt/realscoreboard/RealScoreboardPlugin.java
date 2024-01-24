@@ -72,13 +72,6 @@ public class RealScoreboardPlugin extends JavaPlugin {
             getLogger().warning("PlaceholderAPI is not installed on the server.");
         }
 
-        if (getServer().getPluginManager().getPlugin("RealPermissions") != null) {
-            //register RealMines permissions onto RealPermissions
-            RealPermissionsAPI.getInstance().getHookupAPI().addHookup(new ExternalPlugin("RealScoreboard", "&fReal&bScoreboard", this.getDescription().getDescription(), Material.PAINTING, Arrays.asList(
-                    new ExternalPluginPermission("realscoreboard.admin", "Allow access to the main operator commands of RealScoreboard.", Arrays.asList("rsb config", "rsb debug", "rsb reload")),
-                    new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))), this.getDescription().getVersion()));
-        }
-
         getLogger().info("Your config version is: " + Config.file().getString("Version"));
         Bukkit.getPluginManager().registerEvents(new PlayerManager(realScoreboard), this);
         CommandManager cm = new CommandManager(this);
@@ -105,6 +98,14 @@ public class RealScoreboardPlugin extends JavaPlugin {
                 }
             });
         }
+
+        if (getServer().getPluginManager().getPlugin("RealPermissions") != null) {
+            //register RealMines permissions onto RealPermissions
+            RealPermissionsAPI.getInstance().getHookupAPI().addHookup(new ExternalPlugin("RealScoreboard", "&fReal&bScoreboard", this.getDescription().getDescription(), Material.PAINTING, Arrays.asList(
+                    new ExternalPluginPermission("realscoreboard.admin", "Allow access to the main operator commands of RealScoreboard.", Arrays.asList("rsb config", "rsb debug", "rsb reload")),
+                    new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))), this.getDescription().getVersion()));
+        }
+
         Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
         getLogger().info(header);
     }
