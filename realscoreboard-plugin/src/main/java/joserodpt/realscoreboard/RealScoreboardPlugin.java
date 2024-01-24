@@ -57,7 +57,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
         Config.setup(this);
         realScoreboard = new RealScoreboard(this);
         RealScoreboardAPI.setInstance(realScoreboard);
-        String header = "------------------- RealScoreboard PT -------------------".replace("PT", this.getDescription().getVersion());
+        String header = "<------------------ RealScoreboard PT ------------------>".replace("PT", this.getDescription().getVersion());
         getLogger().info(header);
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             setupEconomy();
