@@ -1,4 +1,4 @@
-package joserodpt.realscoreboard.api;
+package joserodpt.realscoreboard.api.utils;
 
 /*
  *   ____            _ ____                     _                         _

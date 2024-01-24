@@ -13,6 +13,9 @@ package joserodpt.realscoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
+import joserodpt.realpermissions.api.RealPermissionsAPI;
+import joserodpt.realpermissions.api.pluginhookup.ExternalPlugin;
+import joserodpt.realpermissions.api.pluginhookup.ExternalPluginPermission;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.Config;
 import joserodpt.realscoreboard.api.utils.Text;
@@ -26,6 +29,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -67,6 +71,14 @@ public class RealScoreboardPlugin extends JavaPlugin {
         } else {
             getLogger().warning("PlaceholderAPI is not installed on the server.");
         }
+
+        if (getServer().getPluginManager().getPlugin("RealPermissions") != null) {
+            //register RealMines permissions onto RealPermissions
+            RealPermissionsAPI.getInstance().getHookupAPI().addHookup(new ExternalPlugin("RealScoreboard", "&fReal&bScoreboard", this.getDescription().getDescription(), Material.PAINTING, Arrays.asList(
+                    new ExternalPluginPermission("realscoreboard.admin", "Allow access to the main operator commands of RealScoreboard.", Arrays.asList("rsb config", "rsb debug", "rsb reload")),
+                    new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))), this.getDescription().getVersion()));
+        }
+
         getLogger().info("Your config version is: " + Config.file().getString("Version"));
         Bukkit.getPluginManager().registerEvents(new PlayerManager(realScoreboard), this);
         CommandManager cm = new CommandManager(this);

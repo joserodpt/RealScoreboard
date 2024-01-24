@@ -15,7 +15,7 @@ package joserodpt.realscoreboard.utils;
 
 import joserodpt.realscoreboard.RealScoreboard;
 import joserodpt.realscoreboard.RealScoreboardPlugin;
-import joserodpt.realscoreboard.api.IPlaceholders;
+import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.config.Config;
 import joserodpt.realscoreboard.api.utils.Text;
 import me.clip.placeholderapi.PlaceholderAPI;

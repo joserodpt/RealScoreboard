@@ -18,6 +18,7 @@ import joserodpt.realscoreboard.api.managers.AbstractAnimationManager;
 import joserodpt.realscoreboard.api.managers.AbstractDatabaseManager;
 import joserodpt.realscoreboard.api.managers.AbstractPlayerManager;
 import joserodpt.realscoreboard.api.managers.AbstractScoreboardManager;
+import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;

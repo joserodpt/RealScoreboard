@@ -14,7 +14,7 @@ package joserodpt.realscoreboard;
  */
 
 import joserodpt.realscoreboard.managers.AnimationManager;
-import joserodpt.realscoreboard.api.IPlaceholders;
+import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.Config;
 import joserodpt.realscoreboard.api.config.PlayerData;
