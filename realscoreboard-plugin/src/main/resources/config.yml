@@ -14,7 +14,7 @@ Config:
   ItemAdder-Support: false
   mcMMO-Support: false
   Check-for-Updates: true
-  Prefix: '&fReal&bScoreboard &7| &r'
+  Prefix: '&fReal&dScoreboard &7| &r'
   Reloaded: '&fThe config has been &areloaded&f.'
   Use-Placeholders-In-Scoreboard-Titles: false
   RealScoreboard-Disabled-By-Default: false

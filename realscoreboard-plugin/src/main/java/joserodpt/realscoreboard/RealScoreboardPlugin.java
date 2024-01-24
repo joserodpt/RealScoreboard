@@ -101,7 +101,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
         if (getServer().getPluginManager().getPlugin("RealPermissions") != null) {
             //register RealMines permissions onto RealPermissions
-            RealPermissionsAPI.getInstance().getHookupAPI().addHookup(new ExternalPlugin("RealScoreboard", "&fReal&bScoreboard", this.getDescription().getDescription(), Material.PAINTING, Arrays.asList(
+            RealPermissionsAPI.getInstance().getHookupAPI().addHookup(new ExternalPlugin("RealScoreboard", "&fReal&dScoreboard", this.getDescription().getDescription(), Material.PAINTING, Arrays.asList(
                     new ExternalPluginPermission("realscoreboard.admin", "Allow access to the main operator commands of RealScoreboard.", Arrays.asList("rsb config", "rsb debug", "rsb reload")),
                     new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))), this.getDescription().getVersion()));
         }
