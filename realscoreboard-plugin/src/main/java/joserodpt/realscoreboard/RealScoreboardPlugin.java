@@ -91,10 +91,10 @@ public class RealScoreboardPlugin extends JavaPlugin {
         if (Config.file().getBoolean("Config.Check-for-Updates")) {
             new UpdateChecker(this, 22928).getVersion(version -> {
                 if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                    getLogger().warning("The plugin is updated to the latest version.");
+                    getLogger().info("The plugin is updated to the latest version.");
                 } else {
                     newUpdate = true;
-                    getLogger().info("There is a new update available! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-20-1.22928/");
+                    getLogger().warning("There is a new update available! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-20-1.22928/");
                 }
             });
         }
