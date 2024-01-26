@@ -1,14 +1,14 @@
 #✦------------------------------------------------------✦
 #|                      Main Config                     |
 #✦------------------------------------------------------✦
-#RealScoreboard created by JoseGamerPT and maintained by Neziw
+#RealScoreboard created by joserodpt and maintained by Neziw
 #
 #Useful links:
 #SpigotMC - https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/
 #Discord Server - https://discord.gg/t7gfnYZKy8
 #bStats - https://bstats.org/plugin/bukkit/RealScoreboard/10080
 #HEX Color Formats: https://github.com/Iridium-Development/IridiumColorAPI
-#API for Developers: https://github.com/JoseGamerPT/RealScoreboard/blob/master/api.md
+#API for Developers: https://github.com/joserodpt/RealScoreboard/blob/master/api.md
 Debug: false
 Config:
   ItemAdder-Support: false

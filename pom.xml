@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>josegamerpt.realscoreboard</groupId>
+    <groupId>joserodpt.realscoreboard</groupId>
     <artifactId>realscoreboard-parent</artifactId>
     <version>1.3.3</version>
     <packaging>pom</packaging>
@@ -14,7 +14,7 @@
 
     <developers>
         <developer>
-            <id>JoseGamerPT</id>
+            <id>joserodpt</id>
         </developer>
         <developer>
             <id>neziw</id>
@@ -50,7 +50,7 @@
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/JoseGamerPT/RealScoreboard/issues</url>
+        <url>https://github.com/joserodpt/RealScoreboard/issues</url>
     </issueManagement>
 
     <distributionManagement>

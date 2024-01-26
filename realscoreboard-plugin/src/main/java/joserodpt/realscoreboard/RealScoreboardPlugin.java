@@ -53,12 +53,15 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = this;
+        printASCII();
         Config.setup(this);
+
+        instance = this;
         realScoreboard = new RealScoreboard(this);
         RealScoreboardAPI.setInstance(realScoreboard);
-        String header = "<------------------ RealScoreboard PT ------------------>".replace("PT", this.getDescription().getVersion());
-        getLogger().info(header);
+
+        getLogger().info("Your config version: " + Config.file().getString("Version"));
+
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             setupEconomy();
             setupPermissions();
@@ -72,7 +75,6 @@ public class RealScoreboardPlugin extends JavaPlugin {
             getLogger().warning("PlaceholderAPI is not installed on the server.");
         }
 
-        getLogger().info("Your config version is: " + Config.file().getString("Version"));
         Bukkit.getPluginManager().registerEvents(new PlayerManager(realScoreboard), this);
         CommandManager cm = new CommandManager(this);
 
@@ -106,8 +108,22 @@ public class RealScoreboardPlugin extends JavaPlugin {
                     new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))), this.getDescription().getVersion()));
         }
 
-        Arrays.asList("Finished loading RealScoreboard.", "Server version: " + getServerVersion() + " | Plugin Version: " + getDescription().getVersion()).forEach(s -> getLogger().info(s));
-        getLogger().info(header);
+        Arrays.asList("Plugin has been loaded.", "Server version: " + getServerVersion()).forEach(s -> getLogger().info(s));
+        getLogger().info("<------------------ RealScoreboard | vPT ------------------>".replace("PT", this.getDescription().getVersion()));
+    }
+
+    private void printASCII() {
+        logWithColor("&d   ____            _ ____                     _                         _");
+        logWithColor("&d  |  _ \\ ___  __ _| / ___|  ___ ___  _ __ ___| |__   ___   __ _ _ __ __| |");
+        logWithColor("&d  | |_) / _ \\/ _` | \\___ \\ / __/ _ \\| '__/ _ \\ '_ \\ / _ \\ / _` | '__/ _` |");
+        logWithColor("&d  |  _ <  __/ (_| | |___) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |");
+        logWithColor("&d  |_| \\_\\___|\\__,_|_|____/ \\___\\___/|_|  \\___|_.__/ \\___/ \\__,_|_|  \\__,_|");
+        logWithColor("  &8Made by: &9JoseGamer_PT 		                     &8Version: &9" + this.getVersion());
+        getLogger().info("");
+    }
+
+    public void logWithColor(String s) {
+        getServer().getConsoleSender().sendMessage("[" + this.getDescription().getName() + "] " + Text.color(s));
     }
 
     private void setupEconomy() {

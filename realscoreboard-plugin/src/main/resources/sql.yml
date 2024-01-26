@@ -8,7 +8,7 @@
 #Discord Server - https://discord.gg/t7gfnYZKy8
 #bStats - https://bstats.org/plugin/bukkit/RealScoreboard/10080
 #HEX Color Formats: https://github.com/Iridium-Development/IridiumColorAPI
-#API for Developers: https://github.com/JoseGamerPT/RealScoreboard/blob/master/api.md
+#API for Developers: https://github.com/joserodpt/RealScoreboard/blob/master/api.md
 driver: "SQLITE"
 host: "localhost"
 database: "RealScoreboard"

@@ -19,7 +19,7 @@
 ```
 ```xml
 <dependency>
-  <groupId>josegamerpt.realscoreboard</groupId>
+  <groupId>joserodpt.realscoreboard</groupId>
   <artifactId>realscoreboard-api</artifactId>
   <version>10-12-2022 Build 2</version>
 </dependency>
@@ -31,7 +31,7 @@ maven {
 }
 ```
 ```groovy
-implementation "josegamerpt.realscoreboard:RealScoreboard-API:10-11-2022 Build 5"
+implementation "joserodpt.realscoreboard:RealScoreboard-API:10-11-2022 Build 5"
 ```
 
 ----

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>josegamerpt.realscoreboard</groupId>
+        <groupId>joserodpt.realscoreboard</groupId>
         <artifactId>realscoreboard-parent</artifactId>
         <version>1.3.3</version>
         <relativePath>../pom.xml</relativePath>
@@ -99,7 +99,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>josegamerpt.realscoreboard</groupId>
+            <groupId>joserodpt.realscoreboard</groupId>
             <artifactId>realscoreboard-api</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
