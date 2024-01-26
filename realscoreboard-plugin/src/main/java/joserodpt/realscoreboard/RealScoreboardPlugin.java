@@ -54,6 +54,8 @@ public class RealScoreboardPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         printASCII();
+
+        final long start = System.currentTimeMillis();
         Config.setup(this);
 
         instance = this;
@@ -108,8 +110,8 @@ public class RealScoreboardPlugin extends JavaPlugin {
                     new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))), this.getDescription().getVersion()));
         }
 
-        Arrays.asList("Plugin has been loaded.", "Server version: " + getServerVersion()).forEach(s -> getLogger().info(s));
-        getLogger().info("<------------------ RealScoreboard | vPT ------------------>".replace("PT", this.getDescription().getVersion()));
+        Arrays.asList("Server version: " + getServerVersion(), "Finished loading in " + ((System.currentTimeMillis() - start) / 1000F) + " seconds.").forEach(s -> getLogger().info(s));
+        getLogger().info("<------------------ RealScoreboard vPT ------------------>".replace("PT", this.getDescription().getVersion()));
     }
 
     private void printASCII() {
@@ -118,7 +120,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
         logWithColor("&d  | |_) / _ \\/ _` | \\___ \\ / __/ _ \\| '__/ _ \\ '_ \\ / _ \\ / _` | '__/ _` |");
         logWithColor("&d  |  _ <  __/ (_| | |___) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |");
         logWithColor("&d  |_| \\_\\___|\\__,_|_|____/ \\___\\___/|_|  \\___|_.__/ \\___/ \\__,_|_|  \\__,_|");
-        logWithColor("  &8Made by: &9JoseGamer_PT 		                     &8Version: &9" + this.getVersion());
+        logWithColor("  &8Made by: &9JoseGamer_PT 		                      &8Version: &9" + this.getVersion());
         getLogger().info("");
     }
 
