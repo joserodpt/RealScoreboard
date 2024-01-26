@@ -15,7 +15,7 @@ package joserodpt.realscoreboard.api.scoreboard;
 
 import fr.mrmicky.fastboard.FastBoard;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.utils.Text;
 import org.bukkit.entity.Player;
@@ -49,7 +49,7 @@ public class ScoreboardTask extends BukkitRunnable {
 
         //hide scoreboard if the player is in a world where it is disabled,
         //or if the player has the scoreboard off (manually or automatically via vanish command)
-        if (Objects.requireNonNull(Config.file().getList("Config.Disabled-Worlds")).
+        if (Objects.requireNonNull(RSBConfig.file().getList("Config.Disabled-Worlds")).
                 contains(this.player.getWorld().getName()) || !playerData.isScoreboardON()) {
 
             if (!this.fastBoard.isDeleted() || !this.fastBoard.getLines().isEmpty()) {
@@ -92,7 +92,7 @@ public class ScoreboardTask extends BukkitRunnable {
         } */
 
             String title = rsb.getTitle();
-            if (Config.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
+            if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                 title = this.rs.getPlaceholders().setPlaceHolders(this.player, title);
             }
             this.fastBoard.updateTitle(Text.color(title));

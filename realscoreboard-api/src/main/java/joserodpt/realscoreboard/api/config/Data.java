@@ -24,7 +24,7 @@ public class Data {
      * @return arraylist of registered worlds
      */
     public static ArrayList<String> getRegisteredWorlds() {
-        return new ArrayList<>(Config.file().getSection("Config.Scoreboard").getRoutesAsStrings(false));
+        return new ArrayList<>(RSBConfig.file().getSection("Config.Scoreboard").getRoutesAsStrings(false));
     }
 
     /**

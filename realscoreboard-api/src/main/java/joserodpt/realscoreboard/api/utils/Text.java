@@ -14,7 +14,7 @@ package joserodpt.realscoreboard.api.utils;
  */
 
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import net.melion.rgbchat.api.RGBApi;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -56,7 +56,7 @@ public class Text {
     }
 
     public static String getPrefix() {
-        return Text.color(Config.file().getString("Config.Prefix"));
+        return Text.color(RSBConfig.file().getString("Config.Prefix"));
     }
 
     public static String randomColor() {

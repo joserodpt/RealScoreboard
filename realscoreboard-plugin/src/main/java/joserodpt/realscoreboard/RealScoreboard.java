@@ -16,7 +16,7 @@ package joserodpt.realscoreboard;
 import joserodpt.realscoreboard.managers.AnimationManager;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.managers.AbstractAnimationManager;
 import joserodpt.realscoreboard.api.managers.AbstractDatabaseManager;
@@ -81,7 +81,7 @@ public class RealScoreboard extends RealScoreboardAPI {
 
     @Override
     public void reload() {
-        Config.reload();
+        RSBConfig.reload();
         this.playerManager.getTasks().forEach((uuid, scoreboardTask) -> scoreboardTask.cancel());
         this.playerManager.getTasks().clear();
         this.scoreboardManager.reload();

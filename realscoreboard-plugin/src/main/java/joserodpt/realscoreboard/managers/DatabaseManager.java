@@ -22,7 +22,7 @@ import com.j256.ormlite.logger.LoggerFactory;
 import com.j256.ormlite.logger.NullLogBackend;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.events.DataSaveEvent;
 import joserodpt.realscoreboard.api.managers.AbstractDatabaseManager;
@@ -53,8 +53,8 @@ public class DatabaseManager extends AbstractDatabaseManager {
         String databaseURL = getDatabaseURL();
         ConnectionSource connectionSource = new JdbcConnectionSource(
                 databaseURL,
-                Config.getSql().getString("username"),
-                Config.getSql().getString("password"),
+                RSBConfig.getSql().getString("username"),
+                RSBConfig.getSql().getString("password"),
                 DatabaseTypeUtils.createDatabaseType(databaseURL)
         );
         TableUtils.createTableIfNotExists(connectionSource, PlayerData.class);
@@ -63,17 +63,17 @@ public class DatabaseManager extends AbstractDatabaseManager {
     }
 
     private String getDatabaseURL() {
-        String driver = Config.getSql().getString("driver").toLowerCase(Locale.ROOT);
+        String driver = RSBConfig.getSql().getString("driver").toLowerCase(Locale.ROOT);
         switch (driver) {
             case "mysql":
             case "mariadb":
-                return "jdbc:mysql://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
+                return "jdbc:mysql://" + RSBConfig.getSql().getString("host") + ":" + RSBConfig.getSql().getInt("port") + "/" + RSBConfig.getSql().getString("database");
             case "postgresql":
-                return "jdbc:postgresql://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + "/" + Config.getSql().getString("database");
+                return "jdbc:postgresql://" + RSBConfig.getSql().getString("host") + ":" + RSBConfig.getSql().getInt("port") + "/" + RSBConfig.getSql().getString("database");
             case "sqlserver":
-                return "jdbc:sqlserver://" + Config.getSql().getString("host") + ":" + Config.getSql().getInt("port") + ";databaseName=" + Config.getSql().getString("database");
+                return "jdbc:sqlserver://" + RSBConfig.getSql().getString("host") + ":" + RSBConfig.getSql().getInt("port") + ";databaseName=" + RSBConfig.getSql().getString("database");
             default:
-                return "jdbc:sqlite:" + new File(javaPlugin.getDataFolder(), Config.getSql().getString("database") + ".db");
+                return "jdbc:sqlite:" + new File(javaPlugin.getDataFolder(), RSBConfig.getSql().getString("database") + ".db");
         }
     }
 

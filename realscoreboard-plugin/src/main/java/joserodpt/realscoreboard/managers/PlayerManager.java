@@ -18,7 +18,7 @@ import joserodpt.realscoreboard.RealScoreboardPlugin;
 import joserodpt.realscoreboard.api.managers.AbstractPlayerManager;
 import joserodpt.realscoreboard.api.scoreboard.ScoreboardTask;
 import joserodpt.realscoreboard.api.config.PlayerData;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.utils.Text;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -46,19 +46,19 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
 
     @Override
     public void check(Player p) {
-        if (Config.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName())) {
+        if (RSBConfig.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName())) {
             if (this.tasks.containsKey(p.getUniqueId())) {
                 this.tasks.get(p.getUniqueId()).cancel();
             }
             this.tasks.remove(p.getUniqueId());
         } else {
-            if (Config.file().getBoolean("Config.RealScoreboard-Disabled-By-Default")) {
+            if (RSBConfig.file().getBoolean("Config.RealScoreboard-Disabled-By-Default")) {
                 PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(p.getUniqueId());
                 playerData.setScoreboardON(false);
                 this.plugin.getDatabaseManager().savePlayerData(playerData, true);
             }
             this.tasks.put(p.getUniqueId(), new ScoreboardTask(p, this.plugin));
-            this.tasks.get(p.getUniqueId()).runTaskTimerAsynchronously(this.plugin.getPlugin(), Config.file().getInt("Config.Scoreboard-Refresh"), Config.file().getInt("Config.Scoreboard-Refresh"));
+            this.tasks.get(p.getUniqueId()).runTaskTimerAsynchronously(this.plugin.getPlugin(), RSBConfig.file().getInt("Config.Scoreboard-Refresh"), RSBConfig.file().getInt("Config.Scoreboard-Refresh"));
         }
     }
 
@@ -78,7 +78,7 @@ public class PlayerManager extends AbstractPlayerManager implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent e) {
         //check if this hiding behaviour is hidden
-        if (Config.file().getBoolean("Config.Auto-Hide-In-Vanish")) {
+        if (RSBConfig.file().getBoolean("Config.Auto-Hide-In-Vanish")) {
 
             Player p = e.getPlayer();
             String cmd = e.getMessage().split(" ")[0];

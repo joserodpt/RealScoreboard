@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-public class Config {
+public class RSBConfig {
 
     private static YamlDocument configFile;
     private static YamlDocument sqlConfigFile;

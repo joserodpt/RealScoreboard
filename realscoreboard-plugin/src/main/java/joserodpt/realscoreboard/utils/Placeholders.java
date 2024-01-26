@@ -16,7 +16,7 @@ package joserodpt.realscoreboard.utils;
 import joserodpt.realscoreboard.RealScoreboard;
 import joserodpt.realscoreboard.RealScoreboardPlugin;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.utils.Text;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -82,10 +82,10 @@ public class Placeholders implements IPlaceholders {
     }
 
     private String time() {
-        DateFormat dateFormat = new SimpleDateFormat(Config.file().getString("Config.Hours.Formatting"));
+        DateFormat dateFormat = new SimpleDateFormat(RSBConfig.file().getString("Config.Hours.Formatting"));
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        cal.add(Calendar.HOUR_OF_DAY, Config.file().getInt("Config.Hours.Offset"));
+        cal.add(Calendar.HOUR_OF_DAY, RSBConfig.file().getInt("Config.Hours.Offset"));
         cal.getTime();
         return dateFormat.format(cal.getTime());
     }

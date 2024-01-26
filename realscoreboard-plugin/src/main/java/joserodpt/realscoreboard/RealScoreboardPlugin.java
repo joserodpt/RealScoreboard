@@ -17,7 +17,7 @@ import joserodpt.realpermissions.api.RealPermissionsAPI;
 import joserodpt.realpermissions.api.pluginhookup.ExternalPlugin;
 import joserodpt.realpermissions.api.pluginhookup.ExternalPluginPermission;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.utils.Text;
 import joserodpt.realscoreboard.listeners.McMMOScoreboardListener;
 import joserodpt.realscoreboard.managers.PlayerManager;
@@ -56,13 +56,13 @@ public class RealScoreboardPlugin extends JavaPlugin {
         printASCII();
 
         final long start = System.currentTimeMillis();
-        Config.setup(this);
+        RSBConfig.setup(this);
 
         instance = this;
         realScoreboard = new RealScoreboard(this);
         RealScoreboardAPI.setInstance(realScoreboard);
 
-        getLogger().info("Your config version: " + Config.file().getString("Version"));
+        getLogger().info("Your config version: " + RSBConfig.file().getString("Version"));
 
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             setupEconomy();
@@ -89,10 +89,10 @@ public class RealScoreboardPlugin extends JavaPlugin {
         cm.register(new Commands(this, realScoreboard));
         new Metrics(this, 10080);
         Bukkit.getOnlinePlayers().forEach(player -> new PlayerManager(realScoreboard).check(player));
-        if (Config.file().getBoolean("Config.xmcMMO-Support")) {
+        if (RSBConfig.file().getBoolean("Config.xmcMMO-Support")) {
             Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(realScoreboard), this);
         }
-        if (Config.file().getBoolean("Config.Check-for-Updates")) {
+        if (RSBConfig.file().getBoolean("Config.Check-for-Updates")) {
             new UpdateChecker(this, 22928).getVersion(version -> {
                 if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
                     getLogger().info("The plugin is updated to the latest version.");

@@ -17,7 +17,7 @@ import joserodpt.realscoreboard.api.config.Data;
 import joserodpt.realscoreboard.api.managers.AbstractScoreboardManager;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.scoreboard.RBoard;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.ScoreboardGroup;
 import org.bukkit.entity.Player;
 
@@ -31,10 +31,10 @@ public class ScoreboardManager extends AbstractScoreboardManager {
 
     @Override
     public void loadScoreboards() {
-        for (String world : Config.file().getSection("Config.Scoreboard").getRoutesAsStrings(false)) {
+        for (String world : RSBConfig.file().getSection("Config.Scoreboard").getRoutesAsStrings(false)) {
             List<RScoreboard> sbs = new ArrayList<>();
-            for (String perm : Config.file().getSection("Config.Scoreboard." + world).getRoutesAsStrings(false)) {
-                sbs.add(new RScoreboard(world, perm, Config.file().getInt("Config.Scoreboard." + world + "." + perm + ".Switch-Timer")));
+            for (String perm : RSBConfig.file().getSection("Config.Scoreboard." + world).getRoutesAsStrings(false)) {
+                sbs.add(new RScoreboard(world, perm, RSBConfig.file().getInt("Config.Scoreboard." + world + "." + perm + ".Switch-Timer")));
             }
             this.scoreboardList.put(world, new ScoreboardGroup(world, sbs));
         }

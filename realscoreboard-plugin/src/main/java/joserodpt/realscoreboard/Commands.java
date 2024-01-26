@@ -13,7 +13,7 @@ package joserodpt.realscoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.utils.Text;
 import lombok.AllArgsConstructor;
@@ -48,7 +48,7 @@ public class Commands extends CommandBase {
     @Permission("realscoreboard.admin")
     public void reloadCommand(final CommandSender commandSender) {
         this.instance.reload();
-        Text.send(commandSender, Config.file().getString("Config.Reloaded"));
+        Text.send(commandSender, RSBConfig.file().getString("Config.Reloaded"));
     }
 
     @SubCommand("toggle")
@@ -60,7 +60,7 @@ public class Commands extends CommandBase {
             PlayerData playerData = this.instance.getDatabaseManager().getPlayerData(p.getUniqueId());
             playerData.setScoreboardON(!playerData.isScoreboardON());
             this.instance.getDatabaseManager().savePlayerData(playerData, true);
-            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle." + (playerData.isScoreboardON() ? "ON" : "OFF")));
+            Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (playerData.isScoreboardON() ? "ON" : "OFF")));
         }
     }
 
@@ -72,7 +72,7 @@ public class Commands extends CommandBase {
             PlayerData playerData = this.instance.getDatabaseManager().getPlayerData(p.getUniqueId());
             playerData.setScoreboardON(false);
             this.instance.getDatabaseManager().savePlayerData(playerData, true);
-            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
+            Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
         }
     }
 
@@ -84,7 +84,7 @@ public class Commands extends CommandBase {
             PlayerData playerData = this.instance.getDatabaseManager().getPlayerData(p.getUniqueId());
             playerData.setScoreboardON(true);
             this.instance.getDatabaseManager().savePlayerData(playerData, true);
-            Text.send(p, Config.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
+            Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
         }
     }
 
@@ -92,11 +92,11 @@ public class Commands extends CommandBase {
     @Permission("realscoreboard.admin")
     public void configCommand(final CommandSender commandSender) {
         Text.send(commandSender, Arrays.asList(Text.getPrefix(),
-                "&fConfig Version: &b" + Config.file().getInt("Version"),
-                "&fScoreboard refresh: &b" + Config.file().getInt("Config.Scoreboard-Refresh"),
+                "&fConfig Version: &b" + RSBConfig.file().getInt("Version"),
+                "&fScoreboard refresh: &b" + RSBConfig.file().getInt("Config.Scoreboard-Refresh"),
                 "&f&nAnimations:",
-                "- &fTitle Delay: &b" + Config.file().getInt("Config.Animations.Title-Delay"),
-                "- &fLoop-Delay: &b" + Config.file().getInt("Config.Animations.Loop-Delay")));
+                "- &fTitle Delay: &b" + RSBConfig.file().getInt("Config.Animations.Title-Delay"),
+                "- &fLoop-Delay: &b" + RSBConfig.file().getInt("Config.Animations.Loop-Delay")));
     }
 
 
@@ -115,16 +115,16 @@ public class Commands extends CommandBase {
                 "&fOS Architecture: &b" + System.getProperty("os.arch"),
                 "&fOS Version: &b" + System.getProperty("os.version"),
                 "> &b&lDATABASE info",
-                "&fDB Driver: &b" + Config.getSql().getString("driver"),
+                "&fDB Driver: &b" + RSBConfig.getSql().getString("driver"),
                 "> &b&lSCOREBOARD info",
                 "&fLoaded Scoreboards: &b" + this.instance.getScoreboardManager().getScoreboards().size(),
                 "&fLoaded Boards: &b" + this.instance.getScoreboardManager().getBoards().size(),
                 "> &b&lCONFIG info",
-                "&fConfig Version: &b" + Config.file().getInt("Version"),
-                "&fScoreboard refresh: &b" + Config.file().getInt("Config.Scoreboard-Refresh"),
+                "&fConfig Version: &b" + RSBConfig.file().getInt("Version"),
+                "&fScoreboard refresh: &b" + RSBConfig.file().getInt("Config.Scoreboard-Refresh"),
                 "&f&nAnimations:",
-                "- &fTitle Delay: &b" + Config.file().getInt("Config.Animations.Title-Delay"),
-                "- &fLoop-Delay: &b" + Config.file().getInt("Config.Animations.Loop-Delay"),
+                "- &fTitle Delay: &b" + RSBConfig.file().getInt("Config.Animations.Title-Delay"),
+                "- &fLoop-Delay: &b" + RSBConfig.file().getInt("Config.Animations.Loop-Delay"),
                 "&e&lNOTE: &fThis information is intended to be shared with the developer in order to provide additional assistance."));
     }
 }

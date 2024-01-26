@@ -15,7 +15,7 @@ package joserodpt.realscoreboard.api.scoreboard;
 
 import joserodpt.realscoreboard.api.animation.BoardLooper;
 import joserodpt.realscoreboard.api.animation.TextLooper;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -52,8 +52,8 @@ public class RScoreboard {
         this.world = world;
         this.interval = interv;
         this.permission = perm;
-        Config.file().getSection("Config.Scoreboard." + this.world + "." + this.permission + ".Boards")
-                .getRoutesAsStrings(false).forEach(s -> this.boards.add(new RBoard(s, Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Title"), Config.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Lines"))));
+        RSBConfig.file().getSection("Config.Scoreboard." + this.world + "." + this.permission + ".Boards")
+                .getRoutesAsStrings(false).forEach(s -> this.boards.add(new RBoard(s, RSBConfig.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Title"), RSBConfig.file().getStringList("Config.Scoreboard." + this.world + "." + this.permission + ".Boards." + s + ".Lines"))));
         this.boards.forEach(rBoard -> this.titleAnimations.put(rBoard.getWorldBoard(), new TextLooper(rBoard.getWorldBoard(), rBoard.getTitle())));
         this.bp = new BoardLooper(this.world, this.boards);
         this.start();
@@ -122,12 +122,12 @@ public class RScoreboard {
             public void run() {
                 titleAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("RealScoreboard"), 0L, Config.file().getInt("Config.Animations.Title-Delay"));
+        }.runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("RealScoreboard"), 0L, RSBConfig.file().getInt("Config.Animations.Title-Delay"));
         this.looper = new BukkitRunnable() {
             @Override
             public void run() {
                 loopAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("RealScoreboard"), 0L, Config.file().getInt("Config.Animations.Loop-Delay"));
+        }.runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("RealScoreboard"), 0L, RSBConfig.file().getInt("Config.Animations.Loop-Delay"));
     }
 }

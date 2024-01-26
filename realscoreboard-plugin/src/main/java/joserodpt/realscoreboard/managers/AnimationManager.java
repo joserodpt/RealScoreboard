@@ -14,7 +14,7 @@ package joserodpt.realscoreboard.managers;
  */
 
 import joserodpt.realscoreboard.api.animation.TextLooper;
-import joserodpt.realscoreboard.api.config.Config;
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.managers.AbstractAnimationManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -74,13 +74,13 @@ public class AnimationManager extends AbstractAnimationManager {
             public void run() {
                 titleAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimerAsynchronously(this.plugin, 0L, Config.file().getInt("Config.Animations.Title-Delay"));
+        }.runTaskTimerAsynchronously(this.plugin, 0L, RSBConfig.file().getInt("Config.Animations.Title-Delay"));
         this.looper = new BukkitRunnable() {
             @Override
             public void run() {
                 loopAnimations.forEach((s, textLooper) -> textLooper.next());
             }
-        }.runTaskTimerAsynchronously(this.plugin, 0L, Config.file().getInt("Config.Animations.Loop-Delay"));
+        }.runTaskTimerAsynchronously(this.plugin, 0L, RSBConfig.file().getInt("Config.Animations.Loop-Delay"));
     }
 
     @Override
