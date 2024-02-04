@@ -13,27 +13,26 @@ package joserodpt.realscoreboard.api.scoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
+import joserodpt.realscoreboard.api.RealScoreboardAPI;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
 import java.util.List;
 
 public class RBoard {
+    protected int titleIndex;
+    protected BukkitTask titleLooperTask;
+    private final List<String> title, lines;
+    private RScoreboard rsb;
 
-    private final String worldBoard;
-    private final List<String> title;
-    private final List<String> lines;
-
-    public RBoard(String worldBoard, List<String> title, List<String> lines) {
-        this.worldBoard = worldBoard;
+    public RBoard(List<String> title, List<String> lines) {
         this.title = title;
         this.lines = lines;
     }
 
-    /**
-     * Gets scoreboard world name
-     *
-     * @return value of world name
-     */
-    public String getWorldBoard() {
-        return this.worldBoard;
+    public RBoard(final RScoreboard rsb, List<String> title, List<String> lines) {
+        this(title, lines);
+        this.rsb = rsb;
     }
 
     /**
@@ -41,8 +40,17 @@ public class RBoard {
      *
      * @return list of scoreboard titles
      */
-    public List<String> getTitle() {
+    public List<String> getTitleList() {
         return this.title;
+    }
+
+    /**
+     * Gets current title of board
+     *
+     * @return current title of board
+     */
+    public String getTitle() {
+        return this.getTitleList().get(titleIndex);
     }
 
     /**
@@ -52,5 +60,36 @@ public class RBoard {
      */
     public List<String> getLines() {
         return this.lines;
+    }
+
+    public void stopTasks() {
+        if (this.titleLooperTask != null) {
+            this.titleLooperTask.cancel();
+        }
+    }
+
+    public void init() {
+        if (rsb == null) {
+            RealScoreboardAPI.getInstance().getLogger().severe("RBoard with title: " + this. getTitleList().toString() + " doesn't have a Scoreboard assigned in code! (possible bug)");
+            return;
+        }
+
+        titleIndex = 0;
+        if (title.size() > 1) {
+            this.titleLooperTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (titleIndex == title.size() - 1) {
+                        titleIndex = 0;
+                    } else {
+                        ++titleIndex;
+                    }
+                }
+            }.runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().getPlugin(), 0L, rsb.titleLoopDelay);
+        }
+    }
+
+    public void setScoreboard(RScoreboard rsb) {
+        this.rsb = rsb;
     }
 }

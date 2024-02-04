@@ -13,59 +13,166 @@ package joserodpt.realscoreboard.managers;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-import joserodpt.realscoreboard.api.config.Data;
-import joserodpt.realscoreboard.api.managers.AbstractScoreboardManager;
-import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
-import joserodpt.realscoreboard.api.scoreboard.RBoard;
+import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import joserodpt.realscoreboard.api.scoreboard.ScoreboardGroup;
+import joserodpt.realscoreboard.api.config.RSBScoreboards;
+import joserodpt.realscoreboard.api.managers.AbstractScoreboardManager;
+import joserodpt.realscoreboard.api.scoreboard.RBoard;
+import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
+import joserodpt.realscoreboard.api.scoreboard.RScoreboardBoards;
+import joserodpt.realscoreboard.api.scoreboard.RScoreboardSingle;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ScoreboardManager extends AbstractScoreboardManager {
+public class ScoreboardManager implements AbstractScoreboardManager {
+    private final Map<String, RScoreboard> scoreboards = new HashMap<>();
+    private final RealScoreboardAPI rsa;
 
-    private final HashMap<String, ScoreboardGroup> scoreboardList = new HashMap<>();
+    public ScoreboardManager(RealScoreboardAPI rsa) {
+        this.rsa = rsa;
+    }
 
     @Override
     public void loadScoreboards() {
-        for (String world : RSBConfig.file().getSection("Config.Scoreboard").getRoutesAsStrings(false)) {
-            List<RScoreboard> sbs = new ArrayList<>();
-            for (String perm : RSBConfig.file().getSection("Config.Scoreboard." + world).getRoutesAsStrings(false)) {
-                sbs.add(new RScoreboard(world, perm, RSBConfig.file().getInt("Config.Scoreboard." + world + "." + perm + ".Switch-Timer")));
-            }
-            this.scoreboardList.put(world, new ScoreboardGroup(world, sbs));
+        //starting from version 1.4, scoreboards are stored in the scoreboards.yml file and have a new structure,
+        //this next part of the code is responsible for the conversion of those old scoreboards in the config.yml
+        if (RSBConfig.file().contains("Config.Scoreboard")) {
+            convertOldScoreboardsV1dot4();
+            return;
         }
+
+        if (!RSBScoreboards.file().contains("Scoreboards") || RSBScoreboards.file().getSection("Scoreboards") == null) {
+            rsa.getLogger().severe("There seems to be no valid scoreboards in the scoreboards.yml file!");
+            return;
+        }
+
+        for (String scoreboardName : RSBScoreboards.file().getSection("Scoreboards").getRoutesAsStrings(false)) {
+            String key = "Scoreboards." + scoreboardName + ".";
+            String w = RSBScoreboards.file().getString(key + "Default-World");
+
+            String displayName = RSBScoreboards.file().getString(key + "Display-Name");
+            String permission = RSBScoreboards.file().getString(key + "Permission");
+
+            int titleRefresh = RSBScoreboards.file().getInt(key + "Refresh.Title");
+            int titleLoopDelay = RSBScoreboards.file().getInt(key + "Refresh.Title-Loop-Delay");
+            int globalScoreboardRefresh = RSBScoreboards.file().getInt(key + "Refresh.Scoreboard");
+
+            //if config has lines, it has only one board, else, two or more
+            if (RSBScoreboards.file().contains(key + "Lines")) {
+                List<String> title = RSBScoreboards.file().getStringList(key + "Title");
+                List<String> lines = RSBScoreboards.file().getStringList(key + "Lines");
+                this.scoreboards.put(scoreboardName, new RScoreboardSingle(scoreboardName, displayName, permission, w, title, lines,
+                        titleRefresh, titleLoopDelay, globalScoreboardRefresh));
+            } else {
+                this.scoreboards.put(scoreboardName, new RScoreboardBoards(scoreboardName, displayName, permission, w,
+                        titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay")));
+            }
+        }
+
+        this.scoreboards.values().forEach(RScoreboard::init);
+        rsa.getLogger().info("Loaded " + this.scoreboards.keySet().size() + " scoreboards.");
+    }
+
+    private void convertOldScoreboardsV1dot4() {
+        rsa.getLogger().warning("Starting scoreboard conversion to scoreboards.yml...");
+        //remove the template scoreboards
+        //RSBScoreboards.file().remove("Scoreboards");
+        int counter = 0;
+
+        for (String world : RSBConfig.file().getSection("Config.Scoreboard").getRoutesAsStrings(false)) {
+            for (String permNode : RSBConfig.file().getSection("Config.Scoreboard." + world).getRoutesAsStrings(false)) {
+                String scoreboardEntry = "Config.Scoreboard." + world + "." + permNode + ".";
+
+                if (RSBConfig.file().getSection(scoreboardEntry + "Boards").getRoutesAsStrings(false).size() == 1) {
+                    for (String boardName : RSBConfig.file().getSection(scoreboardEntry + "Boards").getRoutesAsStrings(false)) {
+                        String boardEntry = scoreboardEntry + "Boards." + boardName;
+
+                        List<String> title = RSBConfig.file().getStringList(boardEntry + ".Title");
+                        List<String> lines = RSBConfig.file().getStringList(boardEntry + ".Lines");
+
+
+                        this.scoreboards.put(permNode, new RScoreboardSingle(permNode, permNode.equalsIgnoreCase("default") ? "none" : "realscoreboard.scoreboard" + permNode, world, title, lines,
+                                20, 20, 20));
+                        ++counter;
+                    }
+                } else {
+                    List<RBoard> boards = new ArrayList<>();
+
+                    RScoreboardBoards rsbb = new RScoreboardBoards(permNode, permNode.equalsIgnoreCase("default") ? "none" : "realscoreboard.scoreboard" + permNode, world,
+                            20, 20, 20 , RSBConfig.file().getInt(scoreboardEntry + "Switch-Timer")); ++counter;
+
+                    for (String boardName : RSBConfig.file().getSection(scoreboardEntry + "Boards").getRoutesAsStrings(false)) {
+                        String boardEntry = scoreboardEntry + "Boards." + boardName;
+
+                        List<String> title = RSBConfig.file().getStringList(boardEntry + ".Title");
+                        List<String> lines = RSBConfig.file().getStringList(boardEntry + ".Lines");
+                        boards.add(new RBoard(title, lines));
+                    }
+
+                    boards.forEach(rBoard -> rBoard.setScoreboard(rsbb));
+                    rsbb.setBoards(boards);
+
+                    this.scoreboards.put(permNode, rsbb);
+                }
+
+                RSBConfig.file().remove("Config.Scoreboard." + world + "." + permNode);
+                rsa.getLogger().warning("Converted Scoreboard " + permNode);
+            }
+        }
+        for (RScoreboard value : this.scoreboards.values()) {
+            value.setPermission("none");
+            break;
+        }
+
+        this.scoreboards.values().forEach(RScoreboard::init);
+
+        rsa.getLogger().warning("Converted " + counter + " scoreboards from the old config format.");
+
+        RSBConfig.file().remove("Config.Scoreboard");
+        RSBConfig.save();
     }
 
     @Override
     public void reload() {
-        this.scoreboardList.forEach((s, rScoreboard) -> rScoreboard.getScoreboards().forEach(RScoreboard::stop));
-        this.scoreboardList.clear();
+        this.scoreboards.values().forEach(RScoreboard::stopTasks);
+        this.scoreboards.clear();
         this.loadScoreboards();
     }
 
     @Override
-    public RScoreboard getScoreboard(Player p) {
-        ScoreboardGroup sg = this.scoreboardList.get(Data.getCorrectPlace(p));
-        return sg.getScoreboard(p);
+    public Map<String, RScoreboard> getScoreboardMap() {
+        return this.scoreboards;
     }
 
     @Override
-    public HashMap<String, ScoreboardGroup> getScoreboards() {
-        return this.scoreboardList;
+    public List<RScoreboard> getScoreboards() {
+        return new ArrayList<>(this.getScoreboardMap().values());
     }
 
     @Override
-    public List<RBoard> getBoards() {
-        List<RBoard> boards = new ArrayList<>();
-        List<ScoreboardGroup> tmp = new ArrayList<>();
-        this.scoreboardList.forEach((s, scoreboardGroup) -> tmp.add(scoreboardGroup));
-        for (ScoreboardGroup scoreboardGroup : tmp) {
-            scoreboardGroup.getScoreboards().forEach(rScoreboard -> boards.addAll(rScoreboard.getBoards()));
+    public RScoreboard getScoreboardForPlayer(Player p) {
+        for (RScoreboard sb : this.scoreboards.values()) {
+            if (sb.getDefaultWord().equalsIgnoreCase(p.getWorld().getName()) && !sb.getPermission().equalsIgnoreCase("none") && p.hasPermission(sb.getPermission())) {
+                return sb;
+            }
         }
-        return boards;
+
+        for (RScoreboard sb : this.scoreboards.values()) {
+            if (sb.getDefaultWord().equalsIgnoreCase(p.getWorld().getName()) && sb.getPermission().equalsIgnoreCase("none")) {
+                return sb;
+            }
+        }
+
+        return null;
+    }
+
+
+    @Override
+    public RScoreboard getScoreboard(String name) {
+        return this.getScoreboardMap().get(name);
     }
 }

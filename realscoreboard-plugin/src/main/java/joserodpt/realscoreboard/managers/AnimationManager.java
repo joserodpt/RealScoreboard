@@ -25,10 +25,8 @@ import java.util.HashMap;
 
 public class AnimationManager extends AbstractAnimationManager {
 
-    private final HashMap<String, TextLooper> titleAnimations = new HashMap<>();
     private final HashMap<String, TextLooper> loopAnimations = new HashMap<>();
     private final JavaPlugin plugin;
-    private BukkitTask title;
     private BukkitTask looper;
 
     public AnimationManager(JavaPlugin plugin) {
@@ -38,13 +36,10 @@ public class AnimationManager extends AbstractAnimationManager {
 
     @Override
     public void start() {
-        this.loadAnimations();
+        loopAnimations.put("rainbow", new TextLooper("rainbow", Arrays.asList("&c", "&6", "&e", "&a", "&b", "&9", "&3", "&d")));
         this.runLoopers();
     }
 
-    private void loadAnimations() {
-        loopAnimations.put("rainbow", new TextLooper("rainbow", Arrays.asList("&c", "&6", "&e", "&a", "&b", "&9", "&3", "&d")));
-    }
 
     @Override
     public String getLoopAnimation(String s) {
@@ -54,28 +49,18 @@ public class AnimationManager extends AbstractAnimationManager {
     @Override
     public void stop() {
         this.cancelAnimationTasks();
-        this.titleAnimations.clear();
         this.loopAnimations.clear();
     }
 
     @Override
     public void cancelAnimationTasks() {
-        if (this.title != null && !this.title.isCancelled()) {
-            this.title.cancel();
-        }
         if (this.looper != null && !this.looper.isCancelled()) {
             this.looper.cancel();
         }
     }
 
     private void runLoopers() {
-        this.title = new BukkitRunnable() {
-            @Override
-            public void run() {
-                titleAnimations.forEach((s, textLooper) -> textLooper.next());
-            }
-        }.runTaskTimerAsynchronously(this.plugin, 0L, RSBConfig.file().getInt("Config.Animations.Title-Delay"));
-        this.looper = new BukkitRunnable() {
+         this.looper = new BukkitRunnable() {
             @Override
             public void run() {
                 loopAnimations.forEach((s, textLooper) -> textLooper.next());

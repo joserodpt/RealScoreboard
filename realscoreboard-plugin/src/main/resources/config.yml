@@ -11,14 +11,15 @@
 #API for Developers: https://github.com/joserodpt/RealScoreboard/blob/master/api.md
 Debug: false
 Config:
-  ItemAdder-Support: false
+  Prefix: '&fReal&dScoreboard &7| &r'
   mcMMO-Support: false
   Check-for-Updates: true
-  Prefix: '&fReal&dScoreboard &7| &r'
-  Reloaded: '&fThe config has been &areloaded&f.'
   Use-Placeholders-In-Scoreboard-Titles: false
   RealScoreboard-Disabled-By-Default: false
   Auto-Hide-In-Vanish: true
+  Animations:
+    Loop-Delay: 10
+  Reloaded: '&fThe config has been &areloaded&f.'
   Hours:
     Formatting: 'HH:mm:ss'
     Offset: 0
@@ -26,64 +27,9 @@ Config:
     Scoreboard-Toggle:
       'ON': '&fScoreboard turned &aON&f.'
       'OFF': '&fScoreboard turned &cOFF&f.'
-  Animations:
-    Title-Delay: 20
-    Loop-Delay: 20
-  Scoreboard-Refresh: 10
   Disabled-Worlds:
     - testWorld
     - ExampleWorld2
   Bypass-Worlds:
     - skywarsLobby
-  Scoreboard:
-    world:
-      special:
-        Switch-Timer: 50
-        Boards:
-          Board1:
-            Title:
-              - '&bRealScoreBoard'
-              - '&6> &9RealScoreBoard &6<'
-              - '&a>&6> &bRealScoreBoard &6<&a<'
-              - '&6> &9RealScoreBoard &6<'
-            Lines:
-              - '%blank%'
-              - ' &aSpecial Permission Board'
-              - '%blank%'
-      default:
-        Switch-Timer: 35
-        Boards:
-          Board1:
-            Title:
-              - '&bRealScoreBoard'
-              - '&6> &9RealScoreBoard &6<'
-              - '&a>&6> &bRealScoreBoard &6<&a<'
-              - '&6> &9RealScoreBoard &6<'
-            Lines:
-              - '%blank%'
-              - ' &7Name: &f%playername% &8| &f%ping%'
-              - ' &f%day% &8| &f%time%'
-              - ' &7Money: &f%money% &8| &7XP: &f%xp%'
-              - ' &7Location:'
-              - ' &fX %x% Y %y% Z %z%'
-              - '%blank%'
-              - '  &fThis is Board &e#1'
-              - '%blank%'
-              - ' &7RAM: &f%ram%'
-              - ' &7Online: &f%online%&8/&f%maxplayers%'
-              - '%blank%'
-          Board2:
-            Title:
-              - '&bStatistics &aBoard'
-              - '&aStatistics &bBoard'
-            Lines:
-              - '%blank%'
-              - ' &7Stats'
-              - '  &fKills: %kills% &7| &fKD: %kd%'
-              - '  Mob Kills: %mobkills%'
-              - '  Deaths: %deaths%'
-              - '  Jumps: %jumps%'
-              - '%blank%'
-              - ' &fThis is Board &e#2'
-              - '%blank%'
-Version: 15
+Version: 16

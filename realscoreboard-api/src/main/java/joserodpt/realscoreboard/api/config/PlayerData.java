@@ -15,6 +15,7 @@ package joserodpt.realscoreboard.api.config;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.events.ScoreboardToggleEvent;
 import joserodpt.realscoreboard.api.managers.AbstractPlayerManager;
 import org.bukkit.Bukkit;
@@ -64,7 +65,7 @@ public class PlayerData {
         if (scoreboardON) {
             Player player = Bukkit.getPlayer(this.uuid);
             assert player != null;
-            playerManager.check(player);
+            RealScoreboardAPI.getInstance().getPlayerManager().checkPlayer(player);
         }
     }
 
@@ -74,7 +75,7 @@ public class PlayerData {
 
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
-        this.scoreboardON = true;
+        this.scoreboardON = !RSBConfig.file().getBoolean("Config.RealScoreboard-Disabled-By-Default");
     }
 
     @SuppressWarnings("unused")

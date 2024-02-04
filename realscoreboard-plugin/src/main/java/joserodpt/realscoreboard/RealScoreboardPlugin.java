@@ -18,9 +18,11 @@ import joserodpt.realpermissions.api.pluginhookup.ExternalPlugin;
 import joserodpt.realpermissions.api.pluginhookup.ExternalPluginPermission;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
+import joserodpt.realscoreboard.api.config.RSBScoreboards;
+import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.utils.Text;
 import joserodpt.realscoreboard.listeners.McMMOScoreboardListener;
-import joserodpt.realscoreboard.managers.PlayerManager;
+import joserodpt.realscoreboard.listeners.PlayerListener;
 import joserodpt.realscoreboard.utils.Metrics;
 import joserodpt.realscoreboard.utils.UpdateChecker;
 import lombok.Getter;
@@ -33,7 +35,10 @@ import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RealScoreboardPlugin extends JavaPlugin {
 
@@ -54,13 +59,16 @@ public class RealScoreboardPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         printASCII();
+        new Metrics(this, 10080);
 
         final long start = System.currentTimeMillis();
         RSBConfig.setup(this);
+        RSBScoreboards.setup(this);
 
         instance = this;
         realScoreboard = new RealScoreboard(this);
         RealScoreboardAPI.setInstance(realScoreboard);
+        realScoreboard.getScoreboardManager().loadScoreboards();
 
         getLogger().info("Your config version: " + RSBConfig.file().getString("Version"));
 
@@ -77,19 +85,20 @@ public class RealScoreboardPlugin extends JavaPlugin {
             getLogger().warning("PlaceholderAPI is not installed on the server.");
         }
 
-        Bukkit.getPluginManager().registerEvents(new PlayerManager(realScoreboard), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerListener(realScoreboard), this);
         CommandManager cm = new CommandManager(this);
 
-        cm.getMessageHandler().register("cmd.no.permission", (sender) -> Text.send(sender, Text.getPrefix() + "&cYou don't have permission to execute this command!"));
-        cm.getMessageHandler().register("cmd.no.exists", (sender) -> Text.send(sender, Text.getPrefix() + "&cThe command you're trying to use doesn't exist."));
-        cm.getMessageHandler().register("cmd.wrong.usage", (sender) -> Text.send(sender, Text.getPrefix() + "&cWrong usage for the command!"));
-        cm.getMessageHandler().register("cmd.no.console", sender -> Text.send(sender, Text.getPrefix() + "&cCommand can only be executed by a player."));
+        cm.getCompletionHandler().register("#scoreboards", input -> realScoreboard.getScoreboardManager().getScoreboards().stream().map(RScoreboard::getName).collect(Collectors.toList()));
+
+        cm.getMessageHandler().register("cmd.no.permission", (sender) -> Text.send(sender, "&cYou don't have permission to execute this command!"));
+        cm.getMessageHandler().register("cmd.no.exists", (sender) -> Text.send(sender, "&cThe command you're trying to use doesn't exist."));
+        cm.getMessageHandler().register("cmd.wrong.usage", (sender) -> Text.send(sender, "&cWrong usage for the command!"));
+        cm.getMessageHandler().register("cmd.no.console", sender -> Text.send(sender, "&cCommand can only be executed by a player."));
 
         cm.hideTabComplete(true);
-        cm.register(new Commands(this, realScoreboard));
-        new Metrics(this, 10080);
-        Bukkit.getOnlinePlayers().forEach(player -> new PlayerManager(realScoreboard).check(player));
-        if (RSBConfig.file().getBoolean("Config.xmcMMO-Support")) {
+        cm.register(new RealScoreboardCommand(realScoreboard));
+
+        if (RSBConfig.file().getBoolean("Config.mcMMO-Support") && Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
             Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(realScoreboard), this);
         }
         if (RSBConfig.file().getBoolean("Config.Check-for-Updates")) {
@@ -98,16 +107,20 @@ public class RealScoreboardPlugin extends JavaPlugin {
                     getLogger().info("The plugin is updated to the latest version.");
                 } else {
                     newUpdate = true;
-                    getLogger().warning("There is a new update available! https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-20-1.22928/");
+                    getLogger().warning("There is a new update available! https://www.spigotmc.org/resources/22928/");
                 }
             });
         }
 
         if (getServer().getPluginManager().getPlugin("RealPermissions") != null) {
             //register RealMines permissions onto RealPermissions
-            RealPermissionsAPI.getInstance().getHookupAPI().addHookup(new ExternalPlugin(this.getDescription().getName(), "&fReal&dScoreboard", this.getDescription().getDescription(), Material.PAINTING, Arrays.asList(
+            List<ExternalPluginPermission> perms = new ArrayList<>(List.of(
                     new ExternalPluginPermission("realscoreboard.admin", "Allow access to the main operator commands of RealScoreboard.", Arrays.asList("rsb config", "rsb debug", "rsb reload")),
-                    new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))), this.getDescription().getVersion()));
+                    new ExternalPluginPermission("realscoreboard.setscoreboard", "Allow access to the setscoreboard command of RealScoreboard.", List.of("rsb view <name> <target?>")),
+                    new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))));
+            realScoreboard.getScoreboardManager().getScoreboards().stream().filter(rScoreboard -> !rScoreboard.getPermission().equalsIgnoreCase("none")).forEach(rScoreboard -> perms.add(new ExternalPluginPermission(rScoreboard.getPermission(), "Permission for viewing the scoreboard: " + rScoreboard.getDisplayName())));
+
+            RealPermissionsAPI.getInstance().getHookupAPI().addHookup(new ExternalPlugin(this.getDescription().getName(), "&fReal&dScoreboard", this.getDescription().getDescription(), Material.PAINTING, perms, realScoreboard.getVersion()));
         }
 
         Arrays.asList("Server version: " + getServerVersion(), "Finished loading in " + ((System.currentTimeMillis() - start) / 1000F) + " seconds.").forEach(s -> getLogger().info(s));

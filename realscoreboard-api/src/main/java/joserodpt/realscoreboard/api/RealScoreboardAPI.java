@@ -99,4 +99,8 @@ public abstract class RealScoreboardAPI {
      * Reloads plugin configuration directly from API instance
      */
     public abstract void reload();
+
+    public String getVersion() {
+        return this.getPlugin().getDescription().getVersion();
+    }
 }

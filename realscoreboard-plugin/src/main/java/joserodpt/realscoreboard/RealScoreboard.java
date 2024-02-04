@@ -13,6 +13,8 @@ package joserodpt.realscoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
+import joserodpt.realscoreboard.api.config.RSBScoreboards;
+import joserodpt.realscoreboard.api.scoreboard.RPlayerHook;
 import joserodpt.realscoreboard.managers.AnimationManager;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
@@ -44,8 +46,7 @@ public class RealScoreboard extends RealScoreboardAPI {
 
     public RealScoreboard(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.scoreboardManager = new ScoreboardManager();
-        this.scoreboardManager.loadScoreboards();
+        this.scoreboardManager = new ScoreboardManager(this);
         this.playerManager = new PlayerManager(this);
         try {
             this.databaseManager = new DatabaseManager(plugin);
@@ -82,10 +83,11 @@ public class RealScoreboard extends RealScoreboardAPI {
     @Override
     public void reload() {
         RSBConfig.reload();
-        this.playerManager.getTasks().forEach((uuid, scoreboardTask) -> scoreboardTask.cancel());
-        this.playerManager.getTasks().clear();
+        RSBScoreboards.reload();
+
+        this.playerManager.getPlayerHooks().values().forEach(RPlayerHook::stopScoreboard);
         this.scoreboardManager.reload();
-        Bukkit.getOnlinePlayers().forEach(this.playerManager::check);
+        Bukkit.getOnlinePlayers().forEach(this.playerManager::checkPlayer);
     }
 
     @Override

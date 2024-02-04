@@ -1,0 +1,70 @@
+Version: 1
+Scoreboards:
+  default:
+    Default-World: world
+    Display-Name: '&fDefault Board'
+    Permission: none
+    Refresh:
+      Scoreboard: 5
+      Title: 10
+      Title-Loop-Delay: 5
+      Board-Loop-Delay: 30
+    Boards:
+      Board1:
+        Title:
+          - '&bRealScoreBoard'
+          - '&6> &9RealScoreBoard &6<'
+          - '&a>&6> &bRealScoreBoard &6<&a<'
+          - '&6> &9RealScoreBoard &6<'
+        Lines:
+          - '%blank%'
+          - ' &7Name: &f%playername% &8| &f%ping%'
+          - ' &f%day% &8| &f%time%'
+          - ' &7Money: &f%money% &8| &7XP: &f%xp%'
+          - ' &7Location:'
+          - ' &fX %x% Y %y% Z %z%'
+          - '%blank%'
+          - '  &fThis is Board &e#1'
+          - '%blank%'
+          - ' &7RAM: &f%ram%'
+          - ' &7Online: &f%online%&8/&f%maxplayers%'
+          - '%blank%'
+      Board2:
+        Title:
+          - '&bStatistics &aBoard'
+          - '&aStatistics &bBoard'
+        Lines:
+          - '%blank%'
+          - ' &7Stats'
+          - '  &fKills: %kills% &7| &fKD: %kd%'
+          - '  Mob Kills: %mobkills%'
+          - '  Deaths: %deaths%'
+          - '  Jumps: %jumps%'
+          - '%blank%'
+          - ' &fThis is Board &e#2'
+          - '%blank%'
+  test:
+    Default-World: none
+    Display-Name: '&aTest Board'
+    Permission: 'realscoreboard.testboard'
+    Refresh:
+      Scoreboard: 1
+      Title: 20
+      Title-Loop-Delay: 10
+    Title:
+      - '&#50fb00R&#6df700S&#8af300B &#a7f000T&#c3ec00E&#e0e800S&#fde400T'
+      - '&#f600fbR&#f700d1S&#f800a7B &#fa007eT&#fb0054E&#fc002aS&#fd0000T'
+    Lines:
+      - '%blank%'
+      - '&7Player: %rainbow% %displayname% &8| &7Ping: &f%ping%'
+      - '&7Health: &f%life%/%lifeheart% &8| &7Food: &f%playerfood%'
+      - '&7World: &f%world% &8| &7Time: &f%time%'
+      - '&7Money: &f%money% &8| &7XP: &f%xp%'
+      - '%blank%'
+      - '&7Location: &fX %x%, Y %y%, Z %z%'
+      - '&7Facing: &fYaw %yaw% Pitch %pitch%'
+      - '%blank%'
+      - '&7IP: &f%serverip% &8| &7Port: &f%port%'
+      - '&7Version: &f%version%'
+      - '&7Players: &f%online%/%maxplayers% &8| &7RAM: &f%ram%'
+      - '%blank%'

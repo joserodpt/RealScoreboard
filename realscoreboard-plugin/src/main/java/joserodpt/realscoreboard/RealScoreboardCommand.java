@@ -13,12 +13,14 @@ package joserodpt.realscoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
+import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import joserodpt.realscoreboard.api.config.PlayerData;
+import joserodpt.realscoreboard.api.scoreboard.RPlayerHook;
+import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.utils.Text;
-import lombok.AllArgsConstructor;
 import me.mattstudios.mf.annotations.Alias;
 import me.mattstudios.mf.annotations.Command;
+import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Default;
 import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
@@ -29,25 +31,27 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-@AllArgsConstructor
-@SuppressWarnings("unused")
 @Command("realscoreboard")
 @Alias({"rsb", "sb"})
-public class Commands extends CommandBase {
+public class RealScoreboardCommand extends CommandBase {
 
-    private final RealScoreboardPlugin plugin;
-    private final RealScoreboard instance;
+    private final String playerOnly = "Only players can use this command.";
+
+    private final RealScoreboardAPI rsa;
+
+    public RealScoreboardCommand(RealScoreboardAPI rsa) {
+        this.rsa = rsa;
+    }
 
     @Default
     public void defaultCommand(final CommandSender commandSender) {
-        Text.send(commandSender, Arrays.asList("&7", Text.getPrefix() + "&a" + this.plugin.getVersion() + " &bHelp",
-                "&f/rsb toggle"));
+        Text.send(commandSender,  "&fReal&dScoreboard &7| &fv" + this.rsa.getVersion());
     }
 
     @SubCommand("reload")
     @Permission("realscoreboard.admin")
     public void reloadCommand(final CommandSender commandSender) {
-        this.instance.reload();
+        this.rsa.reload();
         Text.send(commandSender, RSBConfig.file().getString("Config.Reloaded"));
     }
 
@@ -55,57 +59,69 @@ public class Commands extends CommandBase {
     @Alias("t")
     @Permission("realscoreboard.toggle")
     public void toggleCommand(final CommandSender commandSender) {
-        if (commandSender instanceof Player) {
-            Player p = (Player) commandSender;
-            PlayerData playerData = this.instance.getDatabaseManager().getPlayerData(p.getUniqueId());
-            playerData.setScoreboardON(!playerData.isScoreboardON());
-            this.instance.getDatabaseManager().savePlayerData(playerData, true);
-            Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (playerData.isScoreboardON() ? "ON" : "OFF")));
+        if (commandSender instanceof Player p) {
+            RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
+            hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
+            Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
+        } else {
+            Text.send(commandSender, playerOnly);
         }
     }
 
     @SubCommand("off")
     @Permission("realscoreboard.toggle")
     public void offCommand(final CommandSender commandSender) {
-        if (commandSender instanceof Player) {
-            Player p = (Player) commandSender;
-            PlayerData playerData = this.instance.getDatabaseManager().getPlayerData(p.getUniqueId());
-            playerData.setScoreboardON(false);
-            this.instance.getDatabaseManager().savePlayerData(playerData, true);
+        if (commandSender instanceof Player p) {
+            RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
+            hook.setRealScoreboardVisible(false);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
+        } else {
+            Text.send(commandSender, playerOnly);
         }
     }
 
     @SubCommand("on")
     @Permission("realscoreboard.toggle")
     public void onCommand(final CommandSender commandSender) {
-        if (commandSender instanceof Player) {
-            Player p = (Player) commandSender;
-            PlayerData playerData = this.instance.getDatabaseManager().getPlayerData(p.getUniqueId());
-            playerData.setScoreboardON(true);
-            this.instance.getDatabaseManager().savePlayerData(playerData, true);
+        if (commandSender instanceof Player p) {
+            RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
+            hook.setRealScoreboardVisible(true);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
+        } else {
+            Text.send(commandSender, playerOnly);
         }
     }
 
-    @SubCommand("config")
-    @Permission("realscoreboard.admin")
-    public void configCommand(final CommandSender commandSender) {
-        Text.send(commandSender, Arrays.asList(Text.getPrefix(),
-                "&fConfig Version: &b" + RSBConfig.file().getInt("Version"),
-                "&fScoreboard refresh: &b" + RSBConfig.file().getInt("Config.Scoreboard-Refresh"),
-                "&f&nAnimations:",
-                "- &fTitle Delay: &b" + RSBConfig.file().getInt("Config.Animations.Title-Delay"),
-                "- &fLoop-Delay: &b" + RSBConfig.file().getInt("Config.Animations.Loop-Delay")));
-    }
+    @SubCommand("setscoreboard")
+    @Alias("setsb")
+    @Completion({"#scoreboards", "#players"})
+    @Permission("realscoreboard.setscoreboard")
+    public void setscoreboardcmd(final CommandSender commandSender, final String name, Player target) {
+        RScoreboard sb = rsa.getScoreboardManager().getScoreboard(name);
+        if (sb == null) {
+            Text.send(commandSender, "Scoreboard not found with that name.");
+            return;
+        }
 
+        if (target == null) {
+            Text.send(commandSender, "Player not found.");
+            return;
+        }
+
+        if (rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).getScoreboard() == sb) {
+            Text.send(commandSender, target.getName() + " &calready has that scoreboard applied.");
+        } else {
+            rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).setScoreboard(sb);
+            Text.send(commandSender, name + " scoreboard applied to " + target.getName());
+        }
+    }
 
     @SubCommand("debug")
     @Permission("realscoreboard.admin")
     public void debug(final CommandSender commandSender) {
         Text.send(commandSender, Arrays.asList("", "", Text.getPrefix(),
                 "> &b&lPLUGIN info",
-                "&fPlugin Version: &b" + this.plugin.getVersion(),
+                "&fPlugin Version: &b" + this.rsa.getVersion(),
                 "> &b&lSERVER info",
                 "&fServer Name: &b" + Bukkit.getName(),
                 "&fServer Version: &b" + Bukkit.getVersion(),
@@ -117,14 +133,9 @@ public class Commands extends CommandBase {
                 "> &b&lDATABASE info",
                 "&fDB Driver: &b" + RSBConfig.getSql().getString("driver"),
                 "> &b&lSCOREBOARD info",
-                "&fLoaded Scoreboards: &b" + this.instance.getScoreboardManager().getScoreboards().size(),
-                "&fLoaded Boards: &b" + this.instance.getScoreboardManager().getBoards().size(),
+                "&fLoaded Scoreboards: &b" + this.rsa.getScoreboardManager().getScoreboards().size(),
                 "> &b&lCONFIG info",
                 "&fConfig Version: &b" + RSBConfig.file().getInt("Version"),
-                "&fScoreboard refresh: &b" + RSBConfig.file().getInt("Config.Scoreboard-Refresh"),
-                "&f&nAnimations:",
-                "- &fTitle Delay: &b" + RSBConfig.file().getInt("Config.Animations.Title-Delay"),
-                "- &fLoop-Delay: &b" + RSBConfig.file().getInt("Config.Animations.Loop-Delay"),
                 "&e&lNOTE: &fThis information is intended to be shared with the developer in order to provide additional assistance."));
     }
 }
