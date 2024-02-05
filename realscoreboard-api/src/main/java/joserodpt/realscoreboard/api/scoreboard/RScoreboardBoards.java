@@ -30,8 +30,8 @@ public class RScoreboardBoards extends RScoreboard {
 
     //loading from normal config scoreboards.yml
     public RScoreboardBoards(final String name, final String displayName, final String permission, final String defaultWord,
-                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final int boardLoopDelay) {
-        super(name, displayName, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh);
+                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final int boardLoopDelay, final boolean defaultSB) {
+        super(name, displayName, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
         this.boardLoopDelay = boardLoopDelay;
         for (String boardNames : RSBScoreboards.file().getSection("Scoreboards." + name + "." + "Boards").getRoutesAsStrings(false)) {
             boards.add(new RBoard(this, RSBScoreboards.file().getStringList("Scoreboards." + name + "." + "Boards." + boardNames + ".Title"), RSBScoreboards.file().getStringList("Scoreboards." + name + "." + "Boards." + boardNames + ".Lines")));
@@ -39,8 +39,8 @@ public class RScoreboardBoards extends RScoreboard {
     }
 
     public RScoreboardBoards(final String name, final String displayName, final String permission, final String defaultWord,
-                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh,  final int boardLoopDelay, final List<RBoard> boards) {
-        super(name, displayName, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh);
+                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh,  final int boardLoopDelay, final List<RBoard> boards, final boolean defaultSB) {
+        super(name, displayName, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
         this.boardLoopDelay = boardLoopDelay;
         this.boards = boards;
     }
@@ -48,7 +48,7 @@ public class RScoreboardBoards extends RScoreboard {
     //loading from old config format
     public RScoreboardBoards(final String name, final String permission, final String defaultWord,
                              final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final int boardLoopDelay) {
-        super(name,"&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh);
+        super(name,"&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, false);
         this.boardLoopDelay = boardLoopDelay;
         //save in new format below in setBoards
     }
@@ -61,11 +61,6 @@ public class RScoreboardBoards extends RScoreboard {
         if (this.boardsLooperTask != null) {
             this.boardsLooperTask.cancel();
         }
-    }
-
-    @Override
-    public RSBType getType() {
-        return RSBType.MULTIPLE_BOARDS;
     }
 
     @Override

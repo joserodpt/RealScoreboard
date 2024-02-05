@@ -19,17 +19,17 @@ import java.util.List;
 
 public abstract class RScoreboard {
 
-    public enum RSBType { SINGLE, MULTIPLE_BOARDS }
-
     protected final String name;
     protected final String displayName;
     protected String permission;
     protected final String defaultWorld;
     protected final int titleRefresh, titleLoopDelay, globalScoreboardRefresh;
+    protected boolean defaultScoreboard;
 
     public RScoreboard(final String name, final String displayName, final String permission, final String defaultWorld,
-                       final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh) {
+                       final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final boolean defaultScoreboard) {
         this.name = name;
+        this.defaultScoreboard = defaultScoreboard;
         this.displayName = displayName;
         this.permission = permission;
         this.defaultWorld = defaultWorld;
@@ -39,12 +39,9 @@ public abstract class RScoreboard {
     }
 
     public abstract void stopTasks();
-
-    public abstract RSBType getType();
     public abstract void init();
     public abstract String getTitle();
     public abstract List<String> getLines();
-
     public abstract void saveScoreboard();
 
     public String getConfigKey() {
@@ -52,12 +49,17 @@ public abstract class RScoreboard {
     }
 
     public void saveCommonData() {
+        RSBScoreboards.file().set(getConfigKey() + "Default", this.isDefault());
         RSBScoreboards.file().set(getConfigKey() + "Default-World", this.getDefaultWord());
         RSBScoreboards.file().set(getConfigKey() + "Display-Name", this.getDisplayName());
         RSBScoreboards.file().set(getConfigKey() + "Permission", this.getPermission());
         RSBScoreboards.file().set(getConfigKey() + "Refresh.Scoreboard", this.globalScoreboardRefresh);
         RSBScoreboards.file().set(getConfigKey() + "Refresh.Title", this.titleRefresh);
         RSBScoreboards.file().set(getConfigKey() + "Refresh.Title-Loop-Delay", this.titleLoopDelay);
+    }
+
+    public boolean isDefault() {
+        return this.defaultScoreboard;
     }
 
     public String getName() {
@@ -78,5 +80,9 @@ public abstract class RScoreboard {
 
     public String getDefaultWord() {
         return defaultWorld;
+    }
+
+    public void setDefault(boolean b) {
+        this.defaultScoreboard = b;
     }
 }

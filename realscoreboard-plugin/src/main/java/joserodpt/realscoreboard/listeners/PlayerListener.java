@@ -32,15 +32,14 @@ public class PlayerListener implements Listener {
         rsa.getPlayerManager().checkPlayer(e.getPlayer());
     }
 
-    private final String[] vanishCommands = {"/pv", "/vanish", "/premiumvanish"};
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent e) {
         //check if this hiding behaviour is hidden
         if (RSBConfig.file().getBoolean("Config.Auto-Hide-In-Vanish")) {
             Player p = e.getPlayer();
             String cmd = e.getMessage().split(" ")[0];
-            for (String vanishCommand : vanishCommands) {
-                if (cmd.equalsIgnoreCase(vanishCommand)) {
+            for (String vanishCommand : RSBConfig.file().getStringList("Config.Vanish-Commands")) {
+                if (cmd.equalsIgnoreCase("/" + vanishCommand)) {
                     PlayerData playerData = this.rsa.getDatabaseManager().getPlayerData(p.getUniqueId());
                     //before the command is processed, the vanish tag in the player is still the previous state, so we set it as the previous
                     playerData.setScoreboardON(rsa.getPlayerManager().isVanished(p));

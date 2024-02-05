@@ -25,7 +25,7 @@ public class RScoreboardSingle extends RScoreboard {
     //old data version
     public RScoreboardSingle(final String name, final String permission, final String defaultWord, final List<String> title, final List<String> lines,
                              final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh) {
-        super(name, "&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh);
+        super(name, "&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, false);
         this.board = new RBoard(this, title, lines);
 
         //save in new format
@@ -34,19 +34,14 @@ public class RScoreboardSingle extends RScoreboard {
 
     //new data version
     public RScoreboardSingle(final String name, final String displayName, final String permission, final String defaultWord, final List<String> title, final List<String> lines,
-                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh) {
-        super(name, displayName, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh);
+                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final boolean defaultSB) {
+        super(name, displayName, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
         this.board = new RBoard(this, title, lines);
     }
 
     @Override
     public void stopTasks() {
         this.board.stopTasks();
-    }
-
-    @Override
-    public RSBType getType() {
-        return RSBType.SINGLE;
     }
 
     @Override

@@ -21,6 +21,7 @@ import joserodpt.realscoreboard.api.scoreboard.RBoard;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboardBoards;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboardSingle;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class ScoreboardManager implements AbstractScoreboardManager {
             String key = "Scoreboards." + scoreboardName + ".";
             String w = RSBScoreboards.file().getString(key + "Default-World");
 
+            boolean def = RSBScoreboards.file().getBoolean(key + "Default");
             String displayName = RSBScoreboards.file().getString(key + "Display-Name");
             String permission = RSBScoreboards.file().getString(key + "Permission");
 
@@ -66,12 +68,30 @@ public class ScoreboardManager implements AbstractScoreboardManager {
                 List<String> title = RSBScoreboards.file().getStringList(key + "Title");
                 List<String> lines = RSBScoreboards.file().getStringList(key + "Lines");
                 this.scoreboards.put(scoreboardName, new RScoreboardSingle(scoreboardName, displayName, permission, w, title, lines,
-                        titleRefresh, titleLoopDelay, globalScoreboardRefresh));
+                        titleRefresh, titleLoopDelay, globalScoreboardRefresh, def));
             } else {
                 this.scoreboards.put(scoreboardName, new RScoreboardBoards(scoreboardName, displayName, permission, w,
-                        titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay")));
+                        titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay"), def));
             }
         }
+
+        Bukkit.getLogger().severe(this.scoreboards.values().stream().map(RScoreboard::getDefaultWord).distinct().toList() + "");
+
+        // Use a Map to track if a world has a default scoreboard (true if it has at least one)
+        Map<String, Boolean> worldHasDefault = new HashMap<>();
+
+        for (RScoreboard rScoreboard : this.scoreboards.values()) {
+            String worldName = rScoreboard.getDefaultWord().toLowerCase(); // Consistent case handling
+            // If this is the first time we're seeing this world or if we find a default, update the map
+            worldHasDefault.compute(worldName, (key, hasDefault) -> hasDefault == null ? rScoreboard.isDefault() : hasDefault || rScoreboard.isDefault());
+        }
+
+        // Now, check which worlds don't have a default scoreboard
+        worldHasDefault.forEach((world, hasDefault) -> {
+            if (!hasDefault) {
+                rsa.getLogger().severe(world + " doesn't have a default scoreboard set!");
+            }
+        });
 
         this.scoreboards.values().forEach(RScoreboard::init);
         rsa.getLogger().info("Loaded " + this.scoreboards.keySet().size() + " scoreboards.");
@@ -93,7 +113,6 @@ public class ScoreboardManager implements AbstractScoreboardManager {
 
                         List<String> title = RSBConfig.file().getStringList(boardEntry + ".Title");
                         List<String> lines = RSBConfig.file().getStringList(boardEntry + ".Lines");
-
 
                         this.scoreboards.put(permNode, new RScoreboardSingle(permNode, permNode.equalsIgnoreCase("default") ? "none" : "realscoreboard.scoreboard" + permNode, world, title, lines,
                                 20, 20, 20));
@@ -125,6 +144,7 @@ public class ScoreboardManager implements AbstractScoreboardManager {
         }
         for (RScoreboard value : this.scoreboards.values()) {
             value.setPermission("none");
+            value.setDefault(true);
             break;
         }
 
@@ -162,7 +182,7 @@ public class ScoreboardManager implements AbstractScoreboardManager {
         }
 
         for (RScoreboard sb : this.scoreboards.values()) {
-            if (sb.getDefaultWord().equalsIgnoreCase(p.getWorld().getName()) && sb.getPermission().equalsIgnoreCase("none")) {
+            if (sb.getDefaultWord().equalsIgnoreCase(p.getWorld().getName()) && sb.isDefault()) {
                 return sb;
             }
         }

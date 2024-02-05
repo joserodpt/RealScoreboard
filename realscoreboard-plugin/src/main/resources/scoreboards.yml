@@ -1,6 +1,7 @@
 Version: 1
 Scoreboards:
   default:
+    Default: true
     Default-World: world
     Display-Name: '&fDefault Board'
     Permission: none
@@ -44,7 +45,8 @@ Scoreboards:
           - ' &fThis is Board &e#2'
           - '%blank%'
   test:
-    Default-World: none
+    Default: false
+    Default-World: world
     Display-Name: '&aTest Board'
     Permission: 'realscoreboard.testboard'
     Refresh:

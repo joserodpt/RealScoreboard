@@ -32,4 +32,8 @@ Config:
     - ExampleWorld2
   Bypass-Worlds:
     - skywarsLobby
+  Vanish-Commands:
+    - pv
+    - vanish
+    - premiumvanish
 Version: 16
