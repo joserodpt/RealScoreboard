@@ -1,6 +1,7 @@
 package joserodpt.realscoreboard.api.managers;
 
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface AbstractScoreboardManager {
     List<RScoreboard> getScoreboards();
     RScoreboard getScoreboardForPlayer(Player p);
     RScoreboard getScoreboard(String name);
+    RScoreboard getDefaultScoreboard(World w);
 }

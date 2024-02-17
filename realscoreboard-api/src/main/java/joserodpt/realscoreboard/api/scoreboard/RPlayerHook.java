@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class RPlayerHook {
 
-    private Player p;
+    private final Player p;
     private RScoreboard current;
     private FastBoard fastBoard;
     private BukkitTask scoreboardRefreshTask;
@@ -48,7 +48,12 @@ public class RPlayerHook {
             this.scoreboardRefreshTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    setScoreboard(RealScoreboardAPI.getInstance().getScoreboardManager().getScoreboardForPlayer(p));
+                    if (!p.isOnline() || !realScoreboardVisible) {
+                        this.cancel();
+                        return;
+                    }
+
+                    //DEBUGGING RealScoreboardAPI.getInstance().getLogger().warning(p.getName() + " - " + current.getName());
 
                     String title = current.getTitle();
                     if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
@@ -75,7 +80,8 @@ public class RPlayerHook {
     }
 
     public void setScoreboard(RScoreboard sb) {
-        this.current = sb;
+        if (sb != null)
+            this.current = sb;
     }
 
     public boolean isRealScoreboardVisible() {

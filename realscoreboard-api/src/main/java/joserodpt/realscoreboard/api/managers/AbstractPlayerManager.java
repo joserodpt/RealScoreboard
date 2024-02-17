@@ -33,5 +33,5 @@ public interface AbstractPlayerManager {
 
     boolean isVanished(Player p);
 
-    void checkPlayer(Player p);
+    void initPlayer(Player player);
 }

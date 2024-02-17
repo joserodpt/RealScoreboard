@@ -15,7 +15,6 @@ package joserodpt.realscoreboard.api.config;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.events.ScoreboardToggleEvent;
 import joserodpt.realscoreboard.api.managers.AbstractPlayerManager;
 import org.bukkit.Bukkit;
@@ -30,8 +29,6 @@ public class PlayerData {
 
     @DatabaseField(columnName = "scoreboard_on")
     private boolean scoreboardON;
-
-    private static AbstractPlayerManager playerManager;
 
     /**
      * Gets boolean value of current scoreboard status
@@ -65,12 +62,10 @@ public class PlayerData {
         if (scoreboardON) {
             Player player = Bukkit.getPlayer(this.uuid);
             assert player != null;
-            RealScoreboardAPI.getInstance().getPlayerManager().checkPlayer(player);
         }
     }
 
     public static void setup(AbstractPlayerManager playerManager) {
-        PlayerData.playerManager = playerManager;
     }
 
     public PlayerData(UUID uuid) {

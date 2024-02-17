@@ -21,7 +21,7 @@ import joserodpt.realscoreboard.api.scoreboard.RBoard;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboardBoards;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboardSingle;
-import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -74,8 +74,6 @@ public class ScoreboardManager implements AbstractScoreboardManager {
                         titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay"), def));
             }
         }
-
-        Bukkit.getLogger().severe(this.scoreboards.values().stream().map(RScoreboard::getDefaultWord).distinct().toList() + "");
 
         // Use a Map to track if a world has a default scoreboard (true if it has at least one)
         Map<String, Boolean> worldHasDefault = new HashMap<>();
@@ -194,5 +192,10 @@ public class ScoreboardManager implements AbstractScoreboardManager {
     @Override
     public RScoreboard getScoreboard(String name) {
         return this.getScoreboardMap().get(name);
+    }
+
+    @Override
+    public RScoreboard getDefaultScoreboard(World w) {
+        return this.getScoreboards().stream().filter(rScoreboard -> rScoreboard.getDefaultWord().equals(w.getName()) && rScoreboard.isDefault()).findFirst().orElse(null);
     }
 }

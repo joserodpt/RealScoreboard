@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
     private final RealScoreboardAPI rsa;
@@ -21,15 +22,23 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void join(PlayerJoinEvent e) {
-        rsa.getPlayerManager().checkPlayer(e.getPlayer());
-        if (e.getPlayer().isOp() && RealScoreboardPlugin.getNewUpdate()) {
-            Text.send(e.getPlayer(), "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/22928/");
+        Player p = e.getPlayer();
+        rsa.getPlayerManager().initPlayer(p);
+        if (p.isOp() && RealScoreboardPlugin.getNewUpdate()) {
+            Text.send(p, "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/22928/");
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void leave(PlayerQuitEvent e) {
+        rsa.getPlayerManager().getPlayerHook(e.getPlayer().getUniqueId()).stopScoreboard();
+        rsa.getPlayerManager().getPlayerHooks().remove(e.getPlayer().getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void changeWorld(PlayerChangedWorldEvent e) {
-        rsa.getPlayerManager().checkPlayer(e.getPlayer());
+        if (RSBConfig.file().getBoolean("Config.World-Scoreboard-Switch"))
+            rsa.getPlayerManager().getPlayerHook(e.getPlayer().getUniqueId()).setScoreboard(rsa.getScoreboardManager().getScoreboardForPlayer(e.getPlayer()));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

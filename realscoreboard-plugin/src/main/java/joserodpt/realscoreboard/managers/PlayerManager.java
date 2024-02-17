@@ -42,6 +42,12 @@ public class PlayerManager implements AbstractPlayerManager {
     }
 
     @Override
+    public void initPlayer(Player p) {
+        rsa.getPlayerManager().getPlayerHooks().put(p.getUniqueId(),
+                new RPlayerHook(p, !RSBConfig.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName()) && rsa.getDatabaseManager().getPlayerData(p.getUniqueId()).isScoreboardON()));
+    }
+
+    @Override
     public RPlayerHook getPlayerHook(UUID uuid) {
         return this.getPlayerHooks().get(uuid);
     }
@@ -49,10 +55,5 @@ public class PlayerManager implements AbstractPlayerManager {
     @Override
     public Map<UUID, RPlayerHook> getPlayerHooks() {
         return this.playerHooks;
-    }
-
-    public void checkPlayer(Player p) {
-        rsa.getPlayerManager().getPlayerHooks().put(p.getUniqueId(),
-                new RPlayerHook(p, !RSBConfig.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName()) && rsa.getDatabaseManager().getPlayerData(p.getUniqueId()).isScoreboardON()));
     }
 }

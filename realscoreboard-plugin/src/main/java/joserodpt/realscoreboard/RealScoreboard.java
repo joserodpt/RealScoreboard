@@ -87,7 +87,10 @@ public class RealScoreboard extends RealScoreboardAPI {
 
         this.playerManager.getPlayerHooks().values().forEach(RPlayerHook::stopScoreboard);
         this.scoreboardManager.reload();
-        Bukkit.getOnlinePlayers().forEach(this.playerManager::checkPlayer);
+
+        this.playerManager.getPlayerHooks().values().forEach(RPlayerHook::stopScoreboard);
+        this.playerManager.getPlayerHooks().clear();
+        Bukkit.getOnlinePlayers().forEach(this.playerManager::initPlayer);
     }
 
     @Override

@@ -45,7 +45,11 @@ public class RealScoreboardCommand extends CommandBase {
 
     @Default
     public void defaultCommand(final CommandSender commandSender) {
-        Text.send(commandSender,  "&fReal&dScoreboard &7| &fv" + this.rsa.getVersion());
+        if (commandSender instanceof Player) {
+            //TODO: CONFIG GUI
+        } else {
+            commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &fv" + this.rsa.getVersion()));
+        }
     }
 
     @SubCommand("reload")
@@ -107,6 +111,9 @@ public class RealScoreboardCommand extends CommandBase {
             Text.send(commandSender, "Player not found.");
             return;
         }
+
+        rsa.getLogger().warning(rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).getScoreboard().getName());
+        rsa.getLogger().warning(sb.getName());
 
         if (rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).getScoreboard() == sb) {
             Text.send(commandSender, target.getName() + " &calready has that scoreboard applied.");
