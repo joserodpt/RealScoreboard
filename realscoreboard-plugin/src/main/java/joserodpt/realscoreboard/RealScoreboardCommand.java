@@ -18,6 +18,7 @@ import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.RPlayerHook;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.utils.Text;
+import joserodpt.realscoreboard.gui.SettingsGUI;
 import me.mattstudios.mf.annotations.Alias;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Completion;
@@ -45,8 +46,10 @@ public class RealScoreboardCommand extends CommandBase {
 
     @Default
     public void defaultCommand(final CommandSender commandSender) {
-        if (commandSender instanceof Player) {
+        if (commandSender instanceof Player p && (p.isOp() || p.hasPermission("realscoreboard.admin"))) {
             //TODO: CONFIG GUI
+            SettingsGUI s = new SettingsGUI(p, rsa);
+            s.openInventory(p);
         } else {
             commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &fv" + this.rsa.getVersion()));
         }

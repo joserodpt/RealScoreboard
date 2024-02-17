@@ -21,6 +21,7 @@ import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.utils.Text;
+import joserodpt.realscoreboard.gui.SettingsGUI;
 import joserodpt.realscoreboard.listeners.McMMOScoreboardListener;
 import joserodpt.realscoreboard.listeners.PlayerListener;
 import joserodpt.realscoreboard.utils.Metrics;
@@ -86,6 +87,8 @@ public class RealScoreboardPlugin extends JavaPlugin {
         }
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(realScoreboard), this);
+        Bukkit.getPluginManager().registerEvents(SettingsGUI.getListener(), this);
+
         CommandManager cm = new CommandManager(this);
 
         cm.getCompletionHandler().register("#scoreboards", input -> realScoreboard.getScoreboardManager().getScoreboards().stream().map(RScoreboard::getName).collect(Collectors.toList()));

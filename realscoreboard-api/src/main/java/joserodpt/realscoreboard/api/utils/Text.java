@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,6 +34,12 @@ public class Text {
     public static String color(String string) {
         return ChatColor.translateAlternateColorCodes('&',
                 RGBApi.INSTANCE.toColoredMessage(string));
+    }
+
+    public static List<String> color(final List<?> list) {
+        final List<String> color = new ArrayList<>();
+        list.forEach(o -> color.add(Text.color((String) o)));
+        return color;
     }
 
     public static String formatMoney(double value) {
