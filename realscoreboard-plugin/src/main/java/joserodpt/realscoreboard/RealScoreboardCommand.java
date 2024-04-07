@@ -115,9 +115,6 @@ public class RealScoreboardCommand extends CommandBase {
             return;
         }
 
-        rsa.getLogger().warning(rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).getScoreboard().getName());
-        rsa.getLogger().warning(sb.getName());
-
         if (rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).getScoreboard() == sb) {
             Text.send(commandSender, target.getName() + " &calready has that scoreboard applied.");
         } else {

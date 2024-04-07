@@ -53,8 +53,6 @@ public class RPlayerHook {
                         return;
                     }
 
-                    //DEBUGGING RealScoreboardAPI.getInstance().getLogger().warning(p.getName() + " - " + current.getName());
-
                     String title = current.getTitle();
                     if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                         title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, title);

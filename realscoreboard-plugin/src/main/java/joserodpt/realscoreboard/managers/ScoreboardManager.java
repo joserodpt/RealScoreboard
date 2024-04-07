@@ -42,6 +42,7 @@ public class ScoreboardManager implements AbstractScoreboardManager {
         //starting from version 1.4, scoreboards are stored in the scoreboards.yml file and have a new structure,
         //this next part of the code is responsible for the conversion of those old scoreboards in the config.yml
         if (RSBConfig.file().contains("Config.Scoreboard")) {
+            rsa.getLogger().warning("Starting scoreboard conversion to scoreboards.yml...");
             convertOldScoreboardsV1dot4();
             return;
         }
@@ -96,7 +97,6 @@ public class ScoreboardManager implements AbstractScoreboardManager {
     }
 
     private void convertOldScoreboardsV1dot4() {
-        rsa.getLogger().warning("Starting scoreboard conversion to scoreboards.yml...");
         //remove the template scoreboards
         //RSBScoreboards.file().remove("Scoreboards");
         int counter = 0;
@@ -112,15 +112,15 @@ public class ScoreboardManager implements AbstractScoreboardManager {
                         List<String> title = RSBConfig.file().getStringList(boardEntry + ".Title");
                         List<String> lines = RSBConfig.file().getStringList(boardEntry + ".Lines");
 
-                        this.scoreboards.put(permNode, new RScoreboardSingle(permNode, permNode.equalsIgnoreCase("default") ? "none" : "realscoreboard.scoreboard" + permNode, world, title, lines,
+                        this.scoreboards.put(permNode, new RScoreboardSingle(permNode, permNode.equalsIgnoreCase("default") ? "none" : ("realscoreboard.scoreboard" + permNode), world, title, lines,
                                 20, 20, 20));
                         ++counter;
                     }
                 } else {
                     List<RBoard> boards = new ArrayList<>();
 
-                    RScoreboardBoards rsbb = new RScoreboardBoards(permNode, permNode.equalsIgnoreCase("default") ? "none" : "realscoreboard.scoreboard" + permNode, world,
-                            20, 20, 20 , RSBConfig.file().getInt(scoreboardEntry + "Switch-Timer")); ++counter;
+                    RScoreboardBoards rsbb = new RScoreboardBoards(permNode, permNode.equalsIgnoreCase("default") ? "none" : ("realscoreboard.scoreboard" + permNode), world,
+                            20, 20, 20 , RSBConfig.file().getInt(scoreboardEntry + "Switch-Timer"), permNode.equalsIgnoreCase("default")); ++counter;
 
                     for (String boardName : RSBConfig.file().getSection(scoreboardEntry + "Boards").getRoutesAsStrings(false)) {
                         String boardEntry = scoreboardEntry + "Boards." + boardName;
@@ -139,11 +139,6 @@ public class ScoreboardManager implements AbstractScoreboardManager {
                 RSBConfig.file().remove("Config.Scoreboard." + world + "." + permNode);
                 rsa.getLogger().warning("Converted Scoreboard " + permNode);
             }
-        }
-        for (RScoreboard value : this.scoreboards.values()) {
-            value.setPermission("none");
-            value.setDefault(true);
-            break;
         }
 
         this.scoreboards.values().forEach(RScoreboard::init);

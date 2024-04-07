@@ -46,7 +46,7 @@ public class RSBConfig {
                     GeneralSettings.builder().setUseDefaults(false).build(),
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).addIgnoredRoute("15", "Config.Scoreboard", '.').build());
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).addIgnoredRoute("16", "Config.Scoreboard", '.').build());
             sqlConfigFile = YamlDocument.create(new File(javaPlugin.getDataFolder(), "sql.yml"), javaPlugin.getResource("sql.yml"));
         } catch (IOException e) {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't setup config files!");

@@ -38,17 +38,10 @@ public class RScoreboardBoards extends RScoreboard {
         }
     }
 
-    public RScoreboardBoards(final String name, final String displayName, final String permission, final String defaultWord,
-                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh,  final int boardLoopDelay, final List<RBoard> boards, final boolean defaultSB) {
-        super(name, displayName, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
-        this.boardLoopDelay = boardLoopDelay;
-        this.boards = boards;
-    }
-
     //loading from old config format
     public RScoreboardBoards(final String name, final String permission, final String defaultWord,
-                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final int boardLoopDelay) {
-        super(name,"&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, false);
+                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final int boardLoopDelay, final boolean defaultSB) {
+        super(name,"&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
         this.boardLoopDelay = boardLoopDelay;
         //save in new format below in setBoards
     }
