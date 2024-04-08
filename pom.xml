@@ -6,7 +6,7 @@
 
     <groupId>joserodpt.realscoreboard</groupId>
     <artifactId>realscoreboard-parent</artifactId>
-    <version>1.4</version>
+    <version>1.4.1</version>
     <packaging>pom</packaging>
 
     <name>RealScoreboard-Parent</name>

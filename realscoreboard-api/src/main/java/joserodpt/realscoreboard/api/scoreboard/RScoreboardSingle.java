@@ -21,15 +21,13 @@ public class RScoreboardSingle extends RScoreboard {
 
     private final RBoard board;
 
-
-    //old data version
     public RScoreboardSingle(final String name, final String permission, final String defaultWord, final List<String> title, final List<String> lines,
-                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh) {
-        super(name, "&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, false);
+                             final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final boolean defaultSB, boolean save) {
+        super(name, "&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
         this.board = new RBoard(this, title, lines);
 
         //save in new format
-        this.saveScoreboard();
+        if (save) this.saveScoreboard();
     }
 
     //new data version

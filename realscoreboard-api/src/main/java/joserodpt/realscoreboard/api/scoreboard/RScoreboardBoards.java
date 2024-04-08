@@ -25,7 +25,7 @@ public class RScoreboardBoards extends RScoreboard {
 
     protected List<RBoard> boards = new ArrayList<>();
     protected final int boardLoopDelay;
-    protected int boardIndex;
+    protected int boardIndex = 0;
     private BukkitTask boardsLooperTask;
 
     //loading from normal config scoreboards.yml
@@ -61,15 +61,14 @@ public class RScoreboardBoards extends RScoreboard {
         //init board tasks
         this.boards.forEach(RBoard::init);
 
-        boardIndex = 0;
         if (boards.size() > 1) {
             this.boardsLooperTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (boardIndex == boards.size() - 1) {
+                    if (boardIndex >= boards.size() - 1) {
                         boardIndex = 0;
                     } else {
-                        ++boardIndex;
+                        boardIndex++;
                     }
                 }
             }.runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().getPlugin(), 0L, boardLoopDelay);

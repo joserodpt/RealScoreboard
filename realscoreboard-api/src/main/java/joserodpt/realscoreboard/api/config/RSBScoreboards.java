@@ -45,7 +45,7 @@ public class RSBScoreboards {
                     GeneralSettings.builder().setUseDefaults(false).build(),
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).addIgnoredRoute("1", "Scoreboards", '.').build());
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).addIgnoredRoute("2", "Scoreboards", '.').build());
         } catch (IOException e) {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't setup config files!");
         }

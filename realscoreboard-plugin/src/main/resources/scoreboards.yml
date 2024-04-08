@@ -1,4 +1,16 @@
-Version: 1
+#✦------------------------------------------------------✦
+#|                   Scoreboard Config                   |
+#✦------------------------------------------------------✦
+# RealScoreboard created by joserodpt and maintained by Neziw
+# Parameter explanation:
+# - Default: if the scoreboard is the default one, doesn't require a permission
+# - Default-World: the default world where the scoreboard appears
+# - Display-Name: used for GUI and other purposes.
+# - Refresh-Scoreboard: the main refresh delay for the whole scoreboard
+# - Refresh-Title: refresh delay only for the scoreboard title
+# - Title-Loop-Delay: loop delay for the title animation task
+# - Board-Loop-Delay: loop delay for the bards switching task (if the scoreboard has multiple boards)
+Version: 2
 Scoreboards:
   default:
     Default: true

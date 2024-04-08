@@ -21,7 +21,6 @@ import joserodpt.realscoreboard.api.scoreboard.RBoard;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboardBoards;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboardSingle;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -42,9 +41,8 @@ public class ScoreboardManager implements AbstractScoreboardManager {
         //starting from version 1.4, scoreboards are stored in the scoreboards.yml file and have a new structure,
         //this next part of the code is responsible for the conversion of those old scoreboards in the config.yml
         if (RSBConfig.file().contains("Config.Scoreboard")) {
-            rsa.getLogger().warning("Starting scoreboard conversion to scoreboards.yml...");
+            rsa.getLogger().warning("Starting scoreboard conversion to the new scoreboards.yml file...");
             convertOldScoreboardsV1dot4();
-            return;
         }
 
         if (!RSBScoreboards.file().contains("Scoreboards") || RSBScoreboards.file().getSection("Scoreboards") == null) {
@@ -53,6 +51,11 @@ public class ScoreboardManager implements AbstractScoreboardManager {
         }
 
         for (String scoreboardName : RSBScoreboards.file().getSection("Scoreboards").getRoutesAsStrings(false)) {
+            //verify that this scoreboard is not loaded
+            if (this.scoreboards.containsKey(scoreboardName)) {
+                continue;
+            }
+
             String key = "Scoreboards." + scoreboardName + ".";
             String w = RSBScoreboards.file().getString(key + "Default-World");
 
@@ -103,27 +106,29 @@ public class ScoreboardManager implements AbstractScoreboardManager {
 
         for (String world : RSBConfig.file().getSection("Config.Scoreboard").getRoutesAsStrings(false)) {
             for (String permNode : RSBConfig.file().getSection("Config.Scoreboard." + world).getRoutesAsStrings(false)) {
-                String scoreboardEntry = "Config.Scoreboard." + world + "." + permNode + ".";
+                RSBScoreboards.file().remove("Scoreboards." + permNode);
+                String oldScoreboardEntry = "Config.Scoreboard." + world + "." + permNode + ".";
+                String newPermission = permNode.equalsIgnoreCase("default") ? "none" : ("realscoreboard.scoreboard" + permNode);
 
-                if (RSBConfig.file().getSection(scoreboardEntry + "Boards").getRoutesAsStrings(false).size() == 1) {
-                    for (String boardName : RSBConfig.file().getSection(scoreboardEntry + "Boards").getRoutesAsStrings(false)) {
-                        String boardEntry = scoreboardEntry + "Boards." + boardName;
+                if (RSBConfig.file().getSection(oldScoreboardEntry + "Boards").getRoutesAsStrings(false).size() == 1) {
+                    for (String boardName : RSBConfig.file().getSection(oldScoreboardEntry + "Boards").getRoutesAsStrings(false)) {
+                        String boardEntry = oldScoreboardEntry + "Boards." + boardName;
 
                         List<String> title = RSBConfig.file().getStringList(boardEntry + ".Title");
                         List<String> lines = RSBConfig.file().getStringList(boardEntry + ".Lines");
 
-                        this.scoreboards.put(permNode, new RScoreboardSingle(permNode, permNode.equalsIgnoreCase("default") ? "none" : ("realscoreboard.scoreboard" + permNode), world, title, lines,
-                                20, 20, 20));
+                        this.scoreboards.put(permNode, new RScoreboardSingle(permNode, newPermission, world, title, lines,
+                                20, 20, 20, permNode.equalsIgnoreCase("default"), true));
                         ++counter;
                     }
                 } else {
                     List<RBoard> boards = new ArrayList<>();
 
-                    RScoreboardBoards rsbb = new RScoreboardBoards(permNode, permNode.equalsIgnoreCase("default") ? "none" : ("realscoreboard.scoreboard" + permNode), world,
-                            20, 20, 20 , RSBConfig.file().getInt(scoreboardEntry + "Switch-Timer"), permNode.equalsIgnoreCase("default")); ++counter;
+                    RScoreboardBoards rsbb = new RScoreboardBoards(permNode, newPermission, world,
+                            20, 20, 20, RSBConfig.file().getInt(oldScoreboardEntry + "Switch-Timer"), permNode.equalsIgnoreCase("default")); ++counter;
 
-                    for (String boardName : RSBConfig.file().getSection(scoreboardEntry + "Boards").getRoutesAsStrings(false)) {
-                        String boardEntry = scoreboardEntry + "Boards." + boardName;
+                    for (String boardName : RSBConfig.file().getSection(oldScoreboardEntry + "Boards").getRoutesAsStrings(false)) {
+                        String boardEntry = oldScoreboardEntry + "Boards." + boardName;
 
                         List<String> title = RSBConfig.file().getStringList(boardEntry + ".Title");
                         List<String> lines = RSBConfig.file().getStringList(boardEntry + ".Lines");
@@ -136,7 +141,6 @@ public class ScoreboardManager implements AbstractScoreboardManager {
                     this.scoreboards.put(permNode, rsbb);
                 }
 
-                RSBConfig.file().remove("Config.Scoreboard." + world + "." + permNode);
                 rsa.getLogger().warning("Converted Scoreboard " + permNode);
             }
         }
@@ -187,10 +191,5 @@ public class ScoreboardManager implements AbstractScoreboardManager {
     @Override
     public RScoreboard getScoreboard(String name) {
         return this.getScoreboardMap().get(name);
-    }
-
-    @Override
-    public RScoreboard getDefaultScoreboard(World w) {
-        return this.getScoreboards().stream().filter(rScoreboard -> rScoreboard.getDefaultWord().equals(w.getName()) && rScoreboard.isDefault()).findFirst().orElse(null);
     }
 }
