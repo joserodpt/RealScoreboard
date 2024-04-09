@@ -59,7 +59,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Permission("realscoreboard.admin")
     public void reloadCommand(final CommandSender commandSender) {
         this.rsa.reload();
-        Text.send(commandSender, RSBConfig.file().getString("Config.Reloaded"));
+        commandSender.sendMessage( "&f[RealScoreboard] &f" + Text.color(RSBConfig.file().getString("Config.Reloaded")));
     }
 
     @SubCommand("toggle")

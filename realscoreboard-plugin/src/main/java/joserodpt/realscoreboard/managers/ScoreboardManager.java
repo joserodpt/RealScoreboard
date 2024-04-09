@@ -118,14 +118,14 @@ public class ScoreboardManager implements AbstractScoreboardManager {
                         List<String> lines = RSBConfig.file().getStringList(boardEntry + ".Lines");
 
                         this.scoreboards.put(permNode, new RScoreboardSingle(permNode, newPermission, world, title, lines,
-                                20, 20, 20, permNode.equalsIgnoreCase("default"), true));
+                                RSBConfig.file().getInt("Config.Animations.Title-Delay"), RSBConfig.file().getInt("Config.Animations.Loop-Delay"), RSBConfig.file().getInt("Config.Scoreboard-Refresh"), permNode.equalsIgnoreCase("default"), true));
                         ++counter;
                     }
                 } else {
                     List<RBoard> boards = new ArrayList<>();
 
                     RScoreboardBoards rsbb = new RScoreboardBoards(permNode, newPermission, world,
-                            20, 20, 20, RSBConfig.file().getInt(oldScoreboardEntry + "Switch-Timer"), permNode.equalsIgnoreCase("default")); ++counter;
+                            RSBConfig.file().getInt("Config.Animations.Title-Delay"), RSBConfig.file().getInt("Config.Animations.Loop-Delay"), RSBConfig.file().getInt("Config.Scoreboard-Refresh"), RSBConfig.file().getInt(oldScoreboardEntry + "Switch-Timer"), permNode.equalsIgnoreCase("default")); ++counter;
 
                     for (String boardName : RSBConfig.file().getSection(oldScoreboardEntry + "Boards").getRoutesAsStrings(false)) {
                         String boardEntry = oldScoreboardEntry + "Boards." + boardName;
