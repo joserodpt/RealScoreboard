@@ -77,7 +77,7 @@ public class RealScoreboardCommand extends CommandBase {
 
     @SubCommand("toggleo")
     @Alias({"to", "toggleother"})
-    @Permission("realscoreboard.toggle")
+    @Permission("realscoreboard.admin")
     public void toggleOtherCommand(final CommandSender commandSender, final Player player) {
         if (player == null) {
             Text.send(commandSender, "Player not found.");
