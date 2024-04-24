@@ -79,17 +79,13 @@ public class RealScoreboardCommand extends CommandBase {
     @Alias({"to", "toggleother"})
     @Permission("realscoreboard.toggle")
     public void toggleOtherCommand(final CommandSender commandSender, final Player player) {
-        if (commandSender instanceof Player) {
-            if (player == null) {
-                Text.send(commandSender, "Player not found.");
-                return;
-            }
-            RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(player.getUniqueId());
-            hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
-            Text.send(commandSender, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
-        } else {
-            Text.send(commandSender, playerOnly);
+        if (player == null) {
+            Text.send(commandSender, "Player not found.");
+            return;
         }
+        RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(player.getUniqueId());
+        hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
+        Text.send(commandSender, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
     }
 
     @SubCommand("off")
