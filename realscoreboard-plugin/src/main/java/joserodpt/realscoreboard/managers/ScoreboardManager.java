@@ -24,6 +24,7 @@ import joserodpt.realscoreboard.api.scoreboard.RScoreboardSingle;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,14 +68,16 @@ public class ScoreboardManager implements AbstractScoreboardManager {
             int titleLoopDelay = RSBScoreboards.file().getInt(key + "Refresh.Title-Loop-Delay");
             int globalScoreboardRefresh = RSBScoreboards.file().getInt(key + "Refresh.Scoreboard");
 
+            List<String> otherWorlds = RSBScoreboards.file().getStringList(key + "Other-Worlds");
+
             //if config has lines, it has only one board, else, two or more
             if (RSBScoreboards.file().contains(key + "Lines")) {
                 List<String> title = RSBScoreboards.file().getStringList(key + "Title");
                 List<String> lines = RSBScoreboards.file().getStringList(key + "Lines");
-                this.scoreboards.put(scoreboardName, new RScoreboardSingle(scoreboardName, displayName, permission, w, title, lines,
+                this.scoreboards.put(scoreboardName, new RScoreboardSingle(scoreboardName, displayName, permission, w, otherWorlds, title, lines,
                         titleRefresh, titleLoopDelay, globalScoreboardRefresh, def));
             } else {
-                this.scoreboards.put(scoreboardName, new RScoreboardBoards(scoreboardName, displayName, permission, w,
+                this.scoreboards.put(scoreboardName, new RScoreboardBoards(scoreboardName, displayName, permission, w, otherWorlds,
                         titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay"), def));
             }
         }
@@ -117,14 +120,14 @@ public class ScoreboardManager implements AbstractScoreboardManager {
                         List<String> title = RSBConfig.file().getStringList(boardEntry + ".Title");
                         List<String> lines = RSBConfig.file().getStringList(boardEntry + ".Lines");
 
-                        this.scoreboards.put(permNode, new RScoreboardSingle(permNode, newPermission, world, title, lines,
+                        this.scoreboards.put(permNode, new RScoreboardSingle(permNode, newPermission, world, Collections.emptyList(), title, lines,
                                 RSBConfig.file().getInt("Config.Animations.Title-Delay"), RSBConfig.file().getInt("Config.Animations.Loop-Delay"), RSBConfig.file().getInt("Config.Scoreboard-Refresh"), permNode.equalsIgnoreCase("default"), true));
                         ++counter;
                     }
                 } else {
                     List<RBoard> boards = new ArrayList<>();
 
-                    RScoreboardBoards rsbb = new RScoreboardBoards(permNode, newPermission, world,
+                    RScoreboardBoards rsbb = new RScoreboardBoards(permNode, newPermission, world, Collections.emptyList(),
                             RSBConfig.file().getInt("Config.Animations.Title-Delay"), RSBConfig.file().getInt("Config.Animations.Loop-Delay"), RSBConfig.file().getInt("Config.Scoreboard-Refresh"), RSBConfig.file().getInt(oldScoreboardEntry + "Switch-Timer"), permNode.equalsIgnoreCase("default")); ++counter;
 
                     for (String boardName : RSBConfig.file().getSection(oldScoreboardEntry + "Boards").getRoutesAsStrings(false)) {
@@ -173,13 +176,13 @@ public class ScoreboardManager implements AbstractScoreboardManager {
     @Override
     public RScoreboard getScoreboardForPlayer(Player p) {
         for (RScoreboard sb : this.scoreboards.values()) {
-            if (sb.getDefaultWord().equalsIgnoreCase(p.getWorld().getName()) && !sb.getPermission().equalsIgnoreCase("none") && p.hasPermission(sb.getPermission())) {
+            if (sb.isInWorld(p.getWorld()) && !sb.getPermission().equalsIgnoreCase("none") && p.hasPermission(sb.getPermission())) {
                 return sb;
             }
         }
 
         for (RScoreboard sb : this.scoreboards.values()) {
-            if (sb.getDefaultWord().equalsIgnoreCase(p.getWorld().getName()) && sb.isDefault()) {
+            if (sb.isInWorld(p.getWorld()) && sb.isDefault()) {
                 return sb;
             }
         }

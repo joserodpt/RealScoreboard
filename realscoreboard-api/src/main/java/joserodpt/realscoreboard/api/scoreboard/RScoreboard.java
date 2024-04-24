@@ -14,6 +14,7 @@ package joserodpt.realscoreboard.api.scoreboard;
  */
 
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
+import org.bukkit.World;
 
 import java.util.List;
 
@@ -23,16 +24,18 @@ public abstract class RScoreboard {
     protected final String displayName;
     protected String permission;
     protected final String defaultWorld;
+    protected final List<String> otherWorlds;
     protected final int titleRefresh, titleLoopDelay, globalScoreboardRefresh;
     protected boolean defaultScoreboard;
 
-    public RScoreboard(final String name, final String displayName, final String permission, final String defaultWorld,
+    public RScoreboard(final String name, final String displayName, final String permission, final String defaultWorld, final List<String> otherWorlds,
                        final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final boolean defaultScoreboard) {
         this.name = name;
         this.defaultScoreboard = defaultScoreboard;
         this.displayName = displayName;
         this.permission = permission;
         this.defaultWorld = defaultWorld;
+        this.otherWorlds = otherWorlds;
         this.titleRefresh = titleRefresh;
         this.titleLoopDelay = titleLoopDelay;
         this.globalScoreboardRefresh = globalScoreboardRefresh;
@@ -84,5 +87,26 @@ public abstract class RScoreboard {
 
     public void setDefault(boolean b) {
         this.defaultScoreboard = b;
+    }
+
+    public boolean isInWorld(World world) {
+        if (this.otherWorlds.size() == 1 && this.otherWorlds.get(0).equalsIgnoreCase("*")) return true;
+
+        return this.getDefaultWord().equalsIgnoreCase(world.getName()) || this.otherWorlds.contains(world.getName());
+    }
+
+    @Override
+    public String toString() {
+        return "RScoreboard{" +
+                "name='" + name + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", permission='" + permission + '\'' +
+                ", defaultWorld='" + defaultWorld + '\'' +
+                ", otherWorlds=" + otherWorlds +
+                ", titleRefresh=" + titleRefresh +
+                ", titleLoopDelay=" + titleLoopDelay +
+                ", globalScoreboardRefresh=" + globalScoreboardRefresh +
+                ", defaultScoreboard=" + defaultScoreboard +
+                '}';
     }
 }

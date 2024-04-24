@@ -29,9 +29,9 @@ public class RScoreboardBoards extends RScoreboard {
     private BukkitTask boardsLooperTask;
 
     //loading from normal config scoreboards.yml
-    public RScoreboardBoards(final String name, final String displayName, final String permission, final String defaultWord,
+    public RScoreboardBoards(final String name, final String displayName, final String permission, final String defaultWord, final List<String> otherWorlds,
                              final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final int boardLoopDelay, final boolean defaultSB) {
-        super(name, displayName, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
+        super(name, displayName, permission, defaultWord, otherWorlds, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
         this.boardLoopDelay = boardLoopDelay;
         for (String boardNames : RSBScoreboards.file().getSection("Scoreboards." + name + "." + "Boards").getRoutesAsStrings(false)) {
             boards.add(new RBoard(this, RSBScoreboards.file().getStringList("Scoreboards." + name + "." + "Boards." + boardNames + ".Title"), RSBScoreboards.file().getStringList("Scoreboards." + name + "." + "Boards." + boardNames + ".Lines")));
@@ -39,9 +39,9 @@ public class RScoreboardBoards extends RScoreboard {
     }
 
     //loading from old config format
-    public RScoreboardBoards(final String name, final String permission, final String defaultWord,
+    public RScoreboardBoards(final String name, final String permission, final String defaultWord, final List<String> otherWorlds,
                              final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final int boardLoopDelay, final boolean defaultSB) {
-        super(name,"&7" + name, permission, defaultWord, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
+        super(name,"&7" + name, permission, defaultWord, otherWorlds, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
         this.boardLoopDelay = boardLoopDelay;
         //save in new format below in setBoards
     }

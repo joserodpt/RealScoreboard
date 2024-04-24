@@ -78,8 +78,18 @@ public class RPlayerHook {
     }
 
     public void setScoreboard(RScoreboard sb) {
-        if (sb != null)
+        if (sb != null) {
             this.current = sb;
+            if (!isScoreboardActive()) {
+                startScoreboard();
+            }
+        } else {
+            stopScoreboard();
+        }
+    }
+
+    public boolean isScoreboardActive() {
+        return this.scoreboardRefreshTask != null && this.fastBoard != null && !this.fastBoard.isDeleted();
     }
 
     public boolean isRealScoreboardVisible() {
