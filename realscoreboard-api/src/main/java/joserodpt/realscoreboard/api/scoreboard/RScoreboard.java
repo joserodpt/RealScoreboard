@@ -16,6 +16,7 @@ package joserodpt.realscoreboard.api.scoreboard;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
 import org.bukkit.World;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class RScoreboard {
@@ -54,6 +55,7 @@ public abstract class RScoreboard {
     public void saveCommonData() {
         RSBScoreboards.file().set(getConfigKey() + "Default", this.isDefault());
         RSBScoreboards.file().set(getConfigKey() + "Default-World", this.getDefaultWord());
+        RSBScoreboards.file().set(getConfigKey() + "Other-Worlds", Collections.emptyList());
         RSBScoreboards.file().set(getConfigKey() + "Display-Name", this.getDisplayName());
         RSBScoreboards.file().set(getConfigKey() + "Permission", this.getPermission());
         RSBScoreboards.file().set(getConfigKey() + "Refresh.Scoreboard", this.globalScoreboardRefresh);

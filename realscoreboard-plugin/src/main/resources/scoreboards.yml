@@ -10,11 +10,13 @@
 # - Refresh-Title: refresh delay only for the scoreboard title
 # - Title-Loop-Delay: loop delay for the title animation task
 # - Board-Loop-Delay: loop delay for the bards switching task (if the scoreboard has multiple boards)
-Version: 2
+Version: 3
 Scoreboards:
   default:
     Default: true
     Default-World: world
+    Other-Worlds:
+      - '*'
     Display-Name: '&fDefault Board'
     Permission: none
     Refresh:
@@ -59,6 +61,8 @@ Scoreboards:
   test:
     Default: false
     Default-World: world
+    Other-Worlds:
+      - 'coolWorld'
     Display-Name: '&aTest Board'
     Permission: 'realscoreboard.testboard'
     Refresh:
