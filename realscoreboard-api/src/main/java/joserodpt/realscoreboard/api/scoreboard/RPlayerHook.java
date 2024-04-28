@@ -53,19 +53,21 @@ public class RPlayerHook {
                         return;
                     }
 
-                    String title = current.getTitle();
-                    if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
-                        title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, title);
-                    }
-                    fastBoard.updateTitle(Text.color(title));
+                    if (current != null) {
+                        String title = current.getTitle();
+                        if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
+                            title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, title);
+                        }
+                        fastBoard.updateTitle(Text.color(title));
 
-                    List<String> list = current.getLines().stream().map(s -> {
-                        s = s.matches("(?i)%blank%") ?
-                                (Text.randomColor() + "§r" + Text.randomColor()) :
-                                RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, s);
-                        return Text.color(s);
-                    }).collect(Collectors.toList());
-                    fastBoard.updateLines(list);
+                        List<String> list = current.getLines().stream().map(s -> {
+                            s = s.matches("(?i)%blank%") ?
+                                    (Text.randomColor() + "§r" + Text.randomColor()) :
+                                    RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, s);
+                            return Text.color(s);
+                        }).collect(Collectors.toList());
+                        fastBoard.updateLines(list);
+                    }
                 }
             }.runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().getPlugin(), 0L, current.globalScoreboardRefresh);
         }
