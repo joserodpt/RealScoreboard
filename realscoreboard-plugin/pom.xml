@@ -7,7 +7,7 @@
     <parent>
         <groupId>joserodpt.realscoreboard</groupId>
         <artifactId>realscoreboard-parent</artifactId>
-        <version>1.4.1</version>
+        <version>1.4.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>me.mattstudios.utils</groupId>
             <artifactId>matt-framework</artifactId>
-            <version>1.4.1</version>
+            <version>1.4.2</version>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
