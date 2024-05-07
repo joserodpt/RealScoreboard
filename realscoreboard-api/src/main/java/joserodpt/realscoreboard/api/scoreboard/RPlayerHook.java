@@ -58,7 +58,8 @@ public class RPlayerHook {
                         if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                             title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, title);
                         }
-                        fastBoard.updateTitle(Text.color(title));
+                        if (fastBoard != null && !fastBoard.isDeleted())
+                            fastBoard.updateTitle(Text.color(title));
 
                         List<String> list = current.getLines().stream().map(s -> {
                             s = s.matches("(?i)%blank%") ?
@@ -66,7 +67,8 @@ public class RPlayerHook {
                                     RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, s);
                             return Text.color(s);
                         }).collect(Collectors.toList());
-                        fastBoard.updateLines(list);
+                        if (fastBoard != null && !fastBoard.isDeleted())
+                            fastBoard.updateLines(list);
                     }
                 }
             }.runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().getPlugin(), 0L, current.globalScoreboardRefresh);
