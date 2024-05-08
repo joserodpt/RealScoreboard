@@ -10,7 +10,7 @@ jobs:
     - uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: 16
+        java-version: 17
     - uses: actions/cache@v3
       with:
         path: ~/.m2/repository
@@ -18,7 +18,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - run: java -version && mvn --version
-    - run: mvn --activate-profiles dist --no-transfer-progress package
+    - run: mvn package
     - uses: actions/upload-artifact@v3
       with:
         name: 'RealScoreboard (Dev Build)'
