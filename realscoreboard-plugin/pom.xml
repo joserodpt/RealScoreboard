@@ -145,5 +145,12 @@
             <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>joserodpt.realpermissions</groupId>
+            <artifactId>realpermissions</artifactId>
+            <version>0.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/RealPermissions.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
