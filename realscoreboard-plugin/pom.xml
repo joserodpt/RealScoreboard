@@ -150,7 +150,7 @@
             <artifactId>realpermissions</artifactId>
             <version>0.3</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/RealPermissions.jar</systemPath>
+            <systemPath>${project.basedir}/../RealPermissions.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
