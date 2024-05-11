@@ -17,6 +17,8 @@ import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.RPlayerHook;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
+import joserodpt.realscoreboard.api.utils.GUIBuilder;
+import joserodpt.realscoreboard.api.utils.Items;
 import joserodpt.realscoreboard.api.utils.Text;
 import joserodpt.realscoreboard.gui.SettingsGUI;
 import me.mattstudios.mf.annotations.Alias;
@@ -27,10 +29,13 @@ import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Command("realscoreboard")
 @Alias({"rsb", "sb"})
@@ -107,6 +112,36 @@ public class RealScoreboardCommand extends CommandBase {
             RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
             hook.setRealScoreboardVisible(true);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
+        } else {
+            Text.send(commandSender, playerOnly);
+        }
+    }
+
+    @SubCommand("selectscoreboard")
+    @Alias("selectsb")
+    @Completion("#players")
+    @Permission("realscoreboard.selectscoreboard")
+    public void selectscoreboardcmd(final CommandSender commandSender, Player target) {
+        if (commandSender instanceof Player p) {
+            if (target == null) {
+                Text.send(commandSender, "Player not found.");
+                return;
+            }
+
+            final GUIBuilder inventory = new GUIBuilder("Choose board for " + target.getName(), 27, target.getUniqueId());
+
+
+            final List<RScoreboard> list = rsa.getScoreboardManager().getScoreboards();
+            for (int i = 0; i < list.size(); i++) {
+                RScoreboard sb = list.get(i);
+                inventory.addItem(e -> {
+                            target.closeInventory();
+                            rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).setScoreboard(sb);
+                            Text.send(p, "Scoreboard &b" + sb.getName() + " &fapplied to &b" + target.getName());
+                        }, Items.createItemLore(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
+            }
+
+            inventory.openInventory(target);
         } else {
             Text.send(commandSender, playerOnly);
         }
