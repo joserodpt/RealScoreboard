@@ -24,6 +24,9 @@ Config:
   Hours:
     Formatting: 'HH:mm:ss'
     Offset: 0
+  Days:
+    Formatting: 'dd/MM/yyyy'
+    Offset: 0
   Messages:
     Scoreboard-Toggle:
       'ON': '&fScoreboard turned &aON&f.'
@@ -37,4 +40,4 @@ Config:
     - pv
     - vanish
     - premiumvanish
-Version: 16
+Version: 17

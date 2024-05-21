@@ -91,8 +91,12 @@ public class Placeholders implements IPlaceholders {
     }
 
     private String day() {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFormat.format(new Date());
+        DateFormat dateFormat = new SimpleDateFormat(RSBConfig.file().getString("Config.Days.Formatting"));
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.HOUR_OF_DAY, RSBConfig.file().getInt("Config.Days.Offset"));
+        cal.getTime();
+        return dateFormat.format(cal.getTime());
     }
 
     private String cords(Player player) {
