@@ -18,14 +18,6 @@ import org.bukkit.entity.Player;
 public interface IPlaceholders {
 
     /**
-     * Gets player ping value as integer
-     *
-     * @param player the player related to thi method
-     * @return       ping of provided player
-     */
-    int getPing(Player player);
-
-    /**
      * Fixes placeholders in provided string
      *
      * @param player the player

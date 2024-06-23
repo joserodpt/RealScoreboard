@@ -17,14 +17,13 @@ import joserodpt.realscoreboard.RealScoreboard;
 import joserodpt.realscoreboard.RealScoreboardPlugin;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.config.RSBConfig;
+import joserodpt.realscoreboard.api.utils.PingUtil;
 import joserodpt.realscoreboard.api.utils.Text;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -34,39 +33,6 @@ import java.util.Date;
 public class Placeholders implements IPlaceholders {
 
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
-
-    private String nmsVersion;
-    private Method getHandleMethod;
-    private Method getPingMethod;
-    private Field pingField;
-
-    @Override
-    public int getPing(Player player) {
-        try {
-            if (this.getHandleMethod == null) {
-                this.getHandleMethod = player.getClass().getDeclaredMethod("getHandle");
-                this.getHandleMethod.setAccessible(true);
-            }
-            Object entityPlayer = this.getHandleMethod.invoke(player);
-            if (this.pingField == null && this.getPingMethod == null) {
-                try {
-                    this.pingField = entityPlayer.getClass().getDeclaredField("ping");
-                } catch (NoSuchFieldError | NoSuchFieldException e) {
-                    this.getPingMethod = Class.forName("org.bukkit.craftbukkit." + this.getNmsVersion() + ".entity.CraftPlayer").getDeclaredMethod("getPing");
-                }
-                if (this.pingField != null)
-                    this.pingField.setAccessible(true);
-            }
-            int ping;
-            if (this.getPingMethod != null)
-                ping = (int) this.getPingMethod.invoke(player);
-            else
-                ping = this.pingField.getInt(entityPlayer);
-            return Math.max(ping, 0);
-        } catch (Exception e) {
-            return 1;
-        }
-    }
 
     private String ram() {
         Runtime r = Runtime.getRuntime();
@@ -191,7 +157,7 @@ public class Placeholders implements IPlaceholders {
                 .replaceAll("%serverip%", this.serverIP())
                 .replaceAll("%version%", this.getVersion())
                 .replaceAll("%versionshort%", this.getVersion())
-                .replaceAll("%ping%", this.getPing(p) + " ms")
+                .replaceAll("%ping%", PingUtil.getPing(p) + " ms")
                 .replaceAll("%ram%", this.ram())
                 .replaceAll("%jumps%", "" + this.stats(p, Statistic.JUMP))
                 .replaceAll("%mobkills%", "" + this.stats(p, Statistic.MOB_KILLS))
@@ -221,11 +187,5 @@ public class Placeholders implements IPlaceholders {
 
     private String placeholderAPI(Player p, String placeholders) {
         return RealScoreboardPlugin.getInstance().isPlaceholderAPI() ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
-    }
-
-    private String getNmsVersion() {
-        if (this.nmsVersion == null)
-            this.nmsVersion = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        return this.nmsVersion;
     }
 }

@@ -14,12 +14,13 @@ package joserodpt.realscoreboard.gui;
  */
 
 import com.google.common.collect.ImmutableList;
-import joserodpt.realpermissions.api.utils.Pagination;
-import joserodpt.realpermissions.api.utils.PlayerInput;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.utils.Items;
+import joserodpt.realscoreboard.api.utils.Pagination;
+import joserodpt.realscoreboard.api.utils.PlayerInput;
 import joserodpt.realscoreboard.api.utils.Text;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -42,7 +43,8 @@ import java.util.UUID;
 
 public class SettingsGUI {
 
-    public class SettingEntry {
+    @Getter
+    public static class SettingEntry {
 
         //0 - bool, 1 - int
         public int entryType;
@@ -56,14 +58,6 @@ public class SettingsGUI {
 
         public String getName() {
             return Text.color(name);
-        }
-
-        public String getConfigPath() {
-            return configPath;
-        }
-
-        public int getEntryType() {
-            return entryType;
         }
 
         public ItemStack getItem() {

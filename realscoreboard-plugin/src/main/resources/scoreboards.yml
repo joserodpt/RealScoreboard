@@ -70,8 +70,8 @@ Scoreboards:
       Title: 20
       Title-Loop-Delay: 10
     Title:
-      - '&#50fb00R&#6df700S&#8af300B &#a7f000T&#c3ec00E&#e0e800S&#fde400T'
-      - '&#f600fbR&#f700d1S&#f800a7B &#fa007eT&#fb0054E&#fc002aS&#fd0000T'
+      - '{#ffffff>}RSB Gradient!{#00aeff<}'
+      - '{#69ffde}RSB RGB COLOR!'
     Lines:
       - '%blank%'
       - '&7Player: %rainbow% %displayname% &8| &7Ping: &f%ping%'

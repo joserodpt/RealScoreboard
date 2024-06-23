@@ -15,7 +15,6 @@ package joserodpt.realscoreboard.api.utils;
 
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import net.melion.rgbchat.api.RGBApi;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,9 +30,9 @@ public class Text {
     static final String[] time = {"s", "m", "h", "h", "h", "h", "h", "h", "h"};
     static String[] money = {"", "k", "m", "b", "t", "q", "qi", "s", "sep", "OC", "N", "DEC", "UN", "DUO", "TRE"};
 
-    public static String color(String string) {
-        return ChatColor.translateAlternateColorCodes('&',
-                RGBApi.INSTANCE.toColoredMessage(string));
+    public static String color(String text) {
+        if (text == null || text.isEmpty()) return "";
+        return ForestColorAPI.colorize(text);
     }
 
     public static List<String> color(final List<?> list) {

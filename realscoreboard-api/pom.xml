@@ -97,10 +97,5 @@
             <artifactId>fastboard</artifactId>
             <version>2.1.2</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.CoasterFreakDE</groupId>
-            <artifactId>minecraft-spigot-rgb-chat-support</artifactId>
-            <version>1.0.5</version>
-        </dependency>
     </dependencies>
 </project>
