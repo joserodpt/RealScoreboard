@@ -34,8 +34,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Command("realscoreboard")
 @Alias({"rsb", "sb"})
@@ -130,15 +130,15 @@ public class RealScoreboardCommand extends CommandBase {
 
             final GUIBuilder inventory = new GUIBuilder("Choose board for " + target.getName(), 27, target.getUniqueId());
 
-
-            final List<RScoreboard> list = rsa.getScoreboardManager().getScoreboards();
-            for (int i = 0; i < list.size(); i++) {
-                RScoreboard sb = list.get(i);
+            final Collection<RScoreboard> list = rsa.getScoreboardManager().getScoreboards();
+            int i = 0;
+            for (RScoreboard sb : list) {
                 inventory.addItem(e -> {
-                            target.closeInventory();
-                            rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).setScoreboard(sb);
-                            Text.send(p, "Scoreboard &b" + sb.getName() + " &fapplied to &b" + target.getName());
-                        }, Items.createItemLore(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
+                    target.closeInventory();
+                    rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).setScoreboard(sb);
+                    Text.send(p, "Scoreboard &b" + sb.getName() + " &fapplied to &b" + target.getName());
+                }, Items.createItemLore(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
+                ++i;
             }
 
             inventory.openInventory(target);

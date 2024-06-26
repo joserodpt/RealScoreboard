@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class RPlayerHook {
@@ -61,13 +61,13 @@ public class RPlayerHook {
                         if (fastBoard != null && !fastBoard.isDeleted())
                             fastBoard.updateTitle(Text.color(title));
 
-                        List<String> list = current.getLines().stream().map(s -> {
+                        Collection<String> list = current.getLines().stream().map(s -> {
                             s = s.matches("(?i)%blank%") ?
                                     (Text.randomColor() + "§r" + Text.randomColor()) :
                                     RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, s);
                             return Text.color(s);
                         }).collect(Collectors.toList());
-                        if (fastBoard != null && !fastBoard.isDeleted())
+                        if (fastBoard != null && !fastBoard.isDeleted() && !list.isEmpty())
                             fastBoard.updateLines(list);
                     }
                 }

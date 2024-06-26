@@ -24,6 +24,7 @@ import joserodpt.realscoreboard.api.scoreboard.RScoreboardSingle;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -169,8 +170,8 @@ public class ScoreboardManager implements AbstractScoreboardManager {
     }
 
     @Override
-    public List<RScoreboard> getScoreboards() {
-        return new ArrayList<>(this.getScoreboardMap().values());
+    public Collection<RScoreboard> getScoreboards() {
+        return this.getScoreboardMap().values();
     }
 
     @Override
