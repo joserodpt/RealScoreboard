@@ -50,7 +50,8 @@ public class RealScoreboardCommand extends CommandBase {
     }
 
     @Default
-    public void defaultCommand(final CommandSender commandSender) {
+    @SuppressWarnings("unused")
+    public void defaultcmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p && (p.isOp() || p.hasPermission("realscoreboard.admin"))) {
             //TODO: CONFIG GUI
             SettingsGUI s = new SettingsGUI(p, rsa);
@@ -62,7 +63,8 @@ public class RealScoreboardCommand extends CommandBase {
 
     @SubCommand("reload")
     @Permission("realscoreboard.admin")
-    public void reloadCommand(final CommandSender commandSender) {
+    @SuppressWarnings("unused")
+    public void reloadcmd(final CommandSender commandSender) {
         this.rsa.reload();
         commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &f" + RSBConfig.file().getString("Config.Reloaded")));
     }
@@ -70,7 +72,8 @@ public class RealScoreboardCommand extends CommandBase {
     @SubCommand("toggle")
     @Alias("t")
     @Permission("realscoreboard.toggle")
-    public void toggleCommand(final CommandSender commandSender) {
+    @SuppressWarnings("unused")
+    public void togglecmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
             RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
             hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
@@ -83,7 +86,8 @@ public class RealScoreboardCommand extends CommandBase {
     @SubCommand("toggleo")
     @Alias({"to", "toggleother"})
     @Permission("realscoreboard.admin")
-    public void toggleOtherCommand(final CommandSender commandSender, final Player player) {
+    @SuppressWarnings("unused")
+    public void toggleothercmd(final CommandSender commandSender, final Player player) {
         if (player == null) {
             Text.send(commandSender, "Player not found.");
             return;
@@ -95,7 +99,8 @@ public class RealScoreboardCommand extends CommandBase {
 
     @SubCommand("off")
     @Permission("realscoreboard.toggle")
-    public void offCommand(final CommandSender commandSender) {
+    @SuppressWarnings("unused")
+    public void offcmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
             RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
             hook.setRealScoreboardVisible(false);
@@ -107,7 +112,8 @@ public class RealScoreboardCommand extends CommandBase {
 
     @SubCommand("on")
     @Permission("realscoreboard.toggle")
-    public void onCommand(final CommandSender commandSender) {
+    @SuppressWarnings("unused")
+    public void oncmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
             RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
             hook.setRealScoreboardVisible(true);
@@ -121,6 +127,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Alias("selectsb")
     @Completion("#players")
     @Permission("realscoreboard.selectscoreboard")
+    @SuppressWarnings("unused")
     public void selectscoreboardcmd(final CommandSender commandSender, Player target) {
         if (commandSender instanceof Player p) {
             if (target == null) {
@@ -151,6 +158,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Alias("setsb")
     @Completion({"#scoreboards", "#players"})
     @Permission("realscoreboard.setscoreboard")
+    @SuppressWarnings("unused")
     public void setscoreboardcmd(final CommandSender commandSender, final String name, Player target) {
         RScoreboard sb = rsa.getScoreboardManager().getScoreboard(name);
         if (sb == null) {
@@ -173,7 +181,8 @@ public class RealScoreboardCommand extends CommandBase {
 
     @SubCommand("debug")
     @Permission("realscoreboard.admin")
-    public void debug(final CommandSender commandSender) {
+    @SuppressWarnings("unused")
+    public void debugcmd(final CommandSender commandSender) {
         Text.send(commandSender, Arrays.asList("", "", Text.getPrefix(),
                 "> &b&lPLUGIN info",
                 "&fPlugin Version: &b" + this.rsa.getVersion(),
