@@ -13,7 +13,7 @@ package joserodpt.realscoreboard.api.managers;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-import joserodpt.realscoreboard.api.scoreboard.RPlayerHook;
+import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -27,9 +27,9 @@ public interface AbstractPlayerManager {
     /**
      * Get Player Hook
      */
-    RPlayerHook getPlayerHook(UUID uuid);
+    RSBPlayer getPlayer(UUID uuid);
 
-    Map<UUID, RPlayerHook> getPlayerHooks();
+    Map<UUID, RSBPlayer> getPlayerMap();
 
     boolean isVanished(Player p);
 

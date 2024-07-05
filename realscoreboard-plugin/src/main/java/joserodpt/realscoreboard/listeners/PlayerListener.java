@@ -4,9 +4,8 @@ import joserodpt.realscoreboard.RealScoreboardPlugin;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
+import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
 import joserodpt.realscoreboard.api.utils.Text;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,14 +32,18 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void leave(PlayerQuitEvent e) {
-        rsa.getPlayerManager().getPlayerHook(e.getPlayer().getUniqueId()).stopScoreboard();
-        rsa.getPlayerManager().getPlayerHooks().remove(e.getPlayer().getUniqueId());
+        rsa.getPlayerManager().getPlayer(e.getPlayer().getUniqueId()).stopScoreboard();
+        rsa.getPlayerManager().getPlayerMap().remove(e.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void changeWorld(PlayerChangedWorldEvent e) {
-        if (RSBConfig.file().getBoolean("Config.World-Scoreboard-Switch"))
-            rsa.getPlayerManager().getPlayerHook(e.getPlayer().getUniqueId()).setScoreboard(rsa.getScoreboardManager().getScoreboardForPlayer(e.getPlayer()));
+        if (RSBConfig.file().getBoolean("Config.World-Scoreboard-Switch")) {
+            RSBPlayer hook = rsa.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+            if (hook != null) {
+                hook.setScoreboard(rsa.getScoreboardManager().getScoreboardForPlayer(e.getPlayer()));
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

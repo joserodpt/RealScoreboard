@@ -14,7 +14,7 @@ package joserodpt.realscoreboard;
  */
 
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
-import joserodpt.realscoreboard.api.scoreboard.RPlayerHook;
+import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
 import joserodpt.realscoreboard.managers.AnimationManager;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
@@ -85,11 +85,11 @@ public class RealScoreboard extends RealScoreboardAPI {
         RSBConfig.reload();
         RSBScoreboards.reload();
 
-        this.playerManager.getPlayerHooks().values().forEach(RPlayerHook::stopScoreboard);
+        this.playerManager.getPlayerMap().values().forEach(RSBPlayer::stopScoreboard);
         this.scoreboardManager.reload();
 
-        this.playerManager.getPlayerHooks().values().forEach(RPlayerHook::stopScoreboard);
-        this.playerManager.getPlayerHooks().clear();
+        this.playerManager.getPlayerMap().values().forEach(RSBPlayer::stopScoreboard);
+        this.playerManager.getPlayerMap().clear();
         Bukkit.getOnlinePlayers().forEach(this.playerManager::initPlayer);
     }
 

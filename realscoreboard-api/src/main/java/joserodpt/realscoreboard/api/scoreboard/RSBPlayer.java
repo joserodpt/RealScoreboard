@@ -25,7 +25,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class RPlayerHook {
+public class RSBPlayer {
 
     private final Player p;
     private RScoreboard current;
@@ -33,7 +33,7 @@ public class RPlayerHook {
     private BukkitTask scoreboardRefreshTask;
     private boolean realScoreboardVisible;
 
-    public RPlayerHook(Player p, boolean realScoreboardVisible) {
+    public RSBPlayer(Player p, boolean realScoreboardVisible) {
         this.p = p;
         this.realScoreboardVisible = realScoreboardVisible;
         this.setScoreboard(RealScoreboardAPI.getInstance().getScoreboardManager().getScoreboardForPlayer(p));
@@ -120,7 +120,7 @@ public class RPlayerHook {
 
     @Override
     public String toString() {
-        return "RPlayerHook{" +
+        return "RSBPlayer{" +
                 "player=" + p +
                 ", current=" + current +
                 ", fastBoard=" + fastBoard +

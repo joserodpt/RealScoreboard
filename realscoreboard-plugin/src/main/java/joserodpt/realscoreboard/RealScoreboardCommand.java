@@ -15,7 +15,7 @@ package joserodpt.realscoreboard;
 
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import joserodpt.realscoreboard.api.scoreboard.RPlayerHook;
+import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.utils.GUIBuilder;
 import joserodpt.realscoreboard.api.utils.Items;
@@ -75,7 +75,7 @@ public class RealScoreboardCommand extends CommandBase {
     @SuppressWarnings("unused")
     public void togglecmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
-            RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
+            RSBPlayer hook = rsa.getPlayerManager().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
         } else {
@@ -92,7 +92,7 @@ public class RealScoreboardCommand extends CommandBase {
             Text.send(commandSender, "Player not found.");
             return;
         }
-        RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(player.getUniqueId());
+        RSBPlayer hook = rsa.getPlayerManager().getPlayer(player.getUniqueId());
         hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
         Text.send(commandSender, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
     }
@@ -102,7 +102,7 @@ public class RealScoreboardCommand extends CommandBase {
     @SuppressWarnings("unused")
     public void offcmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
-            RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
+            RSBPlayer hook = rsa.getPlayerManager().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(false);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
         } else {
@@ -115,7 +115,7 @@ public class RealScoreboardCommand extends CommandBase {
     @SuppressWarnings("unused")
     public void oncmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
-            RPlayerHook hook = rsa.getPlayerManager().getPlayerHook(p.getUniqueId());
+            RSBPlayer hook = rsa.getPlayerManager().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(true);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
         } else {
@@ -142,7 +142,7 @@ public class RealScoreboardCommand extends CommandBase {
             for (RScoreboard sb : list) {
                 inventory.addItem(e -> {
                     target.closeInventory();
-                    rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).setScoreboard(sb);
+                    rsa.getPlayerManager().getPlayer(target.getUniqueId()).setScoreboard(sb);
                     Text.send(p, "Scoreboard &b" + sb.getName() + " &fapplied to &b" + target.getName());
                 }, Items.createItemLore(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
                 ++i;
@@ -171,10 +171,10 @@ public class RealScoreboardCommand extends CommandBase {
             return;
         }
 
-        if (rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).getScoreboard() == sb) {
+        if (rsa.getPlayerManager().getPlayer(target.getUniqueId()).getScoreboard() == sb) {
             Text.send(commandSender, target.getName() + " &calready has that scoreboard applied.");
         } else {
-            rsa.getPlayerManager().getPlayerHook(target.getUniqueId()).setScoreboard(sb);
+            rsa.getPlayerManager().getPlayer(target.getUniqueId()).setScoreboard(sb);
             Text.send(commandSender, name + " scoreboard applied to " + target.getName());
         }
     }
