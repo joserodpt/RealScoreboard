@@ -37,7 +37,5 @@ public abstract class AbstractDatabaseManager {
      * @param playerData the playerdata instance
      * @param async      boolean value if save should be async
      */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "1.3")
     public abstract void savePlayerData(PlayerData playerData, boolean async);
 }
