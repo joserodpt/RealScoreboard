@@ -32,8 +32,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void leave(PlayerQuitEvent e) {
-        rsa.getPlayerManager().getPlayer(e.getPlayer().getUniqueId()).stopScoreboard();
-        rsa.getPlayerManager().getPlayerMap().remove(e.getPlayer().getUniqueId());
+        RSBPlayer hook = rsa.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+        if (hook != null) {
+            hook.stopScoreboard();
+            rsa.getPlayerManager().getPlayerMap().remove(hook.getPlayer().getUniqueId());
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

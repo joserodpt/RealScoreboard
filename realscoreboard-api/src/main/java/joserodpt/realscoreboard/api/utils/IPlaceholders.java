@@ -24,5 +24,5 @@ public interface IPlaceholders {
      * @param string the string message
      * @return  fixed string with placeholders
      */
-    String setPlaceHolders(Player player, String string);
+    String setPlaceholders(Player player, String string);
 }

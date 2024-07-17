@@ -147,7 +147,7 @@ public class Placeholders implements IPlaceholders {
     }
 
     @Override
-    public String setPlaceHolders(Player p, String s) {
+    public String setPlaceholders(Player p, String s) {
         String placeholders = s.replaceAll("%playername%", p.getName())
                 .replaceAll("%loc%", this.cords(p))
                 .replaceAll("%life%", Math.round(p.getHealth()) + "")

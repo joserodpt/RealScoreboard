@@ -56,7 +56,7 @@ public class RSBPlayer {
                     if (current != null) {
                         String title = current.getTitle();
                         if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
-                            title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, title);
+                            title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, title);
                         }
                         if (fastBoard != null && !fastBoard.isDeleted())
                             fastBoard.updateTitle(Text.color(title));
@@ -64,7 +64,7 @@ public class RSBPlayer {
                         Collection<String> list = current.getLines().stream().map(s -> {
                             s = s.matches("(?i)%blank%") ?
                                     (Text.randomColor() + "§r" + Text.randomColor()) :
-                                    RealScoreboardAPI.getInstance().getPlaceholders().setPlaceHolders(p, s);
+                                    RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, s);
                             return Text.color(s);
                         }).collect(Collectors.toList());
                         if (fastBoard != null && !fastBoard.isDeleted() && !list.isEmpty())
@@ -116,6 +116,10 @@ public class RSBPlayer {
 
     public RScoreboard getScoreboard() {
         return this.current;
+    }
+
+    public Player getPlayer() {
+        return p;
     }
 
     @Override
