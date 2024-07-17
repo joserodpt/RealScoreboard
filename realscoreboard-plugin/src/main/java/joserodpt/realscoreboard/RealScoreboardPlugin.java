@@ -70,7 +70,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
         instance = this;
         realScoreboard = new RealScoreboard(this);
         RealScoreboardAPI.setInstance(realScoreboard);
-        realScoreboard.getScoreboardManager().loadScoreboards();
+        realScoreboard.getScoreboardManagerAPI().loadScoreboards();
 
         getLogger().info("Your config version: " + RSBConfig.file().getString("Version"));
 
@@ -93,7 +93,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
         CommandManager cm = new CommandManager(this);
 
-        cm.getCompletionHandler().register("#scoreboards", input -> realScoreboard.getScoreboardManager().getScoreboards().stream().map(RScoreboard::getName).collect(Collectors.toList()));
+        cm.getCompletionHandler().register("#scoreboards", input -> realScoreboard.getScoreboardManagerAPI().getScoreboards().stream().map(RScoreboard::getName).collect(Collectors.toList()));
 
         cm.getMessageHandler().register("cmd.no.permission", (sender) -> Text.send(sender, "&cYou don't have permission to execute this command!"));
         cm.getMessageHandler().register("cmd.no.exists", (sender) -> Text.send(sender, "&cThe command you're trying to use doesn't exist."));
@@ -124,7 +124,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
                         new ExternalPluginPermission("realscoreboard.admin", "Allow access to the main operator commands of RealScoreboard.", Arrays.asList("rsb config", "rsb debug", "rsb reload")),
                         new ExternalPluginPermission("realscoreboard.setscoreboard", "Allow access to the setscoreboard command of RealScoreboard.", List.of("rsb view <name> <target?>")),
                         new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))));
-                realScoreboard.getScoreboardManager().getScoreboards().stream().filter(rScoreboard -> !rScoreboard.getPermission().equalsIgnoreCase("none")).forEach(rScoreboard -> perms.add(new ExternalPluginPermission(rScoreboard.getPermission(), "Permission for viewing the scoreboard: " + rScoreboard.getDisplayName())));
+                realScoreboard.getScoreboardManagerAPI().getScoreboards().stream().filter(rScoreboard -> !rScoreboard.getPermission().equalsIgnoreCase("none")).forEach(rScoreboard -> perms.add(new ExternalPluginPermission(rScoreboard.getPermission(), "Permission for viewing the scoreboard: " + rScoreboard.getDisplayName())));
 
                 RealPermissionsAPI.getInstance().getHooksAPI().addHook(new ExternalPlugin(this.getDescription().getName(), "&fReal&dScoreboard", this.getDescription().getDescription(), Material.PAINTING, perms, realScoreboard.getVersion()));
 

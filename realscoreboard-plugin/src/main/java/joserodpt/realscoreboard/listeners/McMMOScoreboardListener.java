@@ -30,16 +30,16 @@ public class McMMOScoreboardListener implements Listener {
     @EventHandler
     public void onRevert(McMMOScoreboardRevertEvent event) {
         Player player = event.getTargetPlayer();
-        PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(player.getUniqueId());
+        PlayerData playerData = this.plugin.getDatabaseManagerAPI().getPlayerData(player.getUniqueId());
         playerData.setScoreboardON(true);
-        this.plugin.getDatabaseManager().savePlayerData(playerData, true);
+        this.plugin.getDatabaseManagerAPI().savePlayerData(playerData, true);
     }
 
     @EventHandler
     public void onMake(McMMOScoreboardMakeboardEvent event) {
         Player player = event.getTargetPlayer();
-        PlayerData playerData = this.plugin.getDatabaseManager().getPlayerData(player.getUniqueId());
+        PlayerData playerData = this.plugin.getDatabaseManagerAPI().getPlayerData(player.getUniqueId());
         playerData.setScoreboardON(false);
-        this.plugin.getDatabaseManager().savePlayerData(playerData, true);
+        this.plugin.getDatabaseManagerAPI().savePlayerData(playerData, true);
     }
 }

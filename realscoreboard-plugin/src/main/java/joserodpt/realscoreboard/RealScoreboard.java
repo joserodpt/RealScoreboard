@@ -15,18 +15,14 @@ package joserodpt.realscoreboard;
 
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
 import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
-import joserodpt.realscoreboard.managers.AnimationManager;
+import joserodpt.realscoreboard.managers.AnimationManagerAPI;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.PlayerData;
-import joserodpt.realscoreboard.api.managers.AbstractAnimationManager;
-import joserodpt.realscoreboard.api.managers.AbstractDatabaseManager;
-import joserodpt.realscoreboard.api.managers.AbstractPlayerManager;
-import joserodpt.realscoreboard.api.managers.AbstractScoreboardManager;
-import joserodpt.realscoreboard.managers.DatabaseManager;
-import joserodpt.realscoreboard.managers.PlayerManager;
-import joserodpt.realscoreboard.managers.ScoreboardManager;
+import joserodpt.realscoreboard.api.managers.DatabaseManagerAPI;
+import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
+import joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI;
 import joserodpt.realscoreboard.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,47 +32,46 @@ import java.util.logging.Logger;
 
 public class RealScoreboard extends RealScoreboardAPI {
 
-    private DatabaseManager databaseManager;
-    private final ScoreboardManager scoreboardManager;
-    private final PlayerManager playerManager;
-    private final AnimationManager animationManager;
+    private joserodpt.realscoreboard.managers.DatabaseManagerAPI databaseManager;
+    private final joserodpt.realscoreboard.managers.ScoreboardManagerAPI scoreboardManager;
+    private final joserodpt.realscoreboard.managers.PlayerManagerAPI playerManager;
+    private final AnimationManagerAPI animationManager;
     private final Logger logger;
     private final IPlaceholders placeholders;
     private final JavaPlugin plugin;
 
     public RealScoreboard(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.scoreboardManager = new ScoreboardManager(this);
-        this.playerManager = new PlayerManager(this);
+        this.scoreboardManager = new joserodpt.realscoreboard.managers.ScoreboardManagerAPI(this);
+        this.playerManager = new joserodpt.realscoreboard.managers.PlayerManagerAPI(this);
         try {
-            this.databaseManager = new DatabaseManager(plugin);
-            PlayerData.setup(this.playerManager); // Init PlayerManager into PlayerData to avoid NPE
+            this.databaseManager = new joserodpt.realscoreboard.managers.DatabaseManagerAPI(plugin);
         } catch (SQLException ex) {
             this.getLogger().severe("Error while starting the Database Manager!");
             this.getLogger().severe(ex.getMessage());
         }
-        this.animationManager = new AnimationManager(plugin);
+        this.animationManager = new AnimationManagerAPI(plugin);
         this.logger = plugin.getLogger();
         this.placeholders = new Placeholders();
     }
 
     @Override
-    public AbstractScoreboardManager getScoreboardManager() {
+    public ScoreboardManagerAPI getScoreboardManagerAPI() {
         return this.scoreboardManager;
     }
 
     @Override
-    public AbstractDatabaseManager getDatabaseManager() {
+    public DatabaseManagerAPI getDatabaseManagerAPI() {
         return this.databaseManager;
     }
 
     @Override
-    public AbstractPlayerManager getPlayerManager() {
+    public PlayerManagerAPI getPlayerManagerAPI() {
         return this.playerManager;
     }
 
     @Override
-    public AbstractAnimationManager getAnimationManager() {
+    public AnimationManagerAPI getAnimationManagerAPI() {
         return this.animationManager;
     }
 

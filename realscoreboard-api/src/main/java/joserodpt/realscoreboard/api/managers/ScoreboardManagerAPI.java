@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 import java.util.Map;
 
-public interface AbstractScoreboardManager {
+public interface ScoreboardManagerAPI {
 
     void loadScoreboards();
     void reload();

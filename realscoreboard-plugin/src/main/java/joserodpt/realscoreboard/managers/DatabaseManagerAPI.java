@@ -25,7 +25,6 @@ import com.j256.ormlite.table.TableUtils;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.events.DataSaveEvent;
-import joserodpt.realscoreboard.api.managers.AbstractDatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -38,14 +37,14 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class DatabaseManager extends AbstractDatabaseManager {
+public class DatabaseManagerAPI extends joserodpt.realscoreboard.api.managers.DatabaseManagerAPI {
 
     private final Dao<PlayerData, UUID> playerDataDao;
     private final JavaPlugin javaPlugin;
     private final HashMap<UUID, PlayerData> playerDataCache = new HashMap<>();
     private final ExecutorService executor;
 
-    public DatabaseManager(JavaPlugin javaPlugin) throws SQLException {
+    public DatabaseManagerAPI(JavaPlugin javaPlugin) throws SQLException {
         LoggerFactory.setLogBackendFactory(new NullLogBackend.NullLogBackendFactory());
         this.javaPlugin = javaPlugin;
         this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),

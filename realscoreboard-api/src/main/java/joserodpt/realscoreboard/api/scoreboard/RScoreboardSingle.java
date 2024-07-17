@@ -13,9 +13,14 @@ package joserodpt.realscoreboard.api.scoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
+import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
+import org.bukkit.Bukkit;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RScoreboardSingle extends RScoreboard {
 
@@ -35,6 +40,13 @@ public class RScoreboardSingle extends RScoreboard {
                              final int titleRefresh, final int titleLoopDelay, final int globalScoreboardRefresh, final boolean defaultSB) {
         super(name, displayName, permission, defaultWord, otherWorlds, titleRefresh, titleLoopDelay, globalScoreboardRefresh, defaultSB);
         this.board = new RBoard(this, title, lines);
+    }
+
+    //for announcements
+    public RScoreboardSingle(final String message) {
+        super("", "", "", "", Collections.emptyList(), 40, 20, 20, false);
+        this.board = new RBoard(this, Collections.singletonList(RSBConfig.file().getString("Config.Messages.Announce-Title")),
+                Arrays.stream(message.split("(?<=\\G.{30})")).collect(Collectors.toList()));
     }
 
     @Override

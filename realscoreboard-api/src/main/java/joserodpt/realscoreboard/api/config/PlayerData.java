@@ -16,7 +16,7 @@ package joserodpt.realscoreboard.api.config;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import joserodpt.realscoreboard.api.events.ScoreboardToggleEvent;
-import joserodpt.realscoreboard.api.managers.AbstractPlayerManager;
+import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -63,9 +63,6 @@ public class PlayerData {
             Player player = Bukkit.getPlayer(this.uuid);
             assert player != null;
         }
-    }
-
-    public static void setup(AbstractPlayerManager playerManager) {
     }
 
     public PlayerData(UUID uuid) {

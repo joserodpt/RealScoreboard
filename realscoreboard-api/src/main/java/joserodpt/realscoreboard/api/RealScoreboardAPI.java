@@ -14,10 +14,10 @@ package joserodpt.realscoreboard.api;
  */
 
 import com.google.common.base.Preconditions;
-import joserodpt.realscoreboard.api.managers.AbstractAnimationManager;
-import joserodpt.realscoreboard.api.managers.AbstractDatabaseManager;
-import joserodpt.realscoreboard.api.managers.AbstractPlayerManager;
-import joserodpt.realscoreboard.api.managers.AbstractScoreboardManager;
+import joserodpt.realscoreboard.api.managers.AnimationManagerAPI;
+import joserodpt.realscoreboard.api.managers.DatabaseManagerAPI;
+import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
+import joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -56,28 +56,28 @@ public abstract class RealScoreboardAPI {
      *
      * @return scoreboard manager instance
      */
-    public abstract AbstractScoreboardManager getScoreboardManager();
+    public abstract ScoreboardManagerAPI getScoreboardManagerAPI();
 
     /**
      * Gets DatabaseManager from API instance
      *
      * @return database manager instance
      */
-    public abstract AbstractDatabaseManager getDatabaseManager();
+    public abstract DatabaseManagerAPI getDatabaseManagerAPI();
 
     /**
      * Gets PlayerManager from API instance
      *
      * @return player manager instance
      */
-    public abstract AbstractPlayerManager getPlayerManager();
+    public abstract PlayerManagerAPI getPlayerManagerAPI();
 
     /**
      * Gets AnimationManager from API instance
      *
      * @return animation manager instance
      */
-    public abstract AbstractAnimationManager getAnimationManager();
+    public abstract AnimationManagerAPI getAnimationManagerAPI();
 
     /**
      * Gets RealScoreboard plugin logger

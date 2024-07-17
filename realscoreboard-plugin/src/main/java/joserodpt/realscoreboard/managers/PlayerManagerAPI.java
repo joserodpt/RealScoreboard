@@ -15,7 +15,6 @@ package joserodpt.realscoreboard.managers;
 
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import joserodpt.realscoreboard.api.managers.AbstractPlayerManager;
 import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
@@ -24,12 +23,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class PlayerManager implements AbstractPlayerManager {
+public class PlayerManagerAPI implements joserodpt.realscoreboard.api.managers.PlayerManagerAPI {
 
     private final Map<UUID, RSBPlayer> playerHooks = new HashMap<>();
     private final RealScoreboardAPI rsa;
 
-    public PlayerManager(RealScoreboardAPI rsa) {
+    public PlayerManagerAPI(RealScoreboardAPI rsa) {
         this.rsa = rsa;
     }
 
@@ -43,8 +42,8 @@ public class PlayerManager implements AbstractPlayerManager {
 
     @Override
     public void initPlayer(Player p) {
-        rsa.getPlayerManager().getPlayerMap().put(p.getUniqueId(),
-                new RSBPlayer(p, !RSBConfig.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName()) && rsa.getDatabaseManager().getPlayerData(p.getUniqueId()).isScoreboardON()));
+        rsa.getPlayerManagerAPI().getPlayerMap().put(p.getUniqueId(),
+                new RSBPlayer(p, !RSBConfig.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName()) && rsa.getDatabaseManagerAPI().getPlayerData(p.getUniqueId()).isScoreboardON()));
     }
 
     @Override

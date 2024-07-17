@@ -28,6 +28,7 @@ Config:
     Formatting: 'dd/MM/yyyy'
     Offset: 0
   Messages:
+    Announce-Title: "&6&lAnnouncement"
     Scoreboard-Toggle:
       'ON': '&fScoreboard turned &aON&f.'
       'OFF': '&fScoreboard turned &cOFF&f.'
@@ -40,4 +41,4 @@ Config:
     - pv
     - vanish
     - premiumvanish
-Version: 17
+Version: 18

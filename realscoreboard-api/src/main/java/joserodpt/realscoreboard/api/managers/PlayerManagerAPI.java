@@ -13,31 +13,25 @@ package joserodpt.realscoreboard.api.managers;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
+import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
+import org.bukkit.entity.Player;
+
+import java.util.Map;
+import java.util.UUID;
+
 /**
- * Abstraction class for AnimationManager
+ * Abstraction class for PlayerManager
  */
-public abstract class AbstractAnimationManager {
+public interface PlayerManagerAPI {
 
     /**
-     * Starts all animations
+     * Get Player Hook
      */
-    public abstract void start();
+    RSBPlayer getPlayer(UUID uuid);
 
-    public abstract String getLoopAnimation(String s);
+    Map<UUID, RSBPlayer> getPlayerMap();
 
-    /**
-     * Stops all animations
-     */
-    public abstract void stop();
+    boolean isVanished(Player p);
 
-    /**
-     * Cancels all animation tasks
-     */
-    public abstract void cancelAnimationTasks();
-
-    /**
-     * Restart animation manager (stop and start again)
-     */
-    @SuppressWarnings("unused")
-    public abstract void reload();
+    void initPlayer(Player player);
 }

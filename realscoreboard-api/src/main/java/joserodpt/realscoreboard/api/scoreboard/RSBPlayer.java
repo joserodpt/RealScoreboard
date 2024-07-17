@@ -18,6 +18,7 @@ import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.utils.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -36,7 +37,7 @@ public class RSBPlayer {
     public RSBPlayer(Player p, boolean realScoreboardVisible) {
         this.p = p;
         this.realScoreboardVisible = realScoreboardVisible;
-        this.setScoreboard(RealScoreboardAPI.getInstance().getScoreboardManager().getScoreboardForPlayer(p));
+        this.setScoreboard(RealScoreboardAPI.getInstance().getScoreboardManagerAPI().getScoreboardForPlayer(p));
         if (this.realScoreboardVisible)
             this.startScoreboard();
     }
@@ -109,9 +110,9 @@ public class RSBPlayer {
             }
         }
         this.realScoreboardVisible = realScoreboardVisible;
-        PlayerData playerData = RealScoreboardAPI.getInstance().getDatabaseManager().getPlayerData(p.getUniqueId());
+        PlayerData playerData = RealScoreboardAPI.getInstance().getDatabaseManagerAPI().getPlayerData(p.getUniqueId());
         playerData.setScoreboardON(this.realScoreboardVisible);
-        RealScoreboardAPI.getInstance().getDatabaseManager().savePlayerData(playerData, true);
+        RealScoreboardAPI.getInstance().getDatabaseManagerAPI().savePlayerData(playerData, true);
     }
 
     public RScoreboard getScoreboard() {
@@ -130,5 +131,11 @@ public class RSBPlayer {
                 ", fastBoard=" + fastBoard +
                 ", scoreboardRefreshTask=" + scoreboardRefreshTask +
                 '}';
+    }
+
+    public void announce(String message, Integer seconds) {
+        RScoreboard prev = current;
+        setScoreboard(new RScoreboardSingle(message));
+        Bukkit.getScheduler().runTaskLater(RealScoreboardAPI.getInstance().getPlugin(), () -> setScoreboard(prev), (seconds == null ? 10 : seconds) * 20);
     }
 }

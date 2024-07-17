@@ -179,7 +179,7 @@ public class Placeholders implements IPlaceholders {
                 .replaceAll("%x%", p.getLocation().getBlockX() + "")
                 .replaceAll("%y%", p.getLocation().getBlockY() + "")
                 .replaceAll("%z%", p.getLocation().getBlockZ() + "")
-                .replaceAll("%rainbow%", RealScoreboard.getInstance().getAnimationManager().getLoopAnimation("rainbow"))
+                .replaceAll("%rainbow%", RealScoreboard.getInstance().getAnimationManagerAPI().getLoopAnimation("rainbow"))
                 .replaceAll("%playtime%", Text.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20));
         return Text.color(this.placeholderAPI(p, placeholders));
     }

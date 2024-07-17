@@ -16,7 +16,6 @@ package joserodpt.realscoreboard.managers;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
-import joserodpt.realscoreboard.api.managers.AbstractScoreboardManager;
 import joserodpt.realscoreboard.api.scoreboard.RBoard;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboardBoards;
@@ -30,11 +29,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ScoreboardManager implements AbstractScoreboardManager {
+public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI {
     private final Map<String, RScoreboard> scoreboards = new HashMap<>();
     private final RealScoreboardAPI rsa;
 
-    public ScoreboardManager(RealScoreboardAPI rsa) {
+    public ScoreboardManagerAPI(RealScoreboardAPI rsa) {
         this.rsa = rsa;
     }
 

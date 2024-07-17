@@ -24,7 +24,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void join(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        rsa.getPlayerManager().initPlayer(p);
+        rsa.getPlayerManagerAPI().initPlayer(p);
         if (p.isOp() && RealScoreboardPlugin.getNewUpdate()) {
             Text.send(p, "&6&lWARNING &fThere is a new version of RealScoreboard! https://www.spigotmc.org/resources/22928/");
         }
@@ -32,19 +32,19 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void leave(PlayerQuitEvent e) {
-        RSBPlayer hook = rsa.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+        RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(e.getPlayer().getUniqueId());
         if (hook != null) {
             hook.stopScoreboard();
-            rsa.getPlayerManager().getPlayerMap().remove(hook.getPlayer().getUniqueId());
+            rsa.getPlayerManagerAPI().getPlayerMap().remove(hook.getPlayer().getUniqueId());
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void changeWorld(PlayerChangedWorldEvent e) {
         if (RSBConfig.file().getBoolean("Config.World-Scoreboard-Switch")) {
-            RSBPlayer hook = rsa.getPlayerManager().getPlayer(e.getPlayer().getUniqueId());
+            RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(e.getPlayer().getUniqueId());
             if (hook != null) {
-                hook.setScoreboard(rsa.getScoreboardManager().getScoreboardForPlayer(e.getPlayer()));
+                hook.setScoreboard(rsa.getScoreboardManagerAPI().getScoreboardForPlayer(e.getPlayer()));
             }
         }
     }
@@ -57,10 +57,10 @@ public class PlayerListener implements Listener {
             String cmd = e.getMessage().split(" ")[0];
             for (String vanishCommand : RSBConfig.file().getStringList("Config.Vanish-Commands")) {
                 if (cmd.equalsIgnoreCase("/" + vanishCommand)) {
-                    PlayerData playerData = this.rsa.getDatabaseManager().getPlayerData(p.getUniqueId());
+                    PlayerData playerData = this.rsa.getDatabaseManagerAPI().getPlayerData(p.getUniqueId());
                     //before the command is processed, the vanish tag in the player is still the previous state, so we set it as the previous
-                    playerData.setScoreboardON(rsa.getPlayerManager().isVanished(p));
-                    this.rsa.getDatabaseManager().savePlayerData(playerData, true);
+                    playerData.setScoreboardON(rsa.getPlayerManagerAPI().isVanished(p));
+                    this.rsa.getDatabaseManagerAPI().savePlayerData(playerData, true);
                     break;
                 }
             }

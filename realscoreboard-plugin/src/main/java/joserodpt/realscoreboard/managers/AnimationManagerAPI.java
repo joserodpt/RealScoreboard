@@ -15,7 +15,6 @@ package joserodpt.realscoreboard.managers;
 
 import joserodpt.realscoreboard.api.animation.TextLooper;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import joserodpt.realscoreboard.api.managers.AbstractAnimationManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -23,13 +22,13 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class AnimationManager extends AbstractAnimationManager {
+public class AnimationManagerAPI extends joserodpt.realscoreboard.api.managers.AnimationManagerAPI {
 
     private final HashMap<String, TextLooper> loopAnimations = new HashMap<>();
     private final JavaPlugin plugin;
     private BukkitTask looper;
 
-    public AnimationManager(JavaPlugin plugin) {
+    public AnimationManagerAPI(JavaPlugin plugin) {
         this.plugin = plugin;
         this.start();
     }

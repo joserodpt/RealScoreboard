@@ -13,25 +13,28 @@ package joserodpt.realscoreboard.api.managers;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
-import org.bukkit.entity.Player;
+import joserodpt.realscoreboard.api.config.PlayerData;
 
-import java.util.Map;
 import java.util.UUID;
 
 /**
- * Abstraction class for PlayerManager
+ * Abstraction class for DatabaseManager
  */
-public interface AbstractPlayerManager {
+public abstract class DatabaseManagerAPI {
 
     /**
-     * Get Player Hook
+     * Gets playerdata for given UUID
+     *
+     * @param uuid the uuid
+     * @return     playerdata instance for provided uuid
      */
-    RSBPlayer getPlayer(UUID uuid);
+    public abstract PlayerData getPlayerData(UUID uuid);
 
-    Map<UUID, RSBPlayer> getPlayerMap();
-
-    boolean isVanished(Player p);
-
-    void initPlayer(Player player);
+    /**
+     * Saves provided playerdata asynchronously or not
+     *
+     * @param playerData the playerdata instance
+     * @param async      boolean value if save should be async
+     */
+    public abstract void savePlayerData(PlayerData playerData, boolean async);
 }

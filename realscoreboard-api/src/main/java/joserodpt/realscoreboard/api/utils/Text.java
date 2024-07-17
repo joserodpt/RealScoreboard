@@ -66,7 +66,7 @@ public class Text {
     }
 
     public static String randomColor() {
-        return ChatColor.translateAlternateColorCodes('&', RealScoreboardAPI.getInstance().getAnimationManager().getLoopAnimation("rainbow") + "&6");
+        return ChatColor.translateAlternateColorCodes('&', RealScoreboardAPI.getInstance().getAnimationManagerAPI().getLoopAnimation("rainbow") + "&6");
     }
 
     public static void send(CommandSender commandSender, List<String> asList) {

@@ -25,9 +25,12 @@ import me.mattstudios.mf.annotations.Alias;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Default;
+import me.mattstudios.mf.annotations.Optional;
 import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
+import me.mattstudios.mf.annotations.WrongUsage;
 import me.mattstudios.mf.base.CommandBase;
+import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -36,6 +39,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Command("realscoreboard")
 @Alias({"rsb", "sb"})
@@ -75,7 +79,7 @@ public class RealScoreboardCommand extends CommandBase {
     @SuppressWarnings("unused")
     public void togglecmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
-            RSBPlayer hook = rsa.getPlayerManager().getPlayer(p.getUniqueId());
+            RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
         } else {
@@ -92,7 +96,7 @@ public class RealScoreboardCommand extends CommandBase {
             Text.send(commandSender, "Player not found.");
             return;
         }
-        RSBPlayer hook = rsa.getPlayerManager().getPlayer(player.getUniqueId());
+        RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(player.getUniqueId());
         hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
         Text.send(commandSender, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
     }
@@ -102,7 +106,7 @@ public class RealScoreboardCommand extends CommandBase {
     @SuppressWarnings("unused")
     public void offcmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
-            RSBPlayer hook = rsa.getPlayerManager().getPlayer(p.getUniqueId());
+            RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(false);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
         } else {
@@ -115,7 +119,7 @@ public class RealScoreboardCommand extends CommandBase {
     @SuppressWarnings("unused")
     public void oncmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p) {
-            RSBPlayer hook = rsa.getPlayerManager().getPlayer(p.getUniqueId());
+            RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(true);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
         } else {
@@ -137,12 +141,12 @@ public class RealScoreboardCommand extends CommandBase {
 
             final GUIBuilder inventory = new GUIBuilder("Choose board for " + target.getName(), 27, target.getUniqueId());
 
-            final Collection<RScoreboard> list = rsa.getScoreboardManager().getScoreboards();
+            final Collection<RScoreboard> list = rsa.getScoreboardManagerAPI().getScoreboards();
             int i = 0;
             for (RScoreboard sb : list) {
                 inventory.addItem(e -> {
                     target.closeInventory();
-                    rsa.getPlayerManager().getPlayer(target.getUniqueId()).setScoreboard(sb);
+                    rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
                     Text.send(p, "Scoreboard &b" + sb.getName() + " &fapplied to &b" + target.getName());
                 }, Items.createItemLore(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
                 ++i;
@@ -160,7 +164,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Permission("realscoreboard.setscoreboard")
     @SuppressWarnings("unused")
     public void setscoreboardcmd(final CommandSender commandSender, final String name, Player target) {
-        RScoreboard sb = rsa.getScoreboardManager().getScoreboard(name);
+        RScoreboard sb = rsa.getScoreboardManagerAPI().getScoreboard(name);
         if (sb == null) {
             Text.send(commandSender, "Scoreboard not found with that name.");
             return;
@@ -171,12 +175,47 @@ public class RealScoreboardCommand extends CommandBase {
             return;
         }
 
-        if (rsa.getPlayerManager().getPlayer(target.getUniqueId()).getScoreboard() == sb) {
+        if (rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).getScoreboard() == sb) {
             Text.send(commandSender, target.getName() + " &calready has that scoreboard applied.");
         } else {
-            rsa.getPlayerManager().getPlayer(target.getUniqueId()).setScoreboard(sb);
+            rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
             Text.send(commandSender, name + " scoreboard applied to " + target.getName());
         }
+    }
+
+    @SubCommand("announce")
+    @Alias("broadcast")
+    @Permission("realscoreboard.setscoreboard")
+    @SuppressWarnings("unused")
+    @WrongUsage("&cUsage: /rsb announce <seconds> <player>")
+    public void announcecmd(final CommandSender commandSender, Integer seconds, @Optional Player p) {
+        if (commandSender instanceof Player myPlayer) {
+            new AnvilGUI.Builder()
+                    .onClose(stateSnapshot -> {
+                    })
+                    .onClick((slot, stateSnapshot) -> { // Either use sync or async variant, not both
+                        if (slot != AnvilGUI.Slot.OUTPUT) {
+                            return Collections.emptyList();
+                        }
+
+                        if (p == null) {
+                            rsa.getPlayerManagerAPI().getPlayerMap().values().forEach(rsbPlayer -> rsbPlayer.announce(stateSnapshot.getText(), seconds));
+                        } else {
+                            rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId()).announce(stateSnapshot.getText(), seconds);
+                        }
+
+                        return List.of(AnvilGUI.ResponseAction.close());
+                    })
+                    .preventClose()                                                    //prevents the inventory from being closed
+                    .text("Sample Message")                              //sets the text the GUI should start with
+                    .title("Enter announce message:")                                    //set the title of the GUI (only works in 1.14+)
+                    .plugin(rsa.getPlugin())                                          //set the plugin instance
+                    .open(myPlayer);
+        } else {
+            Text.send(commandSender, playerOnly);
+        }
+
+
     }
 
     @SubCommand("debug")
@@ -197,7 +236,7 @@ public class RealScoreboardCommand extends CommandBase {
                 "> &b&lDATABASE info",
                 "&fDB Driver: &b" + RSBConfig.getSql().getString("driver"),
                 "> &b&lSCOREBOARD info",
-                "&fLoaded Scoreboards: &b" + this.rsa.getScoreboardManager().getScoreboards().size(),
+                "&fLoaded Scoreboards: &b" + this.rsa.getScoreboardManagerAPI().getScoreboards().size(),
                 "> &b&lCONFIG info",
                 "&fConfig Version: &b" + RSBConfig.file().getInt("Version"),
                 "&e&lNOTE: &fThis information is intended to be shared with the developer in order to provide additional assistance."));

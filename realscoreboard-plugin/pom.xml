@@ -54,7 +54,20 @@
                             <pattern>fr.mrmicky.fastboard</pattern>
                             <shadedPattern>shaded.rsb.fastboard</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.wesjd.anvilgui</pattern>
+                            <shadedPattern>joserodpt.realscoreboard.anvilgui</shadedPattern>
+                        </relocation>
                     </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludeDefaults>false</excludeDefaults>
+                            <includes>
+                                <include>net/wesjd/anvilgui/**</include>
+                            </includes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -94,6 +107,10 @@
         <repository>
             <id>neetgames</id>
             <url>https://nexus.neetgames.com/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
     </repositories>
 
@@ -144,6 +161,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.wesjd</groupId>
+            <artifactId>anvilgui</artifactId>
+            <version>1.10.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>joserodpt.realpermissions</groupId>
