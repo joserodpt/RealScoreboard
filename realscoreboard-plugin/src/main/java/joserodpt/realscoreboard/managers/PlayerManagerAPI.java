@@ -42,8 +42,7 @@ public class PlayerManagerAPI implements joserodpt.realscoreboard.api.managers.P
 
     @Override
     public void initPlayer(Player p) {
-        rsa.getPlayerManagerAPI().getPlayerMap().put(p.getUniqueId(),
-                new RSBPlayer(p, !RSBConfig.file().getList("Config.Bypass-Worlds").contains(p.getWorld().getName()) && rsa.getDatabaseManagerAPI().getPlayerData(p.getUniqueId()).isScoreboardON()));
+        rsa.getPlayerManagerAPI().getPlayerMap().put(p.getUniqueId(), new RSBPlayer(p));
     }
 
     @Override

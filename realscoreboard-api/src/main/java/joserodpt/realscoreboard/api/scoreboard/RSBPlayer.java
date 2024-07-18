@@ -34,9 +34,9 @@ public class RSBPlayer {
     private BukkitTask scoreboardRefreshTask;
     private boolean realScoreboardVisible;
 
-    public RSBPlayer(Player p, boolean realScoreboardVisible) {
+    public RSBPlayer(Player p) {
         this.p = p;
-        this.realScoreboardVisible = realScoreboardVisible;
+        this.realScoreboardVisible = !RSBConfig.file().getStringList("Config.Disabled-Worlds").contains(p.getWorld().getName()) && !RSBConfig.file().getStringList("Config.Bypass-Worlds").contains(p.getWorld().getName()) && RealScoreboardAPI.getInstance().getDatabaseManagerAPI().getPlayerData(p.getUniqueId()).isScoreboardON();
         this.setScoreboard(RealScoreboardAPI.getInstance().getScoreboardManagerAPI().getScoreboardForPlayer(p));
         if (this.realScoreboardVisible)
             this.startScoreboard();
@@ -77,12 +77,22 @@ public class RSBPlayer {
     }
 
     public void stopScoreboard() {
-        if (this.scoreboardRefreshTask != null) { this.scoreboardRefreshTask.cancel(); }
-        if (this.fastBoard != null && !this.fastBoard.isDeleted()) { this.fastBoard.delete(); this.fastBoard = null; }
+        if (this.scoreboardRefreshTask != null) {
+            this.scoreboardRefreshTask.cancel();
+        }
+        if (this.fastBoard != null && !this.fastBoard.isDeleted()) {
+            this.fastBoard.delete();
+            this.fastBoard = null;
+        }
         this.realScoreboardVisible = false;
     }
 
     public void setScoreboard(RScoreboard sb) {
+        if (RSBConfig.file().getStringList("Config.Disabled-Worlds").contains(p.getWorld().getName())) {
+            stopScoreboard();
+            return;
+        }
+
         if (sb != null) {
             this.current = sb;
             if (!isScoreboardActive()) {
