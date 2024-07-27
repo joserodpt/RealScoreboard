@@ -9,7 +9,7 @@ package joserodpt.realscoreboard.utils;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues
+ * @author José Rodrigues © 2016-2024
  * @link https://github.com/joserodpt/RealScoreboard
  */
 

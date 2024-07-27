@@ -9,7 +9,7 @@ package joserodpt.realscoreboard;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues
+ * @author José Rodrigues © 2016-2024
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
@@ -19,7 +19,6 @@ import joserodpt.realscoreboard.managers.AnimationManagerAPI;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.managers.DatabaseManagerAPI;
 import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
 import joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI;

@@ -1,16 +1,11 @@
 package joserodpt.realscoreboard.api.utils;
 
 /*
- *   ____            _ ____                     _                         _
- *  |  _ \ ___  __ _| / ___|  ___ ___  _ __ ___| |__   ___   __ _ _ __ __| |
- *  | |_) / _ \/ _` | \___ \ / __/ _ \| '__/ _ \ '_ \ / _ \ / _` | '__/ _` |
- *  |  _ <  __/ (_| | |___) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |
- *  |_| \_\___|\__,_|_|____/ \___\___/|_|  \___|_.__/ \___/ \__,_|_|  \__,_|
- *
- *
- * Licensed under the MIT License
- * @author José Rodrigues
- * @link https://github.com/joserodpt/RealScoreboard
+ * Modified and optimized version of AdvInventory Original author:
+ * http://spigotmc.org/members/25376/ - Homer04 Original utility version:
+ * http://www.spigotmc.org/threads/133942/ Modified by AnyOD Compatible
+ * https://www.spigotmc.org/threads/gui-creator-v2-making-inventories-was-never-easier.296898/
+ * versions: 1.8 and up
  */
 
 import org.bukkit.Bukkit;
@@ -33,15 +28,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GUIBuilder {
-
-    /*
-     * Modified and optimized version of AdvInventory Original author:
-     * http://spigotmc.org/members/25376/ - Homer04 Original utility version:
-     * http://www.spigotmc.org/threads/133942/ Modified by AnyOD Compatible
-     * https://www.spigotmc.org/threads/gui-creator-v2-making-inventories-was-never-easier.296898/
-     * versions: 1.8 and up
-     */
-
     private static final Map<UUID, GUIBuilder> inventories = new HashMap<>();
     private Inventory inv;
     private final Map<Integer, ClickRunnable> runnables = new HashMap<>();

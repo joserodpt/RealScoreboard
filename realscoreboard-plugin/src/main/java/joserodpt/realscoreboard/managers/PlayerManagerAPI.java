@@ -9,12 +9,11 @@ package joserodpt.realscoreboard.managers;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues
+ * @author José Rodrigues © 2016-2024
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
-import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;

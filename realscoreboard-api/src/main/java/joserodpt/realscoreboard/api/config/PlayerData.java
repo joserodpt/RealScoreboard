@@ -9,14 +9,13 @@ package joserodpt.realscoreboard.api.config;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues
+ * @author José Rodrigues © 2016-2024
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import joserodpt.realscoreboard.api.events.ScoreboardToggleEvent;
-import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
