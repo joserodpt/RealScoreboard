@@ -89,7 +89,7 @@ public class Placeholders implements IPlaceholders {
     private String getGroup(Player p) {
         if (RealScoreboardPlugin.getInstance().getPerms() != null) try {
             String w = RealScoreboardPlugin.getInstance().getPerms().getPrimaryGroup(p);
-            if (w == null) return "None";
+            if (w == null || w.isEmpty()) return "None";
             return w;
         } catch (UnsupportedOperationException e) {
             return "No Perm Plugin";
@@ -100,26 +100,25 @@ public class Placeholders implements IPlaceholders {
     private String prefix(Player p) {
         if (RealScoreboardPlugin.getInstance().getChat() != null) {
             String grupo = RealScoreboardPlugin.getInstance().getChat().getPrimaryGroup(p);
+            if (grupo == null || grupo.isEmpty()) return "None";
             String prefix = RealScoreboardPlugin.getInstance().getChat().getGroupPrefix(p.getWorld(), grupo);
-            if (grupo == null) return "None";
-            if (prefix == null) return "None";
-            return prefix;
+            if (prefix == null || prefix.isEmpty()) return "None";
+            return Text.color(prefix);
         } else return "Missing Vault";
     }
 
     private String sufix(Player p) {
         if (RealScoreboardPlugin.getInstance().getChat() != null) {
             String grupo = RealScoreboardPlugin.getInstance().getChat().getPrimaryGroup(p);
-            String prefix = RealScoreboardPlugin.getInstance().getChat().getGroupSuffix(p.getWorld(), grupo);
-            if (grupo == null) return "None";
-            if (prefix == null) return "None";
-            return prefix;
+            if (grupo == null || grupo.isEmpty()) return "None";
+            String sufix = RealScoreboardPlugin.getInstance().getChat().getGroupSuffix(p.getWorld(), grupo);
+            if (sufix == null || sufix.isEmpty()) return "None";
+            return Text.color(sufix);
         } else return "Missing Vault";
     }
 
     private double money(Player p) {
-        if (RealScoreboardPlugin.getInstance().getEconomy() == null) return -1D;
-        return RealScoreboardPlugin.getInstance().getEconomy().getBalance(p);
+        return RealScoreboardPlugin.getInstance().getEconomy() == null ? -1D : RealScoreboardPlugin.getInstance().getEconomy().getBalance(p);
     }
 
     private int stats(Player p, Statistic s) {
@@ -132,7 +131,6 @@ public class Placeholders implements IPlaceholders {
 
         if (deaths != 0) {
             double kd = (double) kills / deaths;
-
             return decimalFormat.format(kd);
         }
         return "0";
@@ -183,7 +181,6 @@ public class Placeholders implements IPlaceholders {
                 .replaceAll("%playtime%", Text.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20));
         return Text.color(this.placeholderAPI(p, placeholders));
     }
-
 
     private String placeholderAPI(Player p, String placeholders) {
         return RealScoreboardPlugin.getInstance().isPlaceholderAPI() ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
