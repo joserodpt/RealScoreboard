@@ -18,7 +18,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - run: java -version && mvn --version
-    - run: mvn --no-transfer-progress package
+    - run: mvn --no-transfer-progress package -Dmaven.javadoc.skip=true
     - uses: actions/upload-artifact@v3
       with:
         name: 'RealScoreboard (Dev Build)'
