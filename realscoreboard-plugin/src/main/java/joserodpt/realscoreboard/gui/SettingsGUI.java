@@ -114,7 +114,8 @@ public class SettingsGUI {
             @EventHandler
             public void onClick(InventoryClickEvent e) {
                 HumanEntity clicker = e.getWhoClicked();
-                if (clicker instanceof Player p) {
+                if (clicker instanceof Player) {
+                    final Player p = (Player) clicker;
                     if (e.getCurrentItem() == null) {
                         return;
                     }

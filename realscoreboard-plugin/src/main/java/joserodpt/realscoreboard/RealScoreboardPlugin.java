@@ -120,9 +120,9 @@ public class RealScoreboardPlugin extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("RealPermissions") != null) {
             //register RealMines permissions onto RealPermissions
             try {
-                List<ExternalPluginPermission> perms = new ArrayList<>(List.of(
+                List<ExternalPluginPermission> perms = new ArrayList<>(Arrays.asList(
                         new ExternalPluginPermission("realscoreboard.admin", "Allow access to the main operator commands of RealScoreboard.", Arrays.asList("rsb config", "rsb debug", "rsb reload")),
-                        new ExternalPluginPermission("realscoreboard.setscoreboard", "Allow access to the setscoreboard command of RealScoreboard.", List.of("rsb view <name> <target?>")),
+                        new ExternalPluginPermission("realscoreboard.setscoreboard", "Allow access to the setscoreboard command of RealScoreboard.", Arrays.asList("rsb view <name> <target?>")),
                         new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))));
                 realScoreboard.getScoreboardManagerAPI().getScoreboards().stream().filter(rScoreboard -> !rScoreboard.getPermission().equalsIgnoreCase("none")).forEach(rScoreboard -> perms.add(new ExternalPluginPermission(rScoreboard.getPermission(), "Permission for viewing the scoreboard: " + rScoreboard.getDisplayName())));
 
