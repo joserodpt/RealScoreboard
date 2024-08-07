@@ -120,7 +120,7 @@ public class ForestColorAPI {
      */
     public static String colorizeGradient(String input) {
         Matcher matcher = patternOneFromTwo.matcher(input);
-        StringBuilder output = new StringBuilder();
+        StringBuffer output = new StringBuffer();
 
         // First pass to handle the patternOneFromTwo matches
         while (matcher.find()) {
@@ -157,7 +157,7 @@ public class ForestColorAPI {
      */
     public static String colorizeRGB(String input) {
         Matcher matcher = patternNormal.matcher(input);
-        StringBuilder result = new StringBuilder();
+        StringBuffer result = new StringBuffer();
 
         while (matcher.find()) {
             String color = matcher.group(1);
@@ -167,6 +167,7 @@ public class ForestColorAPI {
         matcher.appendTail(result);
         return result.toString();
     }
+
 
     /**
      *
