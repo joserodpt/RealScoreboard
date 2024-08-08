@@ -13,13 +13,13 @@ package joserodpt.realscoreboard.listeners;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-//import com.gmail.nossr50.events.scoreboard.McMMOScoreboardMakeboardEvent;
-//import com.gmail.nossr50.events.scoreboard.McMMOScoreboardRevertEvent;
+import com.gmail.nossr50.events.scoreboard.McMMOScoreboardMakeboardEvent;
+import com.gmail.nossr50.events.scoreboard.McMMOScoreboardRevertEvent;
 import joserodpt.realscoreboard.RealScoreboard;
-//import joserodpt.realscoreboard.api.config.PlayerData;
+import joserodpt.realscoreboard.api.config.PlayerData;
 import lombok.AllArgsConstructor;
-//import org.bukkit.entity.Player;
-//import org.bukkit.event.EventHandler;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 @AllArgsConstructor
@@ -27,7 +27,6 @@ public class McMMOScoreboardListener implements Listener {
 
     private final RealScoreboard plugin;
 
-    /*
     @EventHandler
     public void onRevert(McMMOScoreboardRevertEvent event) {
         Player player = event.getTargetPlayer();
@@ -43,6 +42,4 @@ public class McMMOScoreboardListener implements Listener {
         playerData.setScoreboardON(false);
         this.plugin.getDatabaseManagerAPI().savePlayerData(playerData, true);
     }
-
-     */
 }
