@@ -56,9 +56,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Default
     @SuppressWarnings("unused")
     public void defaultcmd(final CommandSender commandSender) {
-        if (commandSender instanceof Player && (commandSender.isOp() || commandSender.hasPermission("realscoreboard.admin"))) {
-            final Player p = (Player) commandSender;
-            //TODO: CONFIG GUI
+        if (commandSender instanceof Player p && (p.isOp() || p.hasPermission("realscoreboard.admin"))) {
             SettingsGUI s = new SettingsGUI(p, rsa);
             s.openInventory(p);
         } else {
@@ -79,8 +77,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Permission("realscoreboard.toggle")
     @SuppressWarnings("unused")
     public void togglecmd(final CommandSender commandSender) {
-        if (commandSender instanceof Player) {
-            final Player p = (Player) commandSender;
+        if (commandSender instanceof Player p) {
             RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
@@ -107,8 +104,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Permission("realscoreboard.toggle")
     @SuppressWarnings("unused")
     public void offcmd(final CommandSender commandSender) {
-        if (commandSender instanceof Player) {
-            final Player p = (Player) commandSender;
+        if (commandSender instanceof Player p) {
             RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(false);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
@@ -121,8 +117,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Permission("realscoreboard.toggle")
     @SuppressWarnings("unused")
     public void oncmd(final CommandSender commandSender) {
-        if (commandSender instanceof Player) {
-            final Player p = (Player) commandSender;
+        if (commandSender instanceof Player p) {
             RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
             hook.setRealScoreboardVisible(true);
             Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
@@ -137,8 +132,7 @@ public class RealScoreboardCommand extends CommandBase {
     @Permission("realscoreboard.selectscoreboard")
     @SuppressWarnings("unused")
     public void selectscoreboardcmd(final CommandSender commandSender, Player target) {
-        if (commandSender instanceof Player) {
-            final Player p = (Player) commandSender;
+        if (commandSender instanceof Player p) {
             if (target == null) {
                 Text.send(commandSender, "Player not found.");
                 return;
@@ -194,8 +188,7 @@ public class RealScoreboardCommand extends CommandBase {
     @SuppressWarnings("unused")
     @WrongUsage("&cUsage: /rsb announce <seconds> <player>")
     public void announcecmd(final CommandSender commandSender, Integer seconds, @Optional Player p) {
-        if (commandSender instanceof Player) {
-            final Player myPlayer = (Player) commandSender;
+        if (commandSender instanceof Player myPlayer) {
             new AnvilGUI.Builder()
                     .onClose(stateSnapshot -> {
                     })
@@ -210,7 +203,7 @@ public class RealScoreboardCommand extends CommandBase {
                             rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId()).announce(stateSnapshot.getText(), seconds);
                         }
 
-                        return Arrays.asList(AnvilGUI.ResponseAction.close());
+                        return List.of(AnvilGUI.ResponseAction.close());
                     })
                     .preventClose()                                                    //prevents the inventory from being closed
                     .text("Sample Message")                              //sets the text the GUI should start with
