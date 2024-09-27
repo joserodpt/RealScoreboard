@@ -95,7 +95,7 @@ public class RSBPlayer {
 
         if (sb != null) {
             this.current = sb;
-            if (!isScoreboardActive()) {
+            if (!isScoreboardActive() && isRealScoreboardVisible()) {
                 startScoreboard();
             }
         } else {
@@ -120,6 +120,7 @@ public class RSBPlayer {
             }
         }
         this.realScoreboardVisible = realScoreboardVisible;
+        RealScoreboardAPI.getInstance().getLogger().info("RealScoreboard visibility for " + p.getName() + " set to " + realScoreboardVisible);
         PlayerData playerData = RealScoreboardAPI.getInstance().getDatabaseManagerAPI().getPlayerData(p.getUniqueId());
         playerData.setScoreboardON(this.realScoreboardVisible);
         RealScoreboardAPI.getInstance().getDatabaseManagerAPI().savePlayerData(playerData, true);
