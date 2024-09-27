@@ -95,7 +95,7 @@ public class RSBPlayer {
 
         if (sb != null) {
             this.current = sb;
-            if (!isScoreboardActive()) {
+            if (!isScoreboardActive() && isRealScoreboardVisible()) {
                 startScoreboard();
             }
         } else {
