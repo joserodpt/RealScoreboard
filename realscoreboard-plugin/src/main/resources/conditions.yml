@@ -1,0 +1,6 @@
+Conditions:
+  example_condition:
+    condition: "%xp% > 3"
+    result:
+      - 'Congratulations'
+      - 'Xp is > 3'
