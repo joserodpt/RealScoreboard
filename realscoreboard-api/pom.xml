@@ -7,7 +7,7 @@
     <parent>
         <groupId>joserodpt.realscoreboard</groupId>
         <artifactId>realscoreboard-parent</artifactId>
-        <version>1.4.5</version>
+        <version>1.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -28,8 +28,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>14</source>
+                    <target>14</target>
                 </configuration>
             </plugin>
         </plugins>

@@ -39,6 +39,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,8 +72,6 @@ public class RealScoreboardPlugin extends JavaPlugin {
         realScoreboard = new RealScoreboard(this);
         RealScoreboardAPI.setInstance(realScoreboard);
         realScoreboard.getScoreboardManagerAPI().loadScoreboards();
-
-        getLogger().info("Your config version: " + RSBConfig.file().getString("Version"));
 
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
             setupEconomy();
@@ -122,7 +121,7 @@ public class RealScoreboardPlugin extends JavaPlugin {
             try {
                 List<ExternalPluginPermission> perms = new ArrayList<>(Arrays.asList(
                         new ExternalPluginPermission("realscoreboard.admin", "Allow access to the main operator commands of RealScoreboard.", Arrays.asList("rsb config", "rsb debug", "rsb reload")),
-                        new ExternalPluginPermission("realscoreboard.setscoreboard", "Allow access to the setscoreboard command of RealScoreboard.", Arrays.asList("rsb view <name> <target?>")),
+                        new ExternalPluginPermission("realscoreboard.setscoreboard", "Allow access to the setscoreboard command of RealScoreboard.", Collections.singletonList("rsb view <name> <target?>")),
                         new ExternalPluginPermission("realscoreboard.toggle", "Allow permission to toggle the scoreboard.", Arrays.asList("rsb on", "rsb off", "rsb toggle", "rsb t"))));
                 realScoreboard.getScoreboardManagerAPI().getScoreboards().stream().filter(rScoreboard -> !rScoreboard.getPermission().equalsIgnoreCase("none")).forEach(rScoreboard -> perms.add(new ExternalPluginPermission(rScoreboard.getPermission(), "Permission for viewing the scoreboard: " + rScoreboard.getDisplayName())));
 

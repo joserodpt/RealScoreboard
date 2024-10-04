@@ -17,8 +17,7 @@ import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
 import joserodpt.realscoreboard.api.scoreboard.*;
-import joserodpt.realscoreboard.utils.Condition;
-import joserodpt.realscoreboard.utils.ConditionEvaluator;
+import joserodpt.realscoreboard.api.conditions.ConditionManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -31,15 +30,11 @@ import java.util.Map;
 public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI {
     private final Map<String, RScoreboard> scoreboards = new HashMap<>();
     private final RealScoreboardAPI rsa;
-    private final ConditionEvaluator conditionEvaluator; // Instancia de ConditionEvaluator
-    private final PlayerManagerAPI playerManager; // Instancia de PlayerManagerAPI
-    private final ConditionManager conditionManager; // Instancia de ConditionManagerAPI
+    private final ConditionManager conditionManager;
 
-    public ScoreboardManagerAPI(RealScoreboardAPI rsa, PlayerManagerAPI playerManager, ConditionManager conditionManager) {
+    public ScoreboardManagerAPI(RealScoreboardAPI rsa, ConditionManager conditionManager) {
         this.rsa = rsa;
-        this.playerManager = playerManager; // Inicializar playerManager
-        this.conditionManager = conditionManager; // Inicializar conditionManagerApi
-        this.conditionEvaluator = new ConditionEvaluator();
+        this.conditionManager = conditionManager;
     }
 
     @Override
@@ -75,8 +70,19 @@ public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.manage
 
             List<String> otherWorlds = RSBScoreboards.file().getStringList(key + "Other-Worlds");
 
-            // if config has lines, it has only one board, else, two or more
+            //if config has lines, it has only one board, else, two or more
+            if (RSBScoreboards.file().contains(key + "Lines")) {
+                List<String> title = RSBScoreboards.file().getStringList(key + "Title");
+                List<String> lines = RSBScoreboards.file().getStringList(key + "Lines");
 
+                this.scoreboards.put(scoreboardName, new RScoreboardSingle(scoreboardName, displayName, permission, w, otherWorlds, title, lines,
+                        titleRefresh, titleLoopDelay, globalScoreboardRefresh, def));
+            } else {
+                this.scoreboards.put(scoreboardName, new RScoreboardBoards(scoreboardName, displayName, permission, w, otherWorlds,
+                        titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay"), def));
+            }
+
+            /*
             if (RSBScoreboards.file().contains(key + "Lines")) {
                 List<String> title = RSBScoreboards.file().getStringList(key + "Title");
                 List<String> lines = RSBScoreboards.file().getStringList(key + "Lines");
@@ -118,7 +124,7 @@ public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.manage
                         titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay"), def));
             }
 
-            // if config has lines, it has only one board, else, two or more
+             */
 
         }
 
@@ -200,6 +206,7 @@ public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.manage
     public void reload() {
         this.scoreboards.values().forEach(RScoreboard::stopTasks);
         this.scoreboards.clear();
+        this.conditionManager.loadConditions();
         this.loadScoreboards();
     }
 

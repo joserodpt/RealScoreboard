@@ -14,11 +14,13 @@ package joserodpt.realscoreboard.api;
  */
 
 import com.google.common.base.Preconditions;
+import joserodpt.realscoreboard.api.conditions.ConditionManager;
 import joserodpt.realscoreboard.api.managers.AnimationManagerAPI;
 import joserodpt.realscoreboard.api.managers.DatabaseManagerAPI;
 import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
 import joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
+import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -28,16 +30,12 @@ import java.util.logging.Logger;
  */
 public abstract class RealScoreboardAPI {
 
-    private static RealScoreboardAPI instance;
-
     /**
-     * Gets instance of this API
-     *
-     * @return RealScoreboard API instance
+     * -- GETTER --
+     *  Gets instance of this API
      */
-    public static RealScoreboardAPI getInstance() {
-        return instance;
-    }
+    @Getter
+    private static RealScoreboardAPI instance;
 
     /**
      * Sets the RealScoreboard instance.
@@ -103,4 +101,6 @@ public abstract class RealScoreboardAPI {
     public String getVersion() {
         return this.getPlugin().getDescription().getVersion();
     }
+
+    public abstract ConditionManager getConditionManager();
 }

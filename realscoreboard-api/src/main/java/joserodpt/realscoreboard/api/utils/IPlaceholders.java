@@ -22,7 +22,8 @@ public interface IPlaceholders {
      *
      * @param player the player
      * @param string the string message
+     * @param skipCond if should skip conditions parsing
      * @return  fixed string with placeholders
      */
-    String setPlaceholders(Player player, String string);
+    String setPlaceholders(Player player, String string, boolean skipCond);
 }

@@ -25,16 +25,16 @@ Config:
     Loop-Delay: 10
   Reloaded: '&fThe config has been &areloaded&f.'
   Hours:
-    Formatting: 'HH:mm:ss'
+    Formatting: HH:mm:ss
     Offset: 0
   Days:
-    Formatting: 'dd/MM/yyyy'
+    Formatting: dd/MM/yyyy
     Offset: 0
   Messages:
-    Announce-Title: "&6&lAnnouncement"
+    Announce-Title: '&6&lAnnouncement'
     Scoreboard-Toggle:
-      'ON': '&fScoreboard turned &aON&f.'
-      'OFF': '&fScoreboard turned &cOFF&f.'
+      ON: '&fScoreboard turned &aON&f.'
+      OFF: '&fScoreboard turned &cOFF&f.'
   Disabled-Worlds:
     - testWorld
     - ExampleWorld2
@@ -44,4 +44,13 @@ Config:
     - pv
     - vanish
     - premiumvanish
-Version: 18
+  Conditions:
+    xp:
+      Condition: '%xp% > 3'
+      Met: '%aXP is bigger than 3!'
+      Not-Met: '&cYou need to get 3 XP!'
+    low_hp:
+      Condition: '%life% <= 5'
+      Met: '&cWatch out!'
+      Not-Met: '&aYou are fine!'
+Version: 19
