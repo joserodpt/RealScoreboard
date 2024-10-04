@@ -16,10 +16,8 @@ package joserodpt.realscoreboard.managers;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
-import joserodpt.realscoreboard.api.scoreboard.RBoard;
-import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
-import joserodpt.realscoreboard.api.scoreboard.RScoreboardBoards;
-import joserodpt.realscoreboard.api.scoreboard.RScoreboardSingle;
+import joserodpt.realscoreboard.api.scoreboard.*;
+import joserodpt.realscoreboard.api.conditions.ConditionManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -32,9 +30,11 @@ import java.util.Map;
 public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI {
     private final Map<String, RScoreboard> scoreboards = new HashMap<>();
     private final RealScoreboardAPI rsa;
+    private final ConditionManager conditionManager;
 
-    public ScoreboardManagerAPI(RealScoreboardAPI rsa) {
+    public ScoreboardManagerAPI(RealScoreboardAPI rsa, ConditionManager conditionManager) {
         this.rsa = rsa;
+        this.conditionManager = conditionManager;
     }
 
     @Override
@@ -74,12 +74,58 @@ public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.manage
             if (RSBScoreboards.file().contains(key + "Lines")) {
                 List<String> title = RSBScoreboards.file().getStringList(key + "Title");
                 List<String> lines = RSBScoreboards.file().getStringList(key + "Lines");
+
                 this.scoreboards.put(scoreboardName, new RScoreboardSingle(scoreboardName, displayName, permission, w, otherWorlds, title, lines,
                         titleRefresh, titleLoopDelay, globalScoreboardRefresh, def));
             } else {
                 this.scoreboards.put(scoreboardName, new RScoreboardBoards(scoreboardName, displayName, permission, w, otherWorlds,
                         titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay"), def));
             }
+
+            /*
+            if (RSBScoreboards.file().contains(key + "Lines")) {
+                List<String> title = RSBScoreboards.file().getStringList(key + "Title");
+                List<String> lines = RSBScoreboards.file().getStringList(key + "Lines");
+
+                // Lista para almacenar las líneas finales
+                List<String> finalLines = new ArrayList<>();
+
+                // Iterar a través de los jugadores en el mapa
+                for (RSBPlayer rsbPlayer : playerManager.getPlayerMap().values()) {
+                    Player player = rsbPlayer.getPlayer(); // Asumiendo que tienes un método para obtener el Player
+
+                    // Procesar las líneas para el jugador actual
+                    for (String line : lines) {
+                        // Comprobar si la línea empieza con $condition:
+                        if (line.startsWith("$condition:")) {
+                            // Extraer el nombre de la condición
+                            String conditionName = line.substring(11, line.indexOf(" ", 11) != -1 ? line.indexOf(" ", 11) : line.length()).trim();
+
+                            // Obtener la condición utilizando su nombre
+                            Condition condition = conditionManager.getCondition(conditionName); // Asegúrate de que este método esté implementado
+
+                            // Evaluar la condición y obtener los resultados
+                            List<String> results = conditionEvaluator.getResultsIfConditionMet(player, condition);
+                            if (results != null) {
+                                finalLines.addAll(results); // Agregar los resultados si la condición se cumple
+                            }
+                        } else {
+                            // Si la línea no tiene condición, agregarla directamente
+                            finalLines.add(line);
+                        }
+                    }
+                }
+
+                // Agregar el scoreboard con las líneas procesadas
+                this.scoreboards.put(scoreboardName, new RScoreboardSingle(scoreboardName, displayName, permission, w, otherWorlds, title, finalLines,
+                        titleRefresh, titleLoopDelay, globalScoreboardRefresh, def));
+            } else {
+                this.scoreboards.put(scoreboardName, new RScoreboardBoards(scoreboardName, displayName, permission, w, otherWorlds,
+                        titleRefresh, titleLoopDelay, globalScoreboardRefresh, RSBScoreboards.file().getInt(key + "Refresh.Board-Loop-Delay"), def));
+            }
+
+             */
+
         }
 
         // Use a Map to track if a world has a default scoreboard (true if it has at least one)
@@ -160,6 +206,7 @@ public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.manage
     public void reload() {
         this.scoreboards.values().forEach(RScoreboard::stopTasks);
         this.scoreboards.clear();
+        this.conditionManager.loadConditions();
         this.loadScoreboards();
     }
 

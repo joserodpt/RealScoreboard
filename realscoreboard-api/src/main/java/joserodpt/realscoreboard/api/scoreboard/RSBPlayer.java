@@ -18,6 +18,7 @@ import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.utils.Text;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,6 +33,7 @@ public class RSBPlayer {
     private RScoreboard current;
     private FastBoard fastBoard;
     private BukkitTask scoreboardRefreshTask;
+    @Getter
     private boolean realScoreboardVisible;
 
     public RSBPlayer(Player p) {
@@ -57,7 +59,7 @@ public class RSBPlayer {
                     if (current != null) {
                         String title = current.getTitle();
                         if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
-                            title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, title);
+                            title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, title, false);
                         }
                         if (fastBoard != null && !fastBoard.isDeleted())
                             fastBoard.updateTitle(Text.color(title));
@@ -65,7 +67,7 @@ public class RSBPlayer {
                         Collection<String> list = current.getLines().stream().map(s -> {
                             s = s.matches("(?i)%blank%") ?
                                     (Text.randomColor() + "§r" + Text.randomColor()) :
-                                    RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, s);
+                                    RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, s, false);
                             return Text.color(s);
                         }).collect(Collectors.toList());
                         if (fastBoard != null && !fastBoard.isDeleted() && !list.isEmpty())
@@ -105,10 +107,6 @@ public class RSBPlayer {
 
     public boolean isScoreboardActive() {
         return this.scoreboardRefreshTask != null && this.fastBoard != null && !this.fastBoard.isDeleted();
-    }
-
-    public boolean isRealScoreboardVisible() {
-        return realScoreboardVisible;
     }
 
     public void setRealScoreboardVisible(boolean realScoreboardVisible) {

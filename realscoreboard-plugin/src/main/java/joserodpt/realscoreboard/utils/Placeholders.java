@@ -15,6 +15,8 @@ package joserodpt.realscoreboard.utils;
 
 import joserodpt.realscoreboard.RealScoreboard;
 import joserodpt.realscoreboard.RealScoreboardPlugin;
+import joserodpt.realscoreboard.api.RealScoreboardAPI;
+import joserodpt.realscoreboard.api.conditions.Condition;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.utils.PingUtil;
@@ -29,8 +31,16 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Placeholders implements IPlaceholders {
+
+    private final RealScoreboardAPI rsa;
+
+    public Placeholders(RealScoreboardAPI rsa) {
+        this.rsa = rsa;
+    }
 
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
@@ -145,41 +155,137 @@ public class Placeholders implements IPlaceholders {
     }
 
     @Override
-    public String setPlaceholders(Player p, String s) {
-        String placeholders = s.replaceAll("%playername%", p.getName())
-                .replaceAll("%loc%", this.cords(p))
-                .replaceAll("%life%", Math.round(p.getHealth()) + "")
-                .replaceAll("%lifeheart%", this.lifeHeart(Math.round(p.getHealth())))
-                .replaceAll("%time%", this.time())
-                .replaceAll("%day%", this.day())
-                .replaceAll("%serverip%", this.serverIP())
-                .replaceAll("%version%", this.getVersion())
-                .replaceAll("%versionshort%", this.getVersion())
-                .replaceAll("%ping%", PingUtil.getPing(p) + " ms")
-                .replaceAll("%ram%", this.ram())
-                .replaceAll("%jumps%", "" + this.stats(p, Statistic.JUMP))
-                .replaceAll("%mobkills%", "" + this.stats(p, Statistic.MOB_KILLS))
-                .replaceAll("%world%", this.getWorldName(p)).replaceAll("%port%", String.valueOf(this.port()))
-                .replaceAll("%maxplayers%", String.valueOf(this.maxPlayers()))
-                .replaceAll("%online%", String.valueOf(this.onlinePlayers()))
-                .replaceAll("%prefix%", this.prefix(p))
-                .replaceAll("%suffix%", this.sufix(p)).replaceAll("%yaw%", String.valueOf(p.getLocation().getYaw()))
-                .replaceAll("%kills%", String.valueOf(this.stats(p, Statistic.PLAYER_KILLS)))
-                .replaceAll("%deaths%", String.valueOf(this.stats(p, Statistic.DEATHS)))
-                .replaceAll("%kd%", this.getKD(p))
-                .replaceAll("%pitch%", String.valueOf(p.getLocation().getPitch()))
-                .replaceAll("%playerfood%", String.valueOf(p.getFoodLevel()))
-                .replaceAll("%group%", this.getGroup(p))
-                .replaceAll("%money%", Text.formatMoney(this.money(p)))
-                .replaceAll("%moneylong%", Text.formatMoneyLong(this.money(p)))
-                .replaceAll("%displayname%", p.getDisplayName())
-                .replaceAll("%xp%", p.getTotalExperience() + "")
-                .replaceAll("%x%", p.getLocation().getBlockX() + "")
-                .replaceAll("%y%", p.getLocation().getBlockY() + "")
-                .replaceAll("%z%", p.getLocation().getBlockZ() + "")
-                .replaceAll("%rainbow%", RealScoreboard.getInstance().getAnimationManagerAPI().getLoopAnimation("rainbow"))
-                .replaceAll("%playtime%", Text.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20));
-        return Text.color(this.placeholderAPI(p, placeholders));
+    public String setPlaceholders(Player p, String s, boolean skipCond) {
+        Pattern pattern = Pattern.compile("%(.*?)%");
+        Matcher matcher = pattern.matcher(s);
+
+        while (matcher.find()) {
+            String placeholder = matcher.group(1);
+
+            if (!skipCond && placeholder.startsWith("cond:")) {
+                String condName = placeholder.substring(5);
+                Condition condition = rsa.getConditionManager().getCondition(condName);
+                if (condition == null) {
+                    s = s.replace("%" + placeholder + "%", "&cInvalid condition '" + condName + "'");
+                } else {
+                    s = s.replace("%" + placeholder + "%", condition.evaluate(p));
+                }
+            } else {
+                // Handle RealScoreboard native placeholders
+                switch (placeholder.toLowerCase()) {
+                    case "playername":
+                        s = s.replace("%" + placeholder + "%", p.getName());
+                        break;
+                    case "loc":
+                        s = s.replace("%" + placeholder + "%", this.cords(p));
+                        break;
+                    case "life":
+                        s = s.replace("%" + placeholder + "%", Math.round(p.getHealth()) + "");
+                        break;
+                    case "lifeheart":
+                        s = s.replace("%" + placeholder + "%", this.lifeHeart(Math.round(p.getHealth())));
+                        break;
+                    case "time":
+                        s = s.replace("%" + placeholder + "%", this.time());
+                        break;
+                    case "day":
+                        s = s.replace("%" + placeholder + "%", this.day());
+                        break;
+                    case "serverip":
+                        s = s.replace("%" + placeholder + "%", this.serverIP());
+                        break;
+                    case "version":
+                        s = s.replace("%" + placeholder + "%", this.getVersion());
+                        break;
+                    case "versionshort":
+                        s = s.replace("%" + placeholder + "%", this.getVersion());
+                        break;
+                    case "ping":
+                        s = s.replace("%" + placeholder + "%", PingUtil.getPing(p) + " ms");
+                        break;
+                    case "ram":
+                        s = s.replace("%" + placeholder + "%", this.ram());
+                        break;
+                    case "jumps":
+                        s = s.replace("%" + placeholder + "%", "" + this.stats(p, Statistic.JUMP));
+                        break;
+                    case "mobkills":
+                        s = s.replace("%" + placeholder + "%", "" + this.stats(p, Statistic.MOB_KILLS));
+                        break;
+                    case "world":
+                        s = s.replace("%" + placeholder + "%", this.getWorldName(p));
+                        break;
+                    case "port":
+                        s = s.replace("%" + placeholder + "%", String.valueOf(this.port()));
+                        break;
+                    case "maxplayers":
+                        s = s.replace("%" + placeholder + "%", String.valueOf(this.maxPlayers()));
+                        break;
+                    case "online":
+                        s = s.replace("%" + placeholder + "%", String.valueOf(this.onlinePlayers()));
+                        break;
+                    case "prefix":
+                        s = s.replace("%" + placeholder + "%", this.prefix(p));
+                        break;
+                    case "suffix":
+                        s = s.replace("%" + placeholder + "%", this.sufix(p));
+                        break;
+                    case "yaw":
+                        s = s.replace("%" + placeholder + "%", String.valueOf(p.getLocation().getYaw()));
+                        break;
+                    case "kills":
+                        s = s.replace("%" + placeholder + "%", String.valueOf(this.stats(p, Statistic.PLAYER_KILLS)));
+                        break;
+                    case "deaths":
+                        s = s.replace("%" + placeholder + "%", String.valueOf(this.stats(p, Statistic.DEATHS)));
+                        break;
+                    case "kd":
+                        s = s.replace("%" + placeholder + "%", this.getKD(p));
+                        break;
+                    case "pitch":
+                        s = s.replace("%" + placeholder + "%", String.valueOf(p.getLocation().getPitch()));
+                        break;
+                    case "playerfood":
+                        s = s.replace("%" + placeholder + "%", String.valueOf(p.getFoodLevel()));
+                        break;
+                    case "group":
+                        s = s.replace("%" + placeholder + "%", this.getGroup(p));
+                        break;
+                    case "money":
+                        s = s.replace("%" + placeholder + "%", Text.formatMoney(this.money(p)));
+                        break;
+                    case "moneylong":
+                        s = s.replace("%" + placeholder + "%", Text.formatMoneyLong(this.money(p)));
+                        break;
+                    case "displayname":
+                        s = s.replace("%" + placeholder + "%", p.getDisplayName());
+                        break;
+                    case "xp":
+                        s = s.replace("%" + placeholder + "%", p.getTotalExperience() + "");
+                        break;
+                    case "x":
+                        s = s.replace("%" + placeholder + "%", p.getLocation().getBlockX() + "");
+                        break;
+                    case "y":
+                        s = s.replace("%" + placeholder + "%", p.getLocation().getBlockY() + "");
+                        break;
+                    case "z":
+                        s = s.replace("%" + placeholder + "%", p.getLocation().getBlockZ() + "");
+                        break;
+                    case "rainbow":
+                        s = s.replace("%" + placeholder + "%", RealScoreboard.getInstance().getAnimationManagerAPI().getLoopAnimation("rainbow"));
+                        break;
+                    case "playtime":
+                        s = s.replace("%" + placeholder + "%", Text.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20));
+                        break;
+                    default:
+                        s = s.replace("%" + placeholder + "%", this.placeholderAPI(p, "%" + placeholder + "%"));
+                        break;
+                }
+            }
+        }
+
+        return Text.color(s);
     }
 
     private String placeholderAPI(Player p, String placeholders) {

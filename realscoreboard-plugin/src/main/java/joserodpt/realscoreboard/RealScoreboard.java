@@ -22,6 +22,7 @@ import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.managers.DatabaseManagerAPI;
 import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
 import joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI;
+import joserodpt.realscoreboard.api.conditions.ConditionManager;
 import joserodpt.realscoreboard.utils.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,14 +36,18 @@ public class RealScoreboard extends RealScoreboardAPI {
     private final joserodpt.realscoreboard.managers.ScoreboardManagerAPI scoreboardManager;
     private final joserodpt.realscoreboard.managers.PlayerManagerAPI playerManager;
     private final AnimationManagerAPI animationManager;
+    private final ConditionManager conditionManager;
     private final Logger logger;
     private final IPlaceholders placeholders;
     private final JavaPlugin plugin;
 
     public RealScoreboard(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.scoreboardManager = new joserodpt.realscoreboard.managers.ScoreboardManagerAPI(this);
+        this.logger = plugin.getLogger();
         this.playerManager = new joserodpt.realscoreboard.managers.PlayerManagerAPI(this);
+        this.conditionManager = new ConditionManager(this);
+        this.placeholders = new Placeholders(this);
+        this.scoreboardManager = new joserodpt.realscoreboard.managers.ScoreboardManagerAPI(this, conditionManager);
         try {
             this.databaseManager = new joserodpt.realscoreboard.managers.DatabaseManagerAPI(plugin);
         } catch (SQLException ex) {
@@ -50,8 +55,6 @@ public class RealScoreboard extends RealScoreboardAPI {
             this.getLogger().severe(ex.getMessage());
         }
         this.animationManager = new AnimationManagerAPI(plugin);
-        this.logger = plugin.getLogger();
-        this.placeholders = new Placeholders();
     }
 
     @Override
@@ -85,6 +88,11 @@ public class RealScoreboard extends RealScoreboardAPI {
         this.playerManager.getPlayerMap().values().forEach(RSBPlayer::stopScoreboard);
         this.playerManager.getPlayerMap().clear();
         Bukkit.getOnlinePlayers().forEach(this.playerManager::initPlayer);
+    }
+
+    @Override
+    public ConditionManager getConditionManager() {
+        return this.conditionManager;
     }
 
     @Override
