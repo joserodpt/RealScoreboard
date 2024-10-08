@@ -65,10 +65,11 @@ public class RSBPlayer {
                             fastBoard.updateTitle(Text.color(title));
                             Collection<String> list = current.getLines().stream()
                                 .map(s -> RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, s, false))
-                                .filter(s -> !s.contains("$line:avoid"))
+                                .filter(s -> !s.contains("$skip"))
                                 .map(s -> {
                                     s = s.matches("(?i)%blank%") ?
                                             (Text.randomColor() + "§r" + Text.randomColor()) :
+                                            s;
                                     return Text.color(s);
                                 })
                                 .collect(Collectors.toList());
