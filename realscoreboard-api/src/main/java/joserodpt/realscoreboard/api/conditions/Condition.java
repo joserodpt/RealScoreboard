@@ -33,7 +33,7 @@ public class Condition {
     }
 
     public boolean parseExpression(String expression) {
-        Bukkit.getLogger().info("Parsing expression: " + expression);
+        //Bukkit.getLogger().info("Parsing expression: " + expression);
 
         // Trim and tokenize the input string
         String[] tokens = expression.trim().split("\\s+");
@@ -117,15 +117,17 @@ public class Condition {
 
     public String evaluate(Player player) {
         try {
-            if (parseExpression(rsa.getPlaceholders().setPlaceholders(player, condition, true))) {
-                return getMet();
-            } else {
-                return getNotMet();
-            }
+            String evaluatedCondition = rsa.getPlaceholders().setPlaceholders(player, condition, true);
+
+            boolean conditionMet = parseExpression(evaluatedCondition);
+            String result = conditionMet ? getMet() : getNotMet();
+            return rsa.getPlaceholders().setPlaceholders(player, result, false);
+
         } catch (Exception e) {
             Bukkit.getLogger().warning("Error parsing condition: " + condition + " for player: " + player.getName());
             e.printStackTrace();
             return "Error parsing. See console";
         }
     }
+
 }

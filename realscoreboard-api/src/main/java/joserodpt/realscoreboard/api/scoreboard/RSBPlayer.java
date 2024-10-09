@@ -63,13 +63,17 @@ public class RSBPlayer {
                         }
                         if (fastBoard != null && !fastBoard.isDeleted())
                             fastBoard.updateTitle(Text.color(title));
+                            Collection<String> list = current.getLines().stream()
+                                .map(s -> RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, s, false))
+                                .filter(s -> !s.contains("$skip"))
+                                .map(s -> {
+                                    s = s.matches("(?i)%blank%") ?
+                                            (Text.randomColor() + "§r" + Text.randomColor()) :
+                                            s;
+                                    return Text.color(s);
+                                })
+                                .collect(Collectors.toList());
 
-                        Collection<String> list = current.getLines().stream().map(s -> {
-                            s = s.matches("(?i)%blank%") ?
-                                    (Text.randomColor() + "§r" + Text.randomColor()) :
-                                    RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, s, false);
-                            return Text.color(s);
-                        }).collect(Collectors.toList());
                         if (fastBoard != null && !fastBoard.isDeleted() && !list.isEmpty())
                             fastBoard.updateLines(list);
                     }
