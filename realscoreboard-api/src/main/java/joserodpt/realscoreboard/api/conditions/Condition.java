@@ -33,8 +33,6 @@ public class Condition {
     }
 
     public boolean parseExpression(String expression) {
-        //Bukkit.getLogger().info("Parsing expression: " + expression);
-
         // Trim and tokenize the input string
         String[] tokens = expression.trim().split("\\s+");
 

@@ -1,7 +1,13 @@
 #✦------------------------------------------------------✦
-#|                      Main Config                    |
+#|                      Main Config                     |
 #✦------------------------------------------------------✦
 # RealScoreboard created by joserodpt and maintained by Neziw
+#
+# Conditions: custom defined conditions that show when a condition is met or not.
+#  > Example: '%xp% > 3' - This will check if the player has more than 3 XP.
+#  > Example: '%aXP is bigger than 3!' - This will show if the condition is met.
+#  > Example: '&cYou need to get 3 XP!' - This will show if the condition is not met.
+#  You can also use $skip to skip the condition line/message.
 #
 # Useful links:
 #  SpigotMC - https://www.spigotmc.org/resources/22928/
