@@ -7,7 +7,7 @@
     <parent>
         <groupId>joserodpt.realscoreboard</groupId>
         <artifactId>realscoreboard-parent</artifactId>
-        <version>1.5</version>
+        <version>1.5.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -166,7 +166,7 @@
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.10.0-SNAPSHOT</version>
+            <version>1.10.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>joserodpt.realpermissions</groupId>
