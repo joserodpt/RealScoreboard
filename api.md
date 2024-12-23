@@ -14,24 +14,24 @@
 ```xml
 <repository>
   <id>neziw-repo</id>
-  <url>https://repo.neziw.xyz/releases</url>
+  <url>https://repo.neziw.ovh/releases</url>
 </repository>
 ```
 ```xml
 <dependency>
   <groupId>joserodpt.realscoreboard</groupId>
   <artifactId>realscoreboard-api</artifactId>
-  <version>10-12-2022 Build 2</version>
+  <version>VERSION</version>
 </dependency>
 ```
 * Gradle (Groovy)
 ```groovy
 maven {
-    url "https://repo.neziw.xyz/releases"
+    url "https://repo.neziw.ovh/releases"
 }
 ```
 ```groovy
-implementation "joserodpt.realscoreboard:RealScoreboard-API:10-11-2022 Build 5"
+implementation "joserodpt.realscoreboard:RealScoreboard-API:VERSION"
 ```
 
 ----
