@@ -9,7 +9,7 @@ package joserodpt.realscoreboard.api.utils;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues © 2016-2024
+ * @author José Rodrigues © 2016-2025
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
@@ -55,14 +55,11 @@ public class PingUtil {
     }
     
     public static int getPing(Player p) {
-        switch (pingVersion) {
-            case 1:
-                return getNewPing(p);
-            case 0:
-                return getPingReflection(p);
-            default:
-                return -3;
-        }
+        return switch (pingVersion) {
+            case 1 -> getNewPing(p);
+            case 0 -> getPingReflection(p);
+            default -> -3;
+        };
     }
 
     public static int getNewPing(Player p) {

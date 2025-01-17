@@ -9,7 +9,7 @@ package joserodpt.realscoreboard.api.events;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues © 2016-2024
+ * @author José Rodrigues © 2016-2025
  * @link https://github.com/joserodpt/RealScoreboard
  */
 

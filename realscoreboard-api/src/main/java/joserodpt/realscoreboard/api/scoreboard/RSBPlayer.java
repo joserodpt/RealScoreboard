@@ -9,7 +9,7 @@ package joserodpt.realscoreboard.api.scoreboard;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues © 2016-2024
+ * @author José Rodrigues © 2016-2025
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
@@ -61,93 +61,99 @@ public class RSBPlayer {
                         if (RSBConfig.file().getBoolean("Config.Use-Placeholders-In-Scoreboard-Titles")) {
                             title = RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, title, false);
                         }
-                        if (fastBoard != null && !fastBoard.isDeleted())
+                        if (fastBoard != null && !fastBoard.isDeleted()) {
                             fastBoard.updateTitle(Text.color(title));
                             Collection<String> list = current.getLines().stream()
-                                .map(s -> RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, s, false))
-                                .filter(s -> !s.contains("$skip"))
-                                .map(s -> {
-                                    s = s.matches("(?i)%blank%") ?
-                                            (Text.randomColor() + "§r" + Text.randomColor()) :
-                                            s;
-                                    return Text.color(s);
-                                })
-                                .collect(Collectors.toList());
+                                    .map(s -> RealScoreboardAPI.getInstance().getPlaceholders().setPlaceholders(p, s, false))
+                                    .filter(s -> !s.contains("$skip"))
+                                    .map(s -> {
+                                        s = s.matches("(?i)%blank%") ?
+                                                (Text.randomColor() + "§r" + Text.randomColor()) :
+                                                s;
+                                        return Text.color(s);
+                                    })
+                                    .collect(Collectors.toList());
+                        }
 
-                        if (fastBoard != null && !fastBoard.isDeleted() && !list.isEmpty())
+
+                        if (fastBoard != null && !fastBoard.isDeleted() && !list.isEmpty()) {
                             fastBoard.updateLines(list);
+                        }
                     }
-                }
-            }.runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().getPlugin(), 0L, current.globalScoreboardRefresh);
-        }
-    }
+                }.
 
-    public void stopScoreboard() {
-        if (this.scoreboardRefreshTask != null) {
-            this.scoreboardRefreshTask.cancel();
-        }
-        if (this.fastBoard != null && !this.fastBoard.isDeleted()) {
-            this.fastBoard.delete();
-            this.fastBoard = null;
-        }
-        this.realScoreboardVisible = false;
-    }
+                runTaskTimerAsynchronously(RealScoreboardAPI.getInstance().
 
-    public void setScoreboard(RScoreboard sb) {
-        if (RSBConfig.file().getStringList("Config.Disabled-Worlds").contains(p.getWorld().getName())) {
-            stopScoreboard();
-            return;
-        }
-
-        if (sb != null) {
-            this.current = sb;
-            if (!isScoreboardActive() && isRealScoreboardVisible()) {
-                startScoreboard();
+                getPlugin(), 0L,current.globalScoreboardRefresh);
             }
-        } else {
-            stopScoreboard();
         }
-    }
 
-    public boolean isScoreboardActive() {
-        return this.scoreboardRefreshTask != null && this.fastBoard != null && !this.fastBoard.isDeleted();
-    }
+        public void stopScoreboard () {
+            if (this.scoreboardRefreshTask != null) {
+                this.scoreboardRefreshTask.cancel();
+            }
+            if (this.fastBoard != null && !this.fastBoard.isDeleted()) {
+                this.fastBoard.delete();
+                this.fastBoard = null;
+            }
+            this.realScoreboardVisible = false;
+        }
 
-    public void setRealScoreboardVisible(boolean realScoreboardVisible) {
-        if (realScoreboardVisible != this.realScoreboardVisible) {
-            if (realScoreboardVisible) {
-                startScoreboard();
+        public void setScoreboard (RScoreboard sb){
+            if (RSBConfig.file().getStringList("Config.Disabled-Worlds").contains(p.getWorld().getName())) {
+                stopScoreboard();
+                return;
+            }
+
+            if (sb != null) {
+                this.current = sb;
+                if (!isScoreboardActive() && isRealScoreboardVisible()) {
+                    startScoreboard();
+                }
             } else {
                 stopScoreboard();
             }
         }
-        this.realScoreboardVisible = realScoreboardVisible;
-        PlayerData playerData = RealScoreboardAPI.getInstance().getDatabaseManagerAPI().getPlayerData(p.getUniqueId());
-        playerData.setScoreboardON(this.realScoreboardVisible);
-        RealScoreboardAPI.getInstance().getDatabaseManagerAPI().savePlayerData(playerData, true);
-    }
 
-    public RScoreboard getScoreboard() {
-        return this.current;
-    }
+        public boolean isScoreboardActive () {
+            return this.scoreboardRefreshTask != null && this.fastBoard != null && !this.fastBoard.isDeleted();
+        }
 
-    public Player getPlayer() {
-        return p;
-    }
+        public void setRealScoreboardVisible ( boolean realScoreboardVisible){
+            if (realScoreboardVisible != this.realScoreboardVisible) {
+                if (realScoreboardVisible) {
+                    startScoreboard();
+                } else {
+                    stopScoreboard();
+                }
+            }
+            this.realScoreboardVisible = realScoreboardVisible;
+            PlayerData playerData = RealScoreboardAPI.getInstance().getDatabaseManagerAPI().getPlayerData(p.getUniqueId());
+            playerData.setScoreboardON(this.realScoreboardVisible);
+            RealScoreboardAPI.getInstance().getDatabaseManagerAPI().savePlayerData(playerData, true);
+        }
 
-    @Override
-    public String toString() {
-        return "RSBPlayer{" +
-                "player=" + p +
-                ", current=" + current +
-                ", fastBoard=" + fastBoard +
-                ", scoreboardRefreshTask=" + scoreboardRefreshTask +
-                '}';
-    }
+        public RScoreboard getScoreboard () {
+            return this.current;
+        }
 
-    public void announce(String message, Integer seconds) {
-        RScoreboard prev = current;
-        setScoreboard(new RScoreboardSingle(message));
-        Bukkit.getScheduler().runTaskLater(RealScoreboardAPI.getInstance().getPlugin(), () -> setScoreboard(prev), (seconds == null ? 10 : seconds) * 20);
+        public Player getPlayer () {
+            return p;
+        }
+
+        @Override
+        public String toString () {
+            return "RSBPlayer{" +
+                    "player=" + p +
+                    ", current=" + current +
+                    ", fastBoard=" + fastBoard +
+                    ", scoreboardRefreshTask=" + scoreboardRefreshTask +
+                    '}';
+        }
+
+        public void announce (String message, Integer seconds){
+            RScoreboard prev = current;
+            setScoreboard(new RScoreboardSingle(message));
+            Bukkit.getScheduler().runTaskLater(RealScoreboardAPI.getInstance().getPlugin(), () -> setScoreboard(prev), (seconds == null ? 10 : seconds) * 20);
+        }
     }
-}

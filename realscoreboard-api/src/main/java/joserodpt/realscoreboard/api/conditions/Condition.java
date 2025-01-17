@@ -9,7 +9,7 @@ package joserodpt.realscoreboard.api.conditions;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues © 2016-2024
+ * @author José Rodrigues © 2016-2025
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
@@ -86,7 +86,12 @@ public class Condition {
             return evaluateNumbers((Number) left, operator, (Number) right);
         }
 
-        // Handle the operators for other types
+        // Handle string comparisons
+        if (left instanceof String && right instanceof String) {
+            return evaluateStrings((String) left, operator, (String) right);
+        }
+
+        // Handle equality operators for other types
         return switch (operator) {
             case "==" -> left.equals(right);
             case "!=" -> !left.equals(right);
@@ -108,8 +113,19 @@ public class Condition {
             case "<" -> leftDouble < rightDouble;
             case ">=" -> leftDouble >= rightDouble;
             case "<=" -> leftDouble <= rightDouble;
-            default ->
-                    throw new UnsupportedOperationException("Unsupported operator for numeric comparison: " + operator);
+            default -> throw new UnsupportedOperationException("Unsupported operator for numeric comparison: " + operator);
+        };
+    }
+
+    // Helper method to evaluate string comparisons
+    private boolean evaluateStrings(String left, String operator, String right) {
+        return switch (operator) {
+            case "==" -> left.equals(right);
+            case "!=" -> !left.equals(right);
+            case "contains" -> left.contains(right);
+            case "startsWith" -> left.startsWith(right);
+            case "endsWith" -> left.endsWith(right);
+            default -> throw new UnsupportedOperationException("Unsupported operator for string comparison: " + operator);
         };
     }
 
@@ -127,5 +143,4 @@ public class Condition {
             return "Error parsing. See console";
         }
     }
-
 }

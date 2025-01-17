@@ -9,13 +9,12 @@ package joserodpt.realscoreboard.api.scoreboard;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues © 2016-2024
+ * @author José Rodrigues © 2016-2025
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
-import org.bukkit.Bukkit;
 
 import java.util.Arrays;
 import java.util.Collections;

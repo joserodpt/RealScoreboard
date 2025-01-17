@@ -9,7 +9,7 @@ package joserodpt.realscoreboard.managers;
  *
  *
  * Licensed under the MIT License
- * @author José Rodrigues © 2016-2024
+ * @author José Rodrigues © 2016-2025
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
@@ -145,7 +145,7 @@ public class ScoreboardManagerAPI implements joserodpt.realscoreboard.api.manage
         });
 
         this.scoreboards.values().forEach(RScoreboard::init);
-        rsa.getLogger().info("Loaded " + this.scoreboards.keySet().size() + " scoreboards.");
+        rsa.getLogger().info("Loaded " + this.scoreboards.size() + " scoreboards.");
     }
 
     private void convertOldScoreboardsV1dot4() {
