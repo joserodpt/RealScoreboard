@@ -112,6 +112,11 @@
             <id>codemc-snapshots</id>
             <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
+        <repository>
+            <id>neziw-repo-releases</id>
+            <name>Reposilite Repository</name>
+            <url>https://repo.neziw.ovh/releases</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -169,11 +174,10 @@
             <version>1.10.3-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>joserodpt.realpermissions</groupId>
-            <artifactId>realpermissions</artifactId>
-            <version>0.3</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../RealPermissions.jar</systemPath>
+            <groupId>joserodpt</groupId>
+            <artifactId>realpermissions-api</artifactId>
+            <version>0.4.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
