@@ -13,6 +13,10 @@ package joserodpt.realscoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
+import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
+import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
+import dev.triumphteam.cmd.core.message.MessageKey;
+import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import joserodpt.realpermissions.api.RealPermissionsAPI;
 import joserodpt.realpermissions.api.pluginhook.ExternalPlugin;
 import joserodpt.realpermissions.api.pluginhook.ExternalPluginPermission;
@@ -28,12 +32,12 @@ import joserodpt.realscoreboard.listeners.PlayerListener;
 import joserodpt.realscoreboard.utils.Metrics;
 import joserodpt.realscoreboard.utils.UpdateChecker;
 import lombok.Getter;
-import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -90,17 +94,15 @@ public class RealScoreboardPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(SettingsGUI.getListener(), this);
         Bukkit.getPluginManager().registerEvents(GUIBuilder.getListener(), this);
 
-        CommandManager cm = new CommandManager(this);
+        BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(this);
 
-        cm.getCompletionHandler().register("#scoreboards", input -> realScoreboard.getScoreboardManagerAPI().getScoreboards().stream().map(RScoreboard::getName).collect(Collectors.toList()));
+        commandManager.registerSuggestion(SuggestionKey.of("#scoreboards"), (sender, context) -> realScoreboard.getScoreboardManagerAPI().getScoreboards().stream().map(RScoreboard::getName).collect(Collectors.toList()));
 
-        cm.getMessageHandler().register("cmd.no.permission", (sender) -> Text.send(sender, "&cYou don't have permission to execute this command!"));
-        cm.getMessageHandler().register("cmd.no.exists", (sender) -> Text.send(sender, "&cThe command you're trying to use doesn't exist."));
-        cm.getMessageHandler().register("cmd.wrong.usage", (sender) -> Text.send(sender, "&cWrong usage for the command!"));
-        cm.getMessageHandler().register("cmd.no.console", sender -> Text.send(sender, "&cCommand can only be executed by a player."));
+        commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> Text.send(sender, "&cYou don't have permission to execute this command!"));
+        commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> Text.send(sender, "&cThe command you're trying to run doesn't exist."));
+        commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> Text.send(sender, "&cWrong usage for the command!"));
 
-        cm.hideTabComplete(true);
-        cm.register(new RealScoreboardCommand(realScoreboard));
+        commandManager.registerCommand(new RealScoreboardCommand(realScoreboard));
 
         if (RSBConfig.file().getBoolean("Config.mcMMO-Support") && Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
             Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(realScoreboard), this);

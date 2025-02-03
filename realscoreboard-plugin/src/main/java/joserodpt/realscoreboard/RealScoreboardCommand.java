@@ -13,6 +13,12 @@ package joserodpt.realscoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
+import dev.triumphteam.cmd.core.BaseCommand;
+import dev.triumphteam.cmd.core.annotation.Command;
+import dev.triumphteam.cmd.core.annotation.Default;
+import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
@@ -21,16 +27,6 @@ import joserodpt.realscoreboard.api.utils.GUIBuilder;
 import joserodpt.realscoreboard.api.utils.Items;
 import joserodpt.realscoreboard.api.utils.Text;
 import joserodpt.realscoreboard.gui.SettingsGUI;
-import me.mattstudios.mf.annotations.Alias;
-import me.mattstudios.mf.annotations.Command;
-import me.mattstudios.mf.annotations.Completion;
-import me.mattstudios.mf.annotations.Default;
-import me.mattstudios.mf.annotations.Optional;
-import me.mattstudios.mf.annotations.Permission;
-import me.mattstudios.mf.annotations.SubCommand;
-import me.mattstudios.mf.annotations.WrongUsage;
-import me.mattstudios.mf.base.CommandBase;
-import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -41,9 +37,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-@Command("realscoreboard")
-@Alias({"rsb", "sb"})
-public class RealScoreboardCommand extends CommandBase {
+@Command(value="realscoreboard", alias={"rsb", "sb"})
+public class RealScoreboardCommand extends BaseCommand {
 
     private final String playerOnly = "Only players can use this command.";
 
@@ -72,8 +67,7 @@ public class RealScoreboardCommand extends CommandBase {
         commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &f" + RSBConfig.file().getString("Config.Reloaded")));
     }
 
-    @SubCommand("toggle")
-    @Alias("t")
+    @SubCommand(value = "toggle", alias = "t")
     @Permission("realscoreboard.toggle")
     @SuppressWarnings("unused")
     public void togglecmd(final CommandSender commandSender) {
@@ -86,8 +80,7 @@ public class RealScoreboardCommand extends CommandBase {
         }
     }
 
-    @SubCommand("toggleo")
-    @Alias({"to", "toggleother"})
+    @SubCommand(value = "toggleo", alias = {"to", "toggleother"})
     @Permission("realscoreboard.admin")
     @SuppressWarnings("unused")
     public void toggleothercmd(final CommandSender commandSender, final Player player) {
@@ -126,9 +119,7 @@ public class RealScoreboardCommand extends CommandBase {
         }
     }
 
-    @SubCommand("selectscoreboard")
-    @Alias("selectsb")
-    @Completion("#players")
+    @SubCommand(value = "selectscoreboard", alias = "selectsb")
     @Permission("realscoreboard.selectscoreboard")
     @SuppressWarnings("unused")
     public void selectscoreboardcmd(final CommandSender commandSender, Player target) {
@@ -157,12 +148,10 @@ public class RealScoreboardCommand extends CommandBase {
         }
     }
 
-    @SubCommand("setscoreboard")
-    @Alias("setsb")
-    @Completion({"#scoreboards", "#players"})
+    @SubCommand(value = "setscoreboard", alias = "setsb")
     @Permission("realscoreboard.setscoreboard")
     @SuppressWarnings("unused")
-    public void setscoreboardcmd(final CommandSender commandSender, final String name, Player target) {
+    public void setscoreboardcmd(final CommandSender commandSender, @Suggestion("#scoreboards") final String name, Player target) {
         RScoreboard sb = rsa.getScoreboardManagerAPI().getScoreboard(name);
         if (sb == null) {
             Text.send(commandSender, "Scoreboard not found with that name.");
@@ -182,39 +171,18 @@ public class RealScoreboardCommand extends CommandBase {
         }
     }
 
-    @SubCommand("announce")
-    @Alias("broadcast")
+    @SubCommand(value = "announce", alias = "broadcast")
     @Permission("realscoreboard.setscoreboard")
     @SuppressWarnings("unused")
-    @WrongUsage("&cUsage: /rsb announce <seconds> <player>")
-    public void announcecmd(final CommandSender commandSender, Integer seconds, @Optional Player p) {
-        if (commandSender instanceof Player myPlayer) {
-            new AnvilGUI.Builder()
-                    .onClose(stateSnapshot -> {
-                    })
-                    .onClick((slot, stateSnapshot) -> { // Either use sync or async variant, not both
-                        if (slot != AnvilGUI.Slot.OUTPUT) {
-                            return Collections.emptyList();
-                        }
-
-                        if (p == null) {
-                            rsa.getPlayerManagerAPI().getPlayerMap().values().forEach(rsbPlayer -> rsbPlayer.announce(stateSnapshot.getText(), seconds));
-                        } else {
-                            rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId()).announce(stateSnapshot.getText(), seconds);
-                        }
-
-                        return List.of(AnvilGUI.ResponseAction.close());
-                    })
-                    .preventClose()                                                    //prevents the inventory from being closed
-                    .text("Sample Message")                              //sets the text the GUI should start with
-                    .title("Enter announce message:")                                    //set the title of the GUI (only works in 1.14+)
-                    .plugin(rsa.getPlugin())                                          //set the plugin instance
-                    .open(myPlayer);
-        } else {
-            Text.send(commandSender, playerOnly);
+    public void announcecmd(final CommandSender commandSender, Integer seconds, List<String> args) {
+        if (args.isEmpty()) {
+            Text.send(commandSender, "&cUsage: /rsb announce <seconds> <message>");
+            return;
         }
-
-
+        String message = String.join(" ", args);
+        rsa.getPlayerManagerAPI().getPlayerMap().values().forEach(rsbPlayer -> rsbPlayer.announce(message, seconds));
+        Text.send(commandSender, "Announcement sent to all players.");
+        Text.send(commandSender, "Message: " + message);
     }
 
     @SubCommand("debug")

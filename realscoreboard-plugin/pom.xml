@@ -54,20 +54,7 @@
                             <pattern>fr.mrmicky.fastboard</pattern>
                             <shadedPattern>shaded.rsb.fastboard</shadedPattern>
                         </relocation>
-                        <relocation>
-                            <pattern>net.wesjd.anvilgui</pattern>
-                            <shadedPattern>joserodpt.realscoreboard.anvilgui</shadedPattern>
-                        </relocation>
                     </relocations>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludeDefaults>false</excludeDefaults>
-                            <includes>
-                                <include>net/wesjd/anvilgui/**</include>
-                            </includes>
-                        </filter>
-                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -117,6 +104,10 @@
             <name>Reposilite Repository</name>
             <url>https://repo.neziw.ovh/releases</url>
         </repository>
+        <repository>
+            <id>repo</id>
+            <url>https://repo.triumphteam.dev/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -126,11 +117,6 @@
             <version>${project.version}</version>
             <type>jar</type>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.mattstudios.utils</groupId>
-            <artifactId>matt-framework</artifactId>
-            <version>1.4.6</version>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
@@ -169,15 +155,16 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.wesjd</groupId>
-            <artifactId>anvilgui</artifactId>
-            <version>1.10.3-SNAPSHOT</version>
+            <groupId>joserodpt.realpermissions</groupId>
+            <artifactId>RealPermissions</artifactId>
+            <version>0.4.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../libs/RealPermissions.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>joserodpt</groupId>
-            <artifactId>realpermissions-api</artifactId>
-            <version>0.4.2</version>
-            <scope>provided</scope>
+            <groupId>dev.triumphteam</groupId>
+            <artifactId>triumph-cmd-bukkit</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
