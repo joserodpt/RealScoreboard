@@ -1,4 +1,4 @@
-package joserodpt.realscoreboard;
+package joserodpt.realscoreboard.commands;
 
 /*
  *   ____            _ ____                     _                         _
@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Command(value="realscoreboard", alias={"rsb", "sb"})
-public class RealScoreboardCommand extends BaseCommand {
+public class RealScoreboardCommand extends BaseCommandWA {
 
     private final String playerOnly = "Only players can use this command.";
 
@@ -82,6 +82,7 @@ public class RealScoreboardCommand extends BaseCommand {
 
     @SubCommand(value = "toggleo", alias = {"to", "toggleother"})
     @Permission("realscoreboard.admin")
+    @WrongUsage("&cUsage: /rsb toggleother <player>")
     @SuppressWarnings("unused")
     public void toggleothercmd(final CommandSender commandSender, final Player player) {
         if (player == null) {
@@ -121,6 +122,7 @@ public class RealScoreboardCommand extends BaseCommand {
 
     @SubCommand(value = "selectscoreboard", alias = "selectsb")
     @Permission("realscoreboard.selectscoreboard")
+    @WrongUsage("&cUsage: /rsb selectscoreboard <player>")
     @SuppressWarnings("unused")
     public void selectscoreboardcmd(final CommandSender commandSender, Player target) {
         if (commandSender instanceof Player p) {
@@ -150,6 +152,7 @@ public class RealScoreboardCommand extends BaseCommand {
 
     @SubCommand(value = "setscoreboard", alias = "setsb")
     @Permission("realscoreboard.setscoreboard")
+    @WrongUsage("&cUsage: /rsb setscoreboard <name> <player>")
     @SuppressWarnings("unused")
     public void setscoreboardcmd(final CommandSender commandSender, @Suggestion("#scoreboards") final String name, Player target) {
         RScoreboard sb = rsa.getScoreboardManagerAPI().getScoreboard(name);
@@ -173,6 +176,7 @@ public class RealScoreboardCommand extends BaseCommand {
 
     @SubCommand(value = "announce", alias = "broadcast")
     @Permission("realscoreboard.setscoreboard")
+    @WrongUsage("&cUsage: /rsb announce <seconds> <message>")
     @SuppressWarnings("unused")
     public void announcecmd(final CommandSender commandSender, Integer seconds, List<String> args) {
         if (args.isEmpty()) {

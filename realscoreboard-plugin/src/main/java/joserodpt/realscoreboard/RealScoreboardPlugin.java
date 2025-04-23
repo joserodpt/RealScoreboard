@@ -26,6 +26,8 @@ import joserodpt.realscoreboard.api.config.RSBScoreboards;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.utils.GUIBuilder;
 import joserodpt.realscoreboard.api.utils.Text;
+import joserodpt.realscoreboard.commands.BaseCommandWA;
+import joserodpt.realscoreboard.commands.RealScoreboardCommand;
 import joserodpt.realscoreboard.gui.SettingsGUI;
 import joserodpt.realscoreboard.listeners.McMMOScoreboardListener;
 import joserodpt.realscoreboard.listeners.PlayerListener;
@@ -44,7 +46,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RealScoreboardPlugin extends JavaPlugin {
@@ -98,11 +102,15 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
         commandManager.registerSuggestion(SuggestionKey.of("#scoreboards"), (sender, context) -> realScoreboard.getScoreboardManagerAPI().getScoreboards().stream().map(RScoreboard::getName).collect(Collectors.toList()));
 
+        Map<String, BaseCommandWA> commands = new HashMap<>();
+        registerCommand("realscoreboard", new RealScoreboardCommand(realScoreboard), commands, commandManager);
+
         commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> Text.send(sender, "&cYou don't have permission to execute this command!"));
         commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> Text.send(sender, "&cThe command you're trying to run doesn't exist."));
-        commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> Text.send(sender, "&cWrong usage for the command!"));
-
-        commandManager.registerCommand(new RealScoreboardCommand(realScoreboard));
+        commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) -> {
+            Bukkit.getLogger().warning(context.getCommand() + " " + context.getSubCommand());
+            Text.send(sender, commands.get(context.getCommand()).getWrongUsage(context.getSubCommand()));
+        });
 
         if (RSBConfig.file().getBoolean("Config.mcMMO-Support") && Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
             Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(realScoreboard), this);
@@ -137,6 +145,11 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
         Arrays.asList("Server version: " + getServerVersion(), "Finished loading in " + ((System.currentTimeMillis() - start) / 1000F) + " seconds.").forEach(s -> getLogger().info(s));
         getLogger().info("<------------------ RealScoreboard vPT ------------------>".replace("PT", this.getDescription().getVersion()));
+    }
+
+    private void registerCommand(String realmines, BaseCommandWA mineCMD, Map<String, BaseCommandWA> commands, BukkitCommandManager<CommandSender> commandManager) {
+        commands.put(realmines, mineCMD);
+        commandManager.registerCommand(mineCMD);
     }
 
     private void printASCII() {
