@@ -288,7 +288,13 @@ public class Placeholders implements IPlaceholders {
         return Text.color(s);
     }
 
-    private String placeholderAPI(Player p, String placeholders) {
-        return RealScoreboardPlugin.getInstance().isPlaceholderAPI() ? PlaceholderAPI.setPlaceholders(p, placeholders) : placeholders;
+    private String placeholderAPI(Player p, String placeholder) {
+        try {
+            return RealScoreboardPlugin.getInstance().isPlaceholderAPI() ? PlaceholderAPI.setPlaceholders(p, placeholder) : placeholder;
+        } catch (Exception e) {
+            RealScoreboardPlugin.getInstance().getLogger().warning("Error while processing PlaceholderAPI placeholder: " + placeholder);
+            RealScoreboardPlugin.getInstance().getLogger().warning(e.getMessage());
+            return "ERR " + placeholder;
+        }
     }
 }
