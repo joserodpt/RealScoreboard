@@ -7,17 +7,19 @@
     <parent>
         <groupId>joserodpt.realscoreboard</groupId>
         <artifactId>realscoreboard-parent</artifactId>
-        <version>1.5.6</version>
+        <version>1.5.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <version>1.5.7</version>
     <artifactId>realscoreboard-plugin</artifactId>
     <packaging>jar</packaging>
-
     <name>RealScoreboard-Plugin</name>
 
     <properties>
-        <java.version>1.8</java.version>
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>14</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -26,7 +28,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
+                <version>3.14.0</version>
                 <configuration>
                     <source>16</source>
                     <target>16</target>
@@ -35,12 +37,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.6.0</version>
                 <configuration>
                     <relocations>
                         <relocation>
-                            <pattern>me.mattstudios.mf</pattern>
-                            <shadedPattern>shaded.rsb.mf</shadedPattern>
+                            <pattern>dev.triumphteam.cmd</pattern>
+                            <shadedPattern>shaded.rsb.cmd</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>dev.dejvokep.boostedyaml</pattern>
@@ -100,11 +102,6 @@
             <url>https://repo.codemc.io/repository/maven-snapshots/</url>
         </repository>
         <repository>
-            <id>neziw-repo-releases</id>
-            <name>Reposilite Repository</name>
-            <url>https://repo.neziw.ovh/releases</url>
-        </repository>
-        <repository>
             <id>repo</id>
             <url>https://repo.triumphteam.dev/snapshots/</url>
         </repository>
@@ -112,11 +109,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>joserodpt.realscoreboard</groupId>
+            <groupId>joserodpt.realscoreboard.api</groupId>
             <artifactId>realscoreboard-api</artifactId>
-            <version>${project.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>1.5.7</version>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
@@ -164,7 +159,13 @@
         <dependency>
             <groupId>dev.triumphteam</groupId>
             <artifactId>triumph-cmd-bukkit</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.0.0-BETA-4</version>
+        </dependency>
+        <dependency>
+            <groupId>joserodpt.realscoreboard.api</groupId>
+            <artifactId>realscoreboard-api</artifactId>
+            <version>1.5.7</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

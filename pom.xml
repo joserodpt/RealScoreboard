@@ -6,7 +6,7 @@
 
     <groupId>joserodpt.realscoreboard</groupId>
     <artifactId>realscoreboard-parent</artifactId>
-    <version>1.5.6</version>
+    <version>1.5.7</version>
     <packaging>pom</packaging>
 
     <name>RealScoreboard-Parent</name>
@@ -53,17 +53,6 @@
         <url>https://github.com/joserodpt/RealScoreboard/issues</url>
     </issueManagement>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>neziw-repo</id>
-            <url>https://repo.neziw.ovh/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>neziw-repo</id>
-            <url>https://repo.neziw.ovh/releases</url>
-        </repository>
-    </distributionManagement>
-
     <modules>
         <module>realscoreboard-plugin</module>
         <module>realscoreboard-api</module>
@@ -75,5 +64,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
+        <java.version>14</java.version>
     </properties>
 </project>

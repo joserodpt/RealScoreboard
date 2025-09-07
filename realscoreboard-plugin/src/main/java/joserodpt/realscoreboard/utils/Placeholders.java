@@ -17,8 +17,8 @@ import joserodpt.realscoreboard.RealScoreboard;
 import joserodpt.realscoreboard.RealScoreboardPlugin;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.conditions.Condition;
-import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.config.RSBConfig;
+import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.utils.PingUtil;
 import joserodpt.realscoreboard.api.utils.Text;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -190,6 +190,11 @@ public class Placeholders implements IPlaceholders {
                         break;
                     case "day":
                         s = s.replace("%" + placeholder + "%", this.day());
+                        break;
+                    case "worlddays":
+                        double days = p.getWorld().getFullTime() / 24000.0;
+                        double roundedDays = Math.round(days * 10.0) / 10.0;
+                        s = s.replace("%" + placeholder + "%", String.valueOf(roundedDays));
                         break;
                     case "serverip":
                         s = s.replace("%" + placeholder + "%", this.serverIP());
