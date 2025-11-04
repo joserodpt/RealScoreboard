@@ -14,7 +14,6 @@ package joserodpt.realscoreboard.commands;
  */
 
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
-import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
 import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
@@ -37,7 +36,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-@Command(value="realscoreboard", alias={"rsb", "sb"})
+@Command(value = "realscoreboard", alias = {"rsb", "sb"})
 public class RealScoreboardCommand extends BaseCommandWA {
 
     private final String playerOnly = "Only players can use this command.";
@@ -172,6 +171,26 @@ public class RealScoreboardCommand extends BaseCommandWA {
             rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
             Text.send(commandSender, name + " scoreboard applied to " + target.getName());
         }
+    }
+
+    @SubCommand(value = "setscoreboardall", alias = "setsball")
+    @Permission("realscoreboard.setscoreboard")
+    @WrongUsage("&cUsage: /rsb setsball <name>")
+    @SuppressWarnings("unused")
+    public void setscoreboardallcmd(final CommandSender commandSender, @Suggestion("#scoreboards") final String name) {
+        RScoreboard sb = rsa.getScoreboardManagerAPI().getScoreboard(name);
+        if (sb == null) {
+            Text.send(commandSender, "Scoreboard not found with that name.");
+            return;
+        }
+
+        Bukkit.getOnlinePlayers().forEach(target -> {
+            if (rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).getScoreboard() != sb)
+                rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
+        });
+
+
+        Text.send(commandSender, name + " scoreboard applied to all players. ");
     }
 
     @SubCommand(value = "announce", alias = "broadcast")
