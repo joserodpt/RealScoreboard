@@ -1,7 +1,7 @@
 #✦------------------------------------------------------✦
 #|                      Main Config                     |
 #✦------------------------------------------------------✦
-# RealScoreboard created by joserodpt and maintained by Neziw
+# RealScoreboard created by joserodpt
 #
 # Conditions: custom defined conditions that show when a condition is met or not.
 #  > Example: '%xp% > 3' - This will check if the player has more than 3 XP.
@@ -17,7 +17,7 @@
 #  > Single Color: {#69ffde}
 #  > Gradient: {#ffffff>}Gradient!{#00aeff<}
 #  > Generate Gradients here: https://rgb.birdflop.com/
-#  API for Developers: https://github.com/joserodpt/RealScoreboard/blob/master/api.md
+#  API for Developers: https://github.com/joserodpt/RealScoreboard/blob/master/api_usage.md
 Debug: false
 Config:
   Prefix: '&fReal&dScoreboard &7| &r'
