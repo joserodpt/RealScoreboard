@@ -153,7 +153,7 @@
             <artifactId>RealPermissions</artifactId>
             <version>0.4.2</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../libs/RealPermissions.jar</systemPath>
+            <systemPath>${pom.basedir}/../libs/RealPermissions.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>dev.triumphteam</groupId>
