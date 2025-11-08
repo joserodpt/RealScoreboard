@@ -109,9 +109,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>joserodpt.realscoreboard.api</groupId>
+            <groupId>com.github.joserodpt.api</groupId>
             <artifactId>realscoreboard-api</artifactId>
-            <version>1.5.7</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
@@ -139,9 +139,8 @@
         <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
-            <version>2.1.176</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../realscoreboard-plugin/libs/mcMMO-2.1.176.jar</systemPath>
+            <version>2.2.004</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -160,12 +159,6 @@
             <groupId>dev.triumphteam</groupId>
             <artifactId>triumph-cmd-bukkit</artifactId>
             <version>2.0.0-BETA-4</version>
-        </dependency>
-        <dependency>
-            <groupId>joserodpt.realscoreboard.api</groupId>
-            <artifactId>realscoreboard-api</artifactId>
-            <version>1.5.7</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
