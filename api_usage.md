@@ -31,7 +31,7 @@ If you need access to internals you need to add plugin dependency yourself or us
 * Maven
 ```xml
 <dependency>
-    <groupId>com.github.joserodpt</groupId>
+    <groupId>com.github.joserodpt.RealScoreboard</groupId>
     <artifactId>realscoreboard-api</artifactId>
     <version>VERSION</version>
 </dependency>
@@ -39,7 +39,7 @@ If you need access to internals you need to add plugin dependency yourself or us
 
 * Gradle (Groovy)
 ```groovy
-implementation 'com.github.joserodpt:realscoreboard-api:VERSION'
+implementation 'com.github.joserodpt.RealScoreboard:realscoreboard-api:VERSION'
 ```
 
 ## 3. Usage

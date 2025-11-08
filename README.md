@@ -44,7 +44,7 @@ Welcome to **RealScoreboard!** This Scoreboard plugin was created to be efficien
 ----
 
 ## Links
-* [API](https://github.com/joserodpt/RealScoreboard/blob/master/api.md)
+* [API](https://github.com/joserodpt/RealScoreboard/blob/master/api_usage.md)
 * [SpigotMC](https://www.spigotmc.org/resources/realscoreboard-1-13-to-1-19-2.22928/)
 * [Discord Server](https://discord.gg/t7gfnYZKy8)
 * [bStats](https://bstats.org/plugin/bukkit/RealScoreboard/10080)
