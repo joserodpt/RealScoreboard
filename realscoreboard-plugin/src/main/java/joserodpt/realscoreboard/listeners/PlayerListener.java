@@ -5,6 +5,7 @@ import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
+import joserodpt.realscoreboard.managers.ExternalScoreboardManagerAPI;
 import joserodpt.realscoreboard.api.utils.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,6 +33,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void leave(PlayerQuitEvent e) {
+        //the plugin that pushed them a board may never get around to clearing it
+        ((ExternalScoreboardManagerAPI) rsa.getExternalScoreboardManagerAPI()).forget(e.getPlayer());
+
         RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(e.getPlayer().getUniqueId());
         if (hook != null) {
             hook.stopScoreboard();

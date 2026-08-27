@@ -30,6 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -64,6 +65,28 @@ public class RealScoreboardCommand extends BaseCommandWA {
     public void reloadcmd(final CommandSender commandSender) {
         this.rsa.reload();
         commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &f" + RSBConfig.file().getString("Config.Reloaded")));
+    }
+
+    @SubCommand("hooks")
+    @Permission("realscoreboard.admin")
+    @SuppressWarnings("unused")
+    public void hookscmd(final CommandSender commandSender) {
+        Collection<Plugin> hooks = this.rsa.getExternalScoreboardManagerAPI().getHooks();
+        if (hooks.isEmpty()) {
+            Text.send(commandSender, "&fReal&dScoreboard &7| &fNo plugins are hooked into RealScoreboard.");
+            return;
+        }
+
+        Text.send(commandSender, "&fHooked plugins:");
+        for (Plugin hook : hooks) {
+            //a hook may be registered and still not be showing anything right now
+            long boards = Bukkit.getOnlinePlayers().stream()
+                    .filter(online -> hook.equals(this.rsa.getExternalScoreboardManagerAPI().getOwner(online)))
+                    .count();
+
+            Text.send(commandSender, "&7- &f" + hook.getName() + " &7[&fv" + hook.getDescription().getVersion()
+                    + "&7] &f" + boards + " &7scoreboard" + (boards == 1 ? "" : "s"));
+        }
     }
 
     @SubCommand(value = "toggle", alias = "t")

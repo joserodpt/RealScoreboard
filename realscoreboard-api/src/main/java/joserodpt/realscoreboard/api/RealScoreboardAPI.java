@@ -15,6 +15,7 @@ package joserodpt.realscoreboard.api;
 
 import com.google.common.base.Preconditions;
 import joserodpt.realscoreboard.api.conditions.ConditionManager;
+import joserodpt.realscoreboard.api.managers.ExternalScoreboardManagerAPI;
 import joserodpt.realscoreboard.api.managers.AnimationManagerAPI;
 import joserodpt.realscoreboard.api.managers.DatabaseManagerAPI;
 import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
@@ -55,6 +56,13 @@ public abstract class RealScoreboardAPI {
      * @return scoreboard manager instance
      */
     public abstract ScoreboardManagerAPI getScoreboardManagerAPI();
+
+    /**
+     * Get the registry other plugins use to take the scoreboard over
+     *
+     * @return external scoreboard manager instance
+     */
+    public abstract ExternalScoreboardManagerAPI getExternalScoreboardManagerAPI();
 
     /**
      * Gets DatabaseManager from API instance

@@ -20,6 +20,7 @@ import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.managers.DatabaseManagerAPI;
+import joserodpt.realscoreboard.api.managers.ExternalScoreboardManagerAPI;
 import joserodpt.realscoreboard.api.managers.PlayerManagerAPI;
 import joserodpt.realscoreboard.api.managers.ScoreboardManagerAPI;
 import joserodpt.realscoreboard.api.conditions.ConditionManager;
@@ -36,6 +37,7 @@ public class RealScoreboard extends RealScoreboardAPI {
     private final joserodpt.realscoreboard.managers.ScoreboardManagerAPI scoreboardManager;
     private final joserodpt.realscoreboard.managers.PlayerManagerAPI playerManager;
     private final AnimationManagerAPI animationManager;
+    private final joserodpt.realscoreboard.managers.ExternalScoreboardManagerAPI externalScoreboardManager;
     private final ConditionManager conditionManager;
     private final Logger logger;
     private final IPlaceholders placeholders;
@@ -45,6 +47,7 @@ public class RealScoreboard extends RealScoreboardAPI {
         this.plugin = plugin;
         this.logger = plugin.getLogger();
         this.playerManager = new joserodpt.realscoreboard.managers.PlayerManagerAPI(this);
+        this.externalScoreboardManager = new joserodpt.realscoreboard.managers.ExternalScoreboardManagerAPI(this);
         this.conditionManager = new ConditionManager(this);
         this.placeholders = new Placeholders(this);
         this.scoreboardManager = new joserodpt.realscoreboard.managers.ScoreboardManagerAPI(this, conditionManager);
@@ -60,6 +63,11 @@ public class RealScoreboard extends RealScoreboardAPI {
     @Override
     public ScoreboardManagerAPI getScoreboardManagerAPI() {
         return this.scoreboardManager;
+    }
+
+    @Override
+    public ExternalScoreboardManagerAPI getExternalScoreboardManagerAPI() {
+        return this.externalScoreboardManager;
     }
 
     @Override

@@ -7,14 +7,14 @@
     <parent>
         <groupId>com.github.joserodpt</groupId>
         <artifactId>realscoreboard-parent</artifactId>
-        <version>1.5.8</version>
+        <version>1.6</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>RealScoreboard-API</name>
     <groupId>com.github.joserodpt.api</groupId>
     <artifactId>realscoreboard-api</artifactId>
-    <version>1.5.8</version>
+    <version>1.6</version>
     <packaging>jar</packaging>
 
     <properties>
