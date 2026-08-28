@@ -19,9 +19,21 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.regex.Pattern;
+
 @Getter
 @Setter
 public class Condition {
+    private static final Pattern NUMBER_PATTERN = Pattern.compile(
+            "[+-]?(?:" +
+                    "NaN|Infinity|" +
+                    "(?:" +
+                    "(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?|" +
+                    "0[xX](?:[0-9a-fA-F]+(?:\\.[0-9a-fA-F]*)?|\\.[0-9a-fA-F]+)[pP][+-]?[0-9]+" +
+                    ")[fFdD]?" +
+                    ")"
+    );
+
     private String condition, met, notMet;
     private RealScoreboardAPI rsa;
 
@@ -54,20 +66,15 @@ public class Condition {
         return evaluate(left, operator, right);
     }
 
-    // Helper method to parse operands as integers, doubles, booleans, or strings
+    // Helper method to parse operands as numbers, booleans, or strings
     private Object parseValue(String value) {
-        // Try to parse as an integer
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            // Not an integer, continue
+        Integer integer = parseInteger(value);
+        if (integer != null) {
+            return integer;
         }
 
-        // Try to parse as a double
-        try {
+        if (NUMBER_PATTERN.matcher(value).matches()) {
             return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            // Not a double, continue
         }
 
         // Try to parse as a boolean
@@ -77,6 +84,43 @@ public class Condition {
 
         // Fallback to string
         return value;
+    }
+
+    private Integer parseInteger(String value) {
+        if (value == null || value.isEmpty()) {
+            return null;
+        }
+
+        int index = 0;
+        boolean negative = false;
+        char first = value.charAt(0);
+        if (first == '-' || first == '+') {
+            negative = first == '-';
+            index++;
+        }
+
+        if (index == value.length()) {
+            return null;
+        }
+
+        int limit = negative ? Integer.MIN_VALUE : -Integer.MAX_VALUE;
+        int multiplicationLimit = limit / 10;
+        int result = 0;
+
+        while (index < value.length()) {
+            int digit = Character.digit(value.charAt(index++), 10);
+            if (digit < 0 || result < multiplicationLimit) {
+                return null;
+            }
+
+            result *= 10;
+            if (result < limit + digit) {
+                return null;
+            }
+            result -= digit;
+        }
+
+        return negative ? result : -result;
     }
 
     // Helper method to evaluate the expression based on the operator
