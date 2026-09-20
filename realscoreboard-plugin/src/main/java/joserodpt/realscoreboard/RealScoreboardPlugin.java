@@ -13,21 +13,15 @@ package joserodpt.realscoreboard;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
-import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
-import dev.triumphteam.cmd.core.message.MessageKey;
-import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import joserodpt.realpermissions.api.RealPermissionsAPI;
 import joserodpt.realpermissions.api.pluginhook.ExternalPlugin;
 import joserodpt.realpermissions.api.pluginhook.ExternalPluginPermission;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
-import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.api.utils.GUIBuilder;
 import joserodpt.realscoreboard.api.utils.Text;
-import joserodpt.realscoreboard.commands.BaseCommandWA;
-import joserodpt.realscoreboard.commands.RealScoreboardCommand;
+import joserodpt.realscoreboard.commands.RSBCommandManager;
 import joserodpt.realscoreboard.gui.SettingsGUI;
 import joserodpt.realscoreboard.listeners.McMMOScoreboardListener;
 import joserodpt.realscoreboard.listeners.PlayerListener;
@@ -39,17 +33,13 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RealScoreboardPlugin extends JavaPlugin {
 
@@ -98,19 +88,8 @@ public class RealScoreboardPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(SettingsGUI.getListener(), this);
         Bukkit.getPluginManager().registerEvents(GUIBuilder.getListener(), this);
 
-        BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(this);
-
-        commandManager.registerSuggestion(SuggestionKey.of("#scoreboards"), (sender, context) -> realScoreboard.getScoreboardManagerAPI().getScoreboards().stream().map(RScoreboard::getName).collect(Collectors.toList()));
-
-        Map<String, BaseCommandWA> commands = new HashMap<>();
-        registerCommand("realscoreboard", new RealScoreboardCommand(realScoreboard), commands, commandManager);
-
-        commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> Text.send(sender, "&cYou don't have permission to execute this command!"));
-        commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> Text.send(sender, "&cThe command you're trying to run doesn't exist."));
-        commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) -> {
-            Bukkit.getLogger().warning(context.getCommand() + " " + context.getSubCommand());
-            Text.send(sender, commands.get(context.getCommand()).getWrongUsage(context.getSubCommand()));
-        });
+        //Lamp owns the command tree: the suggestions, the permissions and the error messages
+        new RSBCommandManager(this, realScoreboard);
 
         if (RSBConfig.file().getBoolean("Config.mcMMO-Support") && Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
             Bukkit.getPluginManager().registerEvents(new McMMOScoreboardListener(realScoreboard), this);
@@ -145,11 +124,6 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
         Arrays.asList("Server version: " + getServerVersion(), "Finished loading in " + ((System.currentTimeMillis() - start) / 1000F) + " seconds.").forEach(s -> getLogger().info(s));
         getLogger().info("<------------------ RealScoreboard vPT ------------------>".replace("PT", this.getDescription().getVersion()));
-    }
-
-    private void registerCommand(String realmines, BaseCommandWA mineCMD, Map<String, BaseCommandWA> commands, BukkitCommandManager<CommandSender> commandManager) {
-        commands.put(realmines, mineCMD);
-        commandManager.registerCommand(mineCMD);
     }
 
     private void printASCII() {

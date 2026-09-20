@@ -13,11 +13,6 @@ package joserodpt.realscoreboard.commands;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-import dev.triumphteam.cmd.bukkit.annotation.Permission;
-import dev.triumphteam.cmd.core.annotation.Command;
-import dev.triumphteam.cmd.core.annotation.Default;
-import dev.triumphteam.cmd.core.annotation.SubCommand;
-import dev.triumphteam.cmd.core.annotation.Suggestion;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
@@ -31,16 +26,19 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import revxrsal.commands.annotation.Command;
+import revxrsal.commands.annotation.CommandPlaceholder;
+import revxrsal.commands.annotation.Single;
+import revxrsal.commands.annotation.Subcommand;
+import revxrsal.commands.annotation.Usage;
+import revxrsal.commands.bukkit.annotation.CommandPermission;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
-@Command(value = "realscoreboard", alias = {"rsb", "sb"})
-public class RealScoreboardCommand extends BaseCommandWA {
-
-    private final String playerOnly = "Only players can use this command.";
+@Command({"realscoreboard", "rsb", "sb"})
+public class RealScoreboardCommand {
 
     private final RealScoreboardAPI rsa;
 
@@ -48,7 +46,7 @@ public class RealScoreboardCommand extends BaseCommandWA {
         this.rsa = rsa;
     }
 
-    @Default
+    @CommandPlaceholder
     @SuppressWarnings("unused")
     public void defaultcmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p && (p.isOp() || p.hasPermission("realscoreboard.admin"))) {
@@ -59,21 +57,21 @@ public class RealScoreboardCommand extends BaseCommandWA {
         }
     }
 
-    @SubCommand("reload")
-    @Permission("realscoreboard.admin")
+    @Subcommand("reload")
+    @CommandPermission("realscoreboard.admin")
     @SuppressWarnings("unused")
     public void reloadcmd(final CommandSender commandSender) {
         this.rsa.reload();
         commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &f" + RSBConfig.file().getString("Config.Reloaded")));
     }
 
-    @SubCommand("hooks")
-    @Permission("realscoreboard.admin")
+    @Subcommand("hooks")
+    @CommandPermission("realscoreboard.admin")
     @SuppressWarnings("unused")
     public void hookscmd(final CommandSender commandSender) {
         Collection<Plugin> hooks = this.rsa.getExternalScoreboardManagerAPI().getHooks();
         if (hooks.isEmpty()) {
-            Text.send(commandSender, "&fReal&dScoreboard &7| &fNo plugins are hooked into RealScoreboard.");
+            Text.send(commandSender, "&fNo plugins are hooked into RealScoreboard.");
             return;
         }
 
@@ -89,102 +87,73 @@ public class RealScoreboardCommand extends BaseCommandWA {
         }
     }
 
-    @SubCommand(value = "toggle", alias = "t")
-    @Permission("realscoreboard.toggle")
+    @Subcommand({"toggle", "t"})
+    @CommandPermission("realscoreboard.toggle")
     @SuppressWarnings("unused")
-    public void togglecmd(final CommandSender commandSender) {
-        if (commandSender instanceof Player p) {
-            RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
-            hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
-            Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
-        } else {
-            Text.send(commandSender, playerOnly);
-        }
+    public void togglecmd(final Player p) {
+        RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
+        hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
+        Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
     }
 
-    @SubCommand(value = "toggleo", alias = {"to", "toggleother"})
-    @Permission("realscoreboard.admin")
-    @WrongUsage("&cUsage: /rsb toggleother <player>")
+    @Subcommand({"toggleo", "to", "toggleother"})
+    @CommandPermission("realscoreboard.admin")
+    @Usage("&cUsage: /rsb toggleother <player>")
     @SuppressWarnings("unused")
     public void toggleothercmd(final CommandSender commandSender, final Player player) {
-        if (player == null) {
-            Text.send(commandSender, "Player not found.");
-            return;
-        }
         RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(player.getUniqueId());
         hook.setRealScoreboardVisible(!hook.isRealScoreboardVisible());
         Text.send(commandSender, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle." + (hook.isRealScoreboardVisible() ? "ON" : "OFF")));
     }
 
-    @SubCommand("off")
-    @Permission("realscoreboard.toggle")
+    @Subcommand("off")
+    @CommandPermission("realscoreboard.toggle")
     @SuppressWarnings("unused")
-    public void offcmd(final CommandSender commandSender) {
-        if (commandSender instanceof Player p) {
-            RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
-            hook.setRealScoreboardVisible(false);
-            Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
-        } else {
-            Text.send(commandSender, playerOnly);
-        }
+    public void offcmd(final Player p) {
+        RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
+        hook.setRealScoreboardVisible(false);
+        Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.OFF"));
     }
 
-    @SubCommand("on")
-    @Permission("realscoreboard.toggle")
+    @Subcommand("on")
+    @CommandPermission("realscoreboard.toggle")
     @SuppressWarnings("unused")
-    public void oncmd(final CommandSender commandSender) {
-        if (commandSender instanceof Player p) {
-            RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
-            hook.setRealScoreboardVisible(true);
-            Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
-        } else {
-            Text.send(commandSender, playerOnly);
-        }
+    public void oncmd(final Player p) {
+        RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(p.getUniqueId());
+        hook.setRealScoreboardVisible(true);
+        Text.send(p, RSBConfig.file().getString("Config.Messages.Scoreboard-Toggle.ON"));
     }
 
-    @SubCommand(value = "selectscoreboard", alias = "selectsb")
-    @Permission("realscoreboard.selectscoreboard")
-    @WrongUsage("&cUsage: /rsb selectscoreboard <player>")
+    @Subcommand({"selectscoreboard", "selectsb"})
+    @CommandPermission("realscoreboard.selectscoreboard")
+    @Usage("&cUsage: /rsb selectscoreboard <player>")
     @SuppressWarnings("unused")
-    public void selectscoreboardcmd(final CommandSender commandSender, Player target) {
-        if (commandSender instanceof Player p) {
-            if (target == null) {
-                Text.send(commandSender, "Player not found.");
-                return;
-            }
+    public void selectscoreboardcmd(final Player p, final Player target) {
+        final GUIBuilder inventory = new GUIBuilder("Choose board for " + target.getName(), 27, target.getUniqueId());
 
-            final GUIBuilder inventory = new GUIBuilder("Choose board for " + target.getName(), 27, target.getUniqueId());
-
-            final Collection<RScoreboard> list = rsa.getScoreboardManagerAPI().getScoreboards();
-            int i = 0;
-            for (RScoreboard sb : list) {
-                inventory.addItem(e -> {
-                    target.closeInventory();
-                    rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
-                    Text.send(p, "Scoreboard &b" + sb.getName() + " &fapplied to &b" + target.getName());
-                }, Items.createItemLore(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
-                ++i;
-            }
-
-            inventory.openInventory(target);
-        } else {
-            Text.send(commandSender, playerOnly);
+        final Collection<RScoreboard> list = rsa.getScoreboardManagerAPI().getScoreboards();
+        int i = 0;
+        for (RScoreboard sb : list) {
+            inventory.addItem(e -> {
+                target.closeInventory();
+                rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
+                Text.send(p, "Scoreboard &b" + sb.getName() + " &fapplied to &b" + target.getName());
+            }, Items.createItemLore(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
+            ++i;
         }
+
+        inventory.openInventory(target);
     }
 
-    @SubCommand(value = "setscoreboard", alias = "setsb")
-    @Permission("realscoreboard.setscoreboard")
-    @WrongUsage("&cUsage: /rsb setscoreboard <name> <player>")
+    @Subcommand({"setscoreboard", "setsb"})
+    @CommandPermission("realscoreboard.setscoreboard")
+    @Usage("&cUsage: /rsb setscoreboard <name> <player>")
     @SuppressWarnings("unused")
-    public void setscoreboardcmd(final CommandSender commandSender, @Suggestion("#scoreboards") final String name, Player target) {
+    public void setscoreboardcmd(final CommandSender commandSender, @SuggestFrom(RSBSuggestion.SCOREBOARDS) @Single final String name,
+                                 final Player target) {
         RScoreboard sb = rsa.getScoreboardManagerAPI().getScoreboard(name);
         if (sb == null) {
             Text.send(commandSender, "Scoreboard not found with that name.");
-            return;
-        }
-
-        if (target == null) {
-            Text.send(commandSender, "Player not found.");
             return;
         }
 
@@ -196,11 +165,11 @@ public class RealScoreboardCommand extends BaseCommandWA {
         }
     }
 
-    @SubCommand(value = "setscoreboardall", alias = "setsball")
-    @Permission("realscoreboard.setscoreboard")
-    @WrongUsage("&cUsage: /rsb setsball <name>")
+    @Subcommand({"setscoreboardall", "setsball"})
+    @CommandPermission("realscoreboard.setscoreboard")
+    @Usage("&cUsage: /rsb setsball <name>")
     @SuppressWarnings("unused")
-    public void setscoreboardallcmd(final CommandSender commandSender, @Suggestion("#scoreboards") final String name) {
+    public void setscoreboardallcmd(final CommandSender commandSender, @SuggestFrom(RSBSuggestion.SCOREBOARDS) @Single final String name) {
         RScoreboard sb = rsa.getScoreboardManagerAPI().getScoreboard(name);
         if (sb == null) {
             Text.send(commandSender, "Scoreboard not found with that name.");
@@ -216,23 +185,22 @@ public class RealScoreboardCommand extends BaseCommandWA {
         Text.send(commandSender, name + " scoreboard applied to all players. ");
     }
 
-    @SubCommand(value = "announce", alias = "broadcast")
-    @Permission("realscoreboard.setscoreboard")
-    @WrongUsage("&cUsage: /rsb announce <seconds> <message>")
+    /**
+     * {@code message} is the last String parameter, so Lamp hands it the rest of the line rather
+     * than a single word, which is what the old {@code List<String>} argument did.
+     */
+    @Subcommand({"announce", "broadcast"})
+    @CommandPermission("realscoreboard.setscoreboard")
+    @Usage("&cUsage: /rsb announce <seconds> <message>")
     @SuppressWarnings("unused")
-    public void announcecmd(final CommandSender commandSender, Integer seconds, List<String> args) {
-        if (args.isEmpty()) {
-            Text.send(commandSender, "&cUsage: /rsb announce <seconds> <message>");
-            return;
-        }
-        String message = String.join(" ", args);
+    public void announcecmd(final CommandSender commandSender, final Integer seconds, final String message) {
         rsa.getPlayerManagerAPI().getPlayerMap().values().forEach(rsbPlayer -> rsbPlayer.announce(message, seconds));
         Text.send(commandSender, "Announcement sent to all players.");
         Text.send(commandSender, "Message: " + message);
     }
 
-    @SubCommand("debug")
-    @Permission("realscoreboard.admin")
+    @Subcommand("debug")
+    @CommandPermission("realscoreboard.admin")
     @SuppressWarnings("unused")
     public void debugcmd(final CommandSender commandSender) {
         Text.send(commandSender, Arrays.asList("", "", Text.getPrefix(),

@@ -3,7 +3,7 @@ set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODULE_DIR="$PROJECT_DIR/realscoreboard-plugin"
-TARGET_DIR="/Users/jose/Desktop/Files/dev/plugins"
+TARGET_DIR="/Users/jose/Desktop/dev/plugins"
 
 if ! command -v mvn >/dev/null 2>&1; then
   echo "Error: Maven is not installed. Install it with: brew install maven"
