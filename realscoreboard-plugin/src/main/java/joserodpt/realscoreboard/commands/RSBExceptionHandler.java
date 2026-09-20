@@ -17,7 +17,9 @@ import joserodpt.realscoreboard.api.utils.Text;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 import revxrsal.commands.bukkit.exception.BukkitExceptionHandler;
+import revxrsal.commands.bukkit.exception.EmptyEntitySelectorException;
 import revxrsal.commands.bukkit.exception.InvalidPlayerException;
+import revxrsal.commands.bukkit.exception.MalformedEntitySelectorException;
 import revxrsal.commands.bukkit.exception.SenderNotPlayerException;
 import revxrsal.commands.command.ExecutableCommand;
 import revxrsal.commands.exception.MissingArgumentException;
@@ -58,6 +60,20 @@ public class RSBExceptionHandler extends BukkitExceptionHandler {
     @Override
     public void onInvalidPlayer(final InvalidPlayerException e, final BukkitCommandActor actor) {
         Text.send(actor.sender(), "&cPlayer not found.");
+    }
+
+    /**
+     * A selector that matched nobody, such as {@code @a} on an empty server. Reported like a
+     * missing player, because from the caller's side that is what happened.
+     */
+    @Override
+    public void onEmptyEntitySelector(final EmptyEntitySelectorException e, final BukkitCommandActor actor) {
+        Text.send(actor.sender(), "&cNo players matched &f" + e.input() + "&c.");
+    }
+
+    @Override
+    public void onMalformedEntitySelector(final MalformedEntitySelectorException e, final BukkitCommandActor actor) {
+        Text.send(actor.sender(), "&cInvalid selector &f" + e.input() + "&c: " + e.errorMessage());
     }
 
     @Override

@@ -32,6 +32,7 @@ import revxrsal.commands.annotation.Single;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
+import revxrsal.commands.bukkit.parameters.EntitySelector;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -145,44 +146,44 @@ public class RealScoreboardCommand {
         inventory.openInventory(target);
     }
 
+    /**
+     * {@code targets} is a vanilla selector, so {@code @a} applies the board to everyone, which is
+     * what the old {@code /rsb setsball} did. A bare player name still works and reads the same as
+     * it always did.
+     */
     @Subcommand({"setscoreboard", "setsb"})
     @CommandPermission("realscoreboard.setscoreboard")
-    @Usage("&cUsage: /rsb setscoreboard <name> <player>")
+    @Usage("&cUsage: /rsb setscoreboard <name> <player|@a>")
     @SuppressWarnings("unused")
     public void setscoreboardcmd(final CommandSender commandSender, @SuggestFrom(RSBSuggestion.SCOREBOARDS) @Single final String name,
-                                 final Player target) {
+                                 final EntitySelector<Player> targets) {
         RScoreboard sb = rsa.getScoreboardManagerAPI().getScoreboard(name);
         if (sb == null) {
             Text.send(commandSender, "Scoreboard not found with that name.");
             return;
         }
 
-        if (rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).getScoreboard() == sb) {
-            Text.send(commandSender, target.getName() + " &calready has that scoreboard applied.");
-        } else {
-            rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
-            Text.send(commandSender, name + " scoreboard applied to " + target.getName());
+        int applied = 0;
+        for (Player target : targets) {
+            RSBPlayer hook = rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId());
+            if (hook.getScoreboard() == sb) {
+                continue;
+            }
+            hook.setScoreboard(sb);
+            ++applied;
         }
-    }
 
-    @Subcommand({"setscoreboardall", "setsball"})
-    @CommandPermission("realscoreboard.setscoreboard")
-    @Usage("&cUsage: /rsb setsball <name>")
-    @SuppressWarnings("unused")
-    public void setscoreboardallcmd(final CommandSender commandSender, @SuggestFrom(RSBSuggestion.SCOREBOARDS) @Single final String name) {
-        RScoreboard sb = rsa.getScoreboardManagerAPI().getScoreboard(name);
-        if (sb == null) {
-            Text.send(commandSender, "Scoreboard not found with that name.");
+        if (targets.size() == 1) {
+            Player only = targets.get(0);
+            if (applied == 0) {
+                Text.send(commandSender, only.getName() + " &calready has that scoreboard applied.");
+            } else {
+                Text.send(commandSender, name + " scoreboard applied to " + only.getName());
+            }
             return;
         }
 
-        Bukkit.getOnlinePlayers().forEach(target -> {
-            if (rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).getScoreboard() != sb)
-                rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
-        });
-
-
-        Text.send(commandSender, name + " scoreboard applied to all players. ");
+        Text.send(commandSender, name + " scoreboard applied to " + applied + " player" + (applied == 1 ? "" : "s") + ".");
     }
 
     /**
