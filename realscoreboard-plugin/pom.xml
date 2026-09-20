@@ -17,9 +17,7 @@
     <name>RealScoreboard-Plugin</name>
 
     <properties>
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
-        <java.version>14</java.version>
+        <maven.compiler.release>16</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lamp.version>4.0.0-rc.18</lamp.version>
     </properties>
@@ -31,8 +29,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
                 <configuration>
-                    <source>16</source>
-                    <target>16</target>
+                    <release>${maven.compiler.release}</release>
                     <compilerArgs>
                         <!-- Lamp names command arguments after the method parameters, so the
                              usage strings and <name> placeholders depend on these surviving. -->
