@@ -13,93 +13,38 @@ package joserodpt.realscoreboard.api.utils;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import joserodpt.realscoreboard.api.RealScoreboardAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.plugin.Plugin;
 
-public class PlayerInput implements Listener {
+import java.util.Arrays;
 
-	private static final Map<UUID, PlayerInput> inputs = new HashMap<>();
-	private final UUID uuid;
-	private final List<String> texts = Text
-			.color(Arrays.asList("&l&9Type in chat your input", "&fType &4cancel &fto cancel"));
-	private final InputRunnable runGo;
-	private final InputRunnable runCancel;
-	private final BukkitTask taskId;
-	private final Boolean inputMode;
+/**
+ * Asks a player to type something, through RealUtils' prompt: a dialog's text box on servers that
+ * have them, the chat everywhere else. Kept here, with its own constructor and
+ * {@link InputRunnable}, so every screen that asks for input is unchanged.
+ */
+public class PlayerInput {
 
-	public PlayerInput(Player p, InputRunnable correct, InputRunnable cancel) {
-		this.uuid = p.getUniqueId();
-		p.closeInventory();
-		this.inputMode = true;
-		this.runGo = correct;
-		this.runCancel = cancel;
-		this.taskId = new BukkitRunnable() {
-			public void run() {
-				p.sendTitle(texts.get(0), texts.get(1), 0, 21, 0);
-			}
-		}.runTaskTimer(RealScoreboardAPI.getInstance().getPlugin(), 0L, 20);
+    public PlayerInput(final Player p, final InputRunnable correct, final InputRunnable cancel) {
+        new joserodpt.realutils.input.PlayerInput(p, true, correct::run, cancel::run);
+    }
 
-		this.register();
-	}
+    /** Where the prompt's words come from. Called once the plugin is enabled. */
+    public static void setup(final Plugin plugin) {
+        joserodpt.realutils.input.PlayerInput.setup(plugin,
+                p -> Arrays.asList("&l&9Type in chat your input", "&fType &4cancel &fto cancel"),
+                p -> Arrays.asList("&dInput", "&fType your input below."),
+                p -> Text.send(p, "&cInput cancelled."),
+                p -> Text.send(p, "&cAn error occurred."));
+    }
 
-	private void register() {
-		inputs.put(this.uuid, this);
-	}
+    public static Listener getListener() {
+        return joserodpt.realutils.input.PlayerInput.getListener();
+    }
 
-	private void unregister() {
-		inputs.remove(this.uuid);
-	}
-
-	@FunctionalInterface
-	public interface InputRunnable {
-		void run(String input);
-	}
-
-	public static Listener getListener() {
-		return new Listener() {
-			@EventHandler
-			public void onPlayerChat(AsyncPlayerChatEvent event) {
-				Player p = event.getPlayer();
-				String input = event.getMessage();
-				UUID uuid = p.getUniqueId();
-				if (inputs.containsKey(uuid)) {
-					PlayerInput current = inputs.get(uuid);
-					if (current.inputMode) {
-						event.setCancelled(true);
-						try {
-							if (input.equalsIgnoreCase("cancel")) {
-								Text.send(p, "&cInput cancelled.");
-								current.taskId.cancel();
-								p.sendTitle("", "", 0, 1, 0);
-								Bukkit.getScheduler().scheduleSyncDelayedTask(RealScoreboardAPI.getInstance().getPlugin(), () -> current.runCancel.run(input), 3);
-								current.unregister();
-								return;
-							}
-
-							current.taskId.cancel();
-							Bukkit.getScheduler().scheduleSyncDelayedTask(RealScoreboardAPI.getInstance().getPlugin(), () -> current.runGo.run(input), 3);
-							p.sendTitle("", "", 0, 1, 0);
-							current.unregister();
-						} catch (Exception e) {
-							Text.send(p, "&cAn error ocourred. Contact JoseGamer_PT on SpigotMC.com");
-							RealScoreboardAPI.getInstance().getLogger().severe(e.getMessage());
-						}
-					}
-				}
-			}
-
-		};
-	}
+    @FunctionalInterface
+    public interface InputRunnable {
+        void run(String input);
+    }
 }

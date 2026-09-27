@@ -20,6 +20,7 @@ import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
 import joserodpt.realscoreboard.api.utils.GUIBuilder;
+import joserodpt.realscoreboard.api.utils.PlayerInput;
 import joserodpt.realscoreboard.api.utils.Text;
 import joserodpt.realscoreboard.commands.RSBCommandManager;
 import joserodpt.realscoreboard.gui.SettingsGUI;
@@ -27,6 +28,7 @@ import joserodpt.realscoreboard.listeners.McMMOScoreboardListener;
 import joserodpt.realscoreboard.listeners.PlayerListener;
 import joserodpt.realscoreboard.utils.Metrics;
 import joserodpt.realscoreboard.utils.UpdateChecker;
+import joserodpt.realutils.dialog.Dialogs;
 import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -87,6 +89,13 @@ public class RealScoreboardPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerListener(realScoreboard), this);
         Bukkit.getPluginManager().registerEvents(SettingsGUI.getListener(), this);
         Bukkit.getPluginManager().registerEvents(GUIBuilder.getListener(), this);
+        //without it a chat prompt never hears its answer and its title stays up for good
+        Bukkit.getPluginManager().registerEvents(PlayerInput.getListener(), this);
+
+        //the settings and typed input are asked for in dialogs on servers that have them
+        Dialogs.setup(this, () -> RSBConfig.file().getBoolean("Config.Use-Dialogs", true));
+        Dialogs.colorizer(Text::color);
+        PlayerInput.setup(this);
 
         //Lamp owns the command tree: the suggestions, the permissions and the error messages
         new RSBCommandManager(this, realScoreboard);
@@ -124,6 +133,11 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
         Arrays.asList("Server version: " + getServerVersion(), "Finished loading in " + ((System.currentTimeMillis() - start) / 1000F) + " seconds.").forEach(s -> getLogger().info(s));
         getLogger().info("<------------------ RealScoreboard vPT ------------------>".replace("PT", this.getDescription().getVersion()));
+    }
+
+    @Override
+    public void onDisable() {
+        Dialogs.shutdown();
     }
 
     private void printASCII() {

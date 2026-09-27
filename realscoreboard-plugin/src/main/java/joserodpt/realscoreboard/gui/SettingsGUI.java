@@ -20,6 +20,8 @@ import joserodpt.realscoreboard.api.utils.Items;
 import joserodpt.realscoreboard.api.utils.Pagination;
 import joserodpt.realscoreboard.api.utils.PlayerInput;
 import joserodpt.realscoreboard.api.utils.Text;
+import joserodpt.realutils.dialog.SettingsDialog;
+import joserodpt.realutils.dialog.SettingsStore;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -93,6 +95,44 @@ public class SettingsGUI {
             new SettingEntry("Animations Loop Delay", "Config.Animations.Loop-Delay", 1),
             new SettingEntry("Hours Offset", "Config.Hours.Offset", 1)
     );
+
+    /**
+     * Opens the settings: on servers that have dialogs, a menu of categories with every setting in
+     * config.yml; the inventory editor everywhere else.
+     */
+    public static void open(final Player p, final RealScoreboardAPI rsa) {
+        final SettingsDialog settings = new SettingsDialog("&f&lReal&d&lScoreboard &8| &fSettings")
+                .icon(Material.PAINTING)
+                .onSave((player, category) -> Text.send(player, "&fSettings saved."));
+        settings.category("&eGeneral", "&7Prefix, updates and when the scoreboard shows")
+                .text("Config.Prefix", "Plugin prefix", 64)
+                .toggle("Config.Check-for-Updates", "Check for updates").note("after a restart")
+                .toggle("Config.mcMMO-Support", "mcMMO support").note("after a restart")
+                .toggle("Config.RealScoreboard-Disabled-By-Default", "Scoreboard off by default").note("for new players")
+                .toggle("Config.Auto-Hide-In-Vanish", "Hide the scoreboard while vanished")
+                .toggle("Config.World-Scoreboard-Switch", "Switch scoreboards between worlds")
+                .toggle("Config.Use-Placeholders-In-Scoreboard-Titles", "Placeholders in scoreboard titles")
+                .toggle("Config.Use-Dialogs", "Use dialogs").note("off: chat and inventory menus");
+        settings.category("&bTime", "&7How the time and date placeholders read")
+                .text("Config.Hours.Formatting", "Time format", 64)
+                .slider("Config.Hours.Offset", "Time offset", -24, 24, 1).note("hours")
+                .text("Config.Days.Formatting", "Date format", 64)
+                .slider("Config.Days.Offset", "Date offset", -24, 24, 1).note("hours");
+        settings.category("&dAnimations", "&7How fast titles and lines animate")
+                .slider("Config.Animations.Loop-Delay", "Ticks between animation frames", 1, 100, 1).note("after a restart");
+        settings.category("&aWorlds", "&7Where the scoreboard is hidden or kept")
+                .list("Config.Disabled-Worlds", "Worlds without the scoreboard")
+                .list("Config.Bypass-Worlds", "Worlds that keep the last scoreboard")
+                .list("Config.Vanish-Commands", "Commands that count as vanishing");
+        settings.category("&6Messages", "&7What players are told")
+                .text("Config.Reloaded", "After a reload", 256)
+                .text("Config.Messages.Announce-Title", "Announcement title", 256)
+                .text("Config.Messages.Scoreboard-Toggle.ON", "Scoreboard turned on", 256)
+                .text("Config.Messages.Scoreboard-Toggle.OFF", "Scoreboard turned off", 256);
+
+        settings.open(p, SettingsStore.of(RSBConfig.file()::get, RSBConfig.file()::set, RSBConfig::save),
+                () -> new SettingsGUI(p, rsa).openInventory(p));
+    }
 
     public SettingsGUI(Player a, RealScoreboardAPI rsa) {
         this.rsa = rsa;

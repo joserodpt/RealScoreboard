@@ -68,6 +68,16 @@
                             <pattern>fr.mrmicky.fastboard</pattern>
                             <shadedPattern>shaded.rsb.fastboard</shadedPattern>
                         </relocation>
+                        <!-- Relocated with UniDialog, so another plugin shading either cannot clash with
+                             ours; this also rewrites the class names RealUtils loads by name. -->
+                        <relocation>
+                            <pattern>joserodpt.realutils</pattern>
+                            <shadedPattern>shaded.rsb.realutils</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.github.projectunified.unidialog</pattern>
+                            <shadedPattern>shaded.rsb.unidialog</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -116,6 +126,13 @@
     </repositories>
 
     <dependencies>
+        <!-- Dialogs and the chat prompt. It brings UniDialog's Spigot and Paper backends with it,
+             picked between at runtime. -->
+        <dependency>
+            <groupId>com.github.joserodpt</groupId>
+            <artifactId>RealUtils</artifactId>
+            <version>${realutils.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.github.joserodpt.api</groupId>
             <artifactId>realscoreboard-api</artifactId>

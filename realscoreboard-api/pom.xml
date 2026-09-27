@@ -106,5 +106,13 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+        <!-- Dialogs and the chat prompt, from the library the Real* plugins share. Optional, so the
+             API's own users are not handed it; realscoreboard-plugin shades and relocates it. -->
+        <dependency>
+            <groupId>com.github.joserodpt</groupId>
+            <artifactId>RealUtils</artifactId>
+            <version>${realutils.version}</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>

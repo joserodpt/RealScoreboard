@@ -27,6 +27,9 @@ Config:
   RealScoreboard-Disabled-By-Default: false
   Auto-Hide-In-Vanish: true
   World-Scoreboard-Switch: true
+  # On servers that have dialogs (1.21.6 and up), show the settings and ask for typed input in
+  # dialogs instead of the chat and inventory menus. Other servers ignore this.
+  Use-Dialogs: true
   Animations:
     Loop-Delay: 10
   Reloaded: '&fThe config has been &areloaded&f.'
@@ -59,4 +62,4 @@ Config:
       Condition: '%life% <= 5'
       Met: '&cWatch out!'
       Not-Met: '&aYou are fine!'
-Version: 19
+Version: 20

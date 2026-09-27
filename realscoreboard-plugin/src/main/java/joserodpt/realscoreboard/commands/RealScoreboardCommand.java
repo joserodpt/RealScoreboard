@@ -51,8 +51,7 @@ public class RealScoreboardCommand {
     @SuppressWarnings("unused")
     public void defaultcmd(final CommandSender commandSender) {
         if (commandSender instanceof Player p && (p.isOp() || p.hasPermission("realscoreboard.admin"))) {
-            SettingsGUI s = new SettingsGUI(p, rsa);
-            s.openInventory(p);
+            SettingsGUI.open(p, rsa);
         } else {
             commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &fv" + this.rsa.getVersion()));
         }
