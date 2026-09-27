@@ -17,10 +17,10 @@ import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
 import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
-import joserodpt.realscoreboard.api.utils.GUIBuilder;
-import joserodpt.realscoreboard.api.utils.Items;
-import joserodpt.realscoreboard.api.utils.Text;
 import joserodpt.realscoreboard.gui.SettingsGUI;
+import joserodpt.realutils.gui.GUIBuilder;
+import joserodpt.realutils.item.Items;
+import joserodpt.realutils.text.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -138,7 +138,7 @@ public class RealScoreboardCommand {
                 target.closeInventory();
                 rsa.getPlayerManagerAPI().getPlayer(target.getUniqueId()).setScoreboard(sb);
                 Text.send(p, "Scoreboard &b" + sb.getName() + " &fapplied to &b" + target.getName());
-            }, Items.createItemLore(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
+            }, Items.createItem(Material.FILLED_MAP, 1, sb.getDisplayName(), Collections.singletonList("&7Click to apply.")), i);
             ++i;
         }
 
@@ -203,7 +203,7 @@ public class RealScoreboardCommand {
     @CommandPermission("realscoreboard.admin")
     @SuppressWarnings("unused")
     public void debugcmd(final CommandSender commandSender) {
-        Text.send(commandSender, Arrays.asList("", "", Text.getPrefix(),
+        Text.sendList(commandSender, Arrays.asList("", "", Text.getPrefix(),
                 "> &b&lPLUGIN info",
                 "&fPlugin Version: &b" + this.rsa.getVersion(),
                 "> &b&lSERVER info",

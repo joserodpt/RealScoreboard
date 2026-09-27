@@ -18,9 +18,10 @@ import joserodpt.realscoreboard.RealScoreboardPlugin;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.conditions.Condition;
 import joserodpt.realscoreboard.api.config.RSBConfig;
+import joserodpt.realscoreboard.api.utils.Format;
 import joserodpt.realscoreboard.api.utils.IPlaceholders;
 import joserodpt.realscoreboard.api.utils.PingUtil;
-import joserodpt.realscoreboard.api.utils.Text;
+import joserodpt.realutils.text.Text;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
@@ -257,10 +258,10 @@ public class Placeholders implements IPlaceholders {
                         s = s.replace("%" + placeholder + "%", this.getGroup(p));
                         break;
                     case "money":
-                        s = s.replace("%" + placeholder + "%", Text.formatMoney(this.money(p)));
+                        s = s.replace("%" + placeholder + "%", Format.formatMoney(this.money(p)));
                         break;
                     case "moneylong":
-                        s = s.replace("%" + placeholder + "%", Text.formatMoneyLong(this.money(p)));
+                        s = s.replace("%" + placeholder + "%", Format.formatMoneyLong(this.money(p)));
                         break;
                     case "displayname":
                         s = s.replace("%" + placeholder + "%", p.getDisplayName());
@@ -281,7 +282,7 @@ public class Placeholders implements IPlaceholders {
                         s = s.replace("%" + placeholder + "%", RealScoreboard.getInstance().getAnimationManagerAPI().getLoopAnimation("rainbow"));
                         break;
                     case "playtime":
-                        s = s.replace("%" + placeholder + "%", Text.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20));
+                        s = s.replace("%" + placeholder + "%", Format.formatTime(this.stats(p, Statistic.PLAY_ONE_MINUTE) / 20));
                         break;
                     default:
                         s = s.replace("%" + placeholder + "%", this.placeholderAPI(p, "%" + placeholder + "%"));

@@ -14,21 +14,12 @@ package joserodpt.realscoreboard.api.config;
  */
 
 import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
-import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
-import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
-import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
-import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-import org.bukkit.Bukkit;
+import joserodpt.realutils.config.YamlConfig;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 
 public class RSBScoreboards {
 
-    private static YamlDocument configFile;
+    private static YamlConfig configFile;
 
     /**
      * Configures configuration files for RealScoreboard
@@ -38,17 +29,9 @@ public class RSBScoreboards {
      *
      * @param javaPlugin plugin related to this method
      */
-    @SuppressWarnings("ConstantConditions")
     public static void setup(JavaPlugin javaPlugin) {
-        try {
-            configFile = YamlDocument.create(new File(javaPlugin.getDataFolder(), "scoreboards.yml"), javaPlugin.getResource("scoreboards.yml"),
-                    GeneralSettings.builder().setUseDefaults(false).build(),
-                    LoaderSettings.builder().setAutoUpdate(true).build(),
-                    DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).addIgnoredRoute("2", "Scoreboards", '.').build());
-        } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't setup config files!");
-        }
+        configFile = YamlConfig.of(javaPlugin, "scoreboards.yml").versioned("Version").ignoring("2", "Scoreboards")
+                .useDefaults(false).load();
     }
 
     /**
@@ -57,7 +40,7 @@ public class RSBScoreboards {
      * @return yaml configuration file
      */
     public static YamlDocument file() {
-        return configFile;
+        return configFile.file();
     }
 
     /**
@@ -65,11 +48,7 @@ public class RSBScoreboards {
      */
     @SuppressWarnings("unused")
     public static void save() {
-        try {
-            configFile.save();
-        } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save scoreboards.yml!");
-        }
+        configFile.save();
     }
 
     /**
@@ -78,10 +57,6 @@ public class RSBScoreboards {
      * sql configuration file due to instability
      */
     public static void reload() {
-        try {
-            configFile.reload();
-        } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't reload scoreboards.yml!");
-        }
+        configFile.reload();
     }
 }

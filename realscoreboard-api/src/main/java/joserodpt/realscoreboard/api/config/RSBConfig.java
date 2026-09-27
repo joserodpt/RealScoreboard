@@ -14,22 +14,13 @@ package joserodpt.realscoreboard.api.config;
  */
 
 import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
-import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
-import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
-import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
-import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-import org.bukkit.Bukkit;
+import joserodpt.realutils.config.YamlConfig;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 
 public class RSBConfig {
 
-    private static YamlDocument configFile;
-    private static YamlDocument sqlConfigFile;
+    private static YamlConfig configFile;
+    private static YamlConfig sqlConfigFile;
 
     /**
      * Configures configuration files for RealScoreboard
@@ -39,18 +30,10 @@ public class RSBConfig {
      *
      * @param javaPlugin plugin related to this method
      */
-    @SuppressWarnings("ConstantConditions")
     public static void setup(JavaPlugin javaPlugin) {
-        try {
-            configFile = YamlDocument.create(new File(javaPlugin.getDataFolder(), "config.yml"), javaPlugin.getResource("config.yml"),
-                    GeneralSettings.builder().setUseDefaults(false).build(),
-                    LoaderSettings.builder().setAutoUpdate(true).build(),
-                    DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("Version")).addIgnoredRoute("16", "Config.Scoreboard", '.').build());
-            sqlConfigFile = YamlDocument.create(new File(javaPlugin.getDataFolder(), "sql.yml"), javaPlugin.getResource("sql.yml"));
-        } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't setup config files!");
-        }
+        configFile = YamlConfig.of(javaPlugin, "config.yml").versioned("Version").ignoring("16", "Config.Scoreboard")
+                .useDefaults(false).load();
+        sqlConfigFile = YamlConfig.of(javaPlugin, "sql.yml").load();
     }
 
     /**
@@ -59,7 +42,7 @@ public class RSBConfig {
      * @return yaml configuration file
      */
     public static YamlDocument file() {
-        return configFile;
+        return configFile.file();
     }
 
     /**
@@ -68,7 +51,7 @@ public class RSBConfig {
      * @return sql configuration file
      */
     public static YamlDocument getSql() {
-        return sqlConfigFile;
+        return sqlConfigFile.file();
     }
 
     /**
@@ -76,11 +59,7 @@ public class RSBConfig {
      */
     @SuppressWarnings("unused")
     public static void save() {
-        try {
-            configFile.save();
-        } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save config.yml!");
-        }
+        configFile.save();
     }
 
     /**
@@ -89,10 +68,6 @@ public class RSBConfig {
      * sql configuration file due to instability
      */
     public static void reload() {
-        try {
-            configFile.reload();
-        } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't reload config.yml!");
-        }
+        configFile.reload();
     }
 }

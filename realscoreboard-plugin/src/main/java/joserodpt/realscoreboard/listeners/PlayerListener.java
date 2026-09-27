@@ -6,7 +6,7 @@ import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.scoreboard.RSBPlayer;
 import joserodpt.realscoreboard.managers.ExternalScoreboardManagerAPI;
-import joserodpt.realscoreboard.api.utils.Text;
+import joserodpt.realutils.text.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

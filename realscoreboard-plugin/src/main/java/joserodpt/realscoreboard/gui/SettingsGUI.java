@@ -16,12 +16,12 @@ package joserodpt.realscoreboard.gui;
 import com.google.common.collect.ImmutableList;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
-import joserodpt.realscoreboard.api.utils.Items;
-import joserodpt.realscoreboard.api.utils.Pagination;
-import joserodpt.realscoreboard.api.utils.PlayerInput;
-import joserodpt.realscoreboard.api.utils.Text;
 import joserodpt.realutils.dialog.SettingsDialog;
 import joserodpt.realutils.dialog.SettingsStore;
+import joserodpt.realutils.gui.Pagination;
+import joserodpt.realutils.input.PlayerInput;
+import joserodpt.realutils.item.Items;
+import joserodpt.realutils.text.Text;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,9 +65,9 @@ public class SettingsGUI {
         public ItemStack getItem() {
             if (entryType == 0) {
                 boolean val = RSBConfig.file().getBoolean(configPath);
-                return Items.createItemLore(val ? Material.REDSTONE_TORCH : Material.LEVER, 1, this.getName() + " &f- " + (val ? "&a&lON" : "&c&lOFF"), Collections.singletonList("&7Click here to toggle this setting."));
+                return Items.createItem(val ? Material.REDSTONE_TORCH : Material.LEVER, 1, this.getName() + " &f- " + (val ? "&a&lON" : "&c&lOFF"), Collections.singletonList("&7Click here to toggle this setting."));
             } else {
-                return Items.createItemLore(Material.OAK_BUTTON, Math.min(64, Math.max(1, RSBConfig.file().getInt(configPath))), this.getName() + ": " + RSBConfig.file().getInt(configPath), Collections.singletonList("&7Click here to change this value."));
+                return Items.createItem(Material.OAK_BUTTON, Math.min(64, Math.max(1, RSBConfig.file().getInt(configPath))), this.getName() + ": " + RSBConfig.file().getInt(configPath), Collections.singletonList("&7Click here to change this value."));
             }
         }
     }
@@ -78,7 +78,7 @@ public class SettingsGUI {
     private final ItemStack placeholder = Items.createItem(Material.BLACK_STAINED_GLASS_PANE, 1, "");
     static ItemStack next = Items.createItem(Material.GREEN_STAINED_GLASS, 1,  "&aNext");
     static ItemStack back = Items.createItem(Material.YELLOW_STAINED_GLASS, 1,"&6Back");
-    static ItemStack close = Items.createItemLore(Material.OAK_DOOR, 1, "&cClose",
+    static ItemStack close = Items.createItem(Material.OAK_DOOR, 1, "&cClose",
            Collections.singletonList("&7Click here to close the settings."));
     private final Inventory inv;
     private final UUID uuid;
@@ -197,7 +197,7 @@ public class SettingsGUI {
                                 current.load();
                             } else {
                                 p.closeInventory();
-                                new PlayerInput(p, input -> {
+                                new PlayerInput(p, true, input -> {
                                     int val;
                                     try {
                                         val = Integer.parseInt(input);

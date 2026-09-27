@@ -13,44 +13,26 @@ package joserodpt.realscoreboard.commands;
  * @link https://github.com/joserodpt/RealScoreboard
  */
 
-import joserodpt.realscoreboard.api.utils.Text;
-import revxrsal.commands.annotation.Usage;
+import joserodpt.realutils.command.LampExceptionHandler;
+import joserodpt.realutils.text.Text;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
-import revxrsal.commands.bukkit.exception.BukkitExceptionHandler;
 import revxrsal.commands.bukkit.exception.EmptyEntitySelectorException;
 import revxrsal.commands.bukkit.exception.InvalidPlayerException;
 import revxrsal.commands.bukkit.exception.MalformedEntitySelectorException;
-import revxrsal.commands.bukkit.exception.SenderNotPlayerException;
-import revxrsal.commands.command.ExecutableCommand;
-import revxrsal.commands.exception.MissingArgumentException;
-import revxrsal.commands.exception.NoPermissionException;
-import revxrsal.commands.exception.UnknownCommandException;
-import revxrsal.commands.node.ParameterNode;
 
 /**
  * Puts the errors Lamp raises through RealScoreboard's own wording, so a mistyped command reads the
- * same as every other message the plugin sends. Anything not overridden here keeps Lamp's own
- * wording, which is already specific about what it couldn't parse.
+ * same as every other message the plugin sends. Anything not handled here or in
+ * {@link LampExceptionHandler} keeps Lamp's own wording, which is already specific about what it
+ * couldn't parse.
  */
-public class RSBExceptionHandler extends BukkitExceptionHandler {
+public class RSBExceptionHandler extends LampExceptionHandler {
 
-    @Override
-    public void onUnknownCommand(final UnknownCommandException e, final BukkitCommandActor actor) {
-        Text.send(actor.sender(), "&cThe command you're trying to run doesn't exist.");
-    }
-
-    @Override
-    public void onNoPermission(final NoPermissionException e, final BukkitCommandActor actor) {
-        Text.send(actor.sender(), "&cYou don't have permission to execute this command!");
-    }
-
-    /**
-     * Player-only commands take a {@link org.bukkit.entity.Player} instead of a
-     * {@link org.bukkit.command.CommandSender}, and this is where console gets told so.
-     */
-    @Override
-    public void onSenderNotPlayer(final SenderNotPlayerException e, final BukkitCommandActor actor) {
-        Text.send(actor.sender(), "&cOnly players can use this command.");
+    public RSBExceptionHandler() {
+        super(sender -> Text.send(sender, "&cThe command you're trying to run doesn't exist."),
+                sender -> Text.send(sender, "&cYou don't have permission to execute this command!"),
+                sender -> Text.send(sender, "&cOnly players can use this command."),
+                () -> "&cWrong usage for this command. Check if you inputed all the arguments.");
     }
 
     /**
@@ -74,22 +56,5 @@ public class RSBExceptionHandler extends BukkitExceptionHandler {
     @Override
     public void onMalformedEntitySelector(final MalformedEntitySelectorException e, final BukkitCommandActor actor) {
         Text.send(actor.sender(), "&cInvalid selector &f" + e.input() + "&c: " + e.errorMessage());
-    }
-
-    @Override
-    public void onMissingArgument(final MissingArgumentException e, final BukkitCommandActor actor,
-                                  final ParameterNode<BukkitCommandActor, ?> parameter) {
-        Text.send(actor.sender(), usageOf(e.command()));
-    }
-
-    /**
-     * The handwritten {@link Usage} on the method, which spells the command out the way players are
-     * used to seeing it. Commands without one fall back to the generic line, as they always did.
-     */
-    private static String usageOf(final ExecutableCommand<?> command) {
-        final Usage usage = command.annotations().get(Usage.class);
-        return usage == null
-                ? "&cWrong usage for this command. Check if you inputed all the arguments."
-                : usage.value();
     }
 }

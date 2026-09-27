@@ -14,32 +14,20 @@ package joserodpt.realscoreboard.api.utils;
  */
 
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
-import joserodpt.realscoreboard.api.config.RSBConfig;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-public class Text {
+/**
+ * The number and colour formats RealScoreboard's placeholders use. Colouring and sending text
+ * goes through RealUtils' {@link joserodpt.realutils.text.Text}.
+ */
+public class Format {
 
     static final String[] time = {"s", "m", "h", "h", "h", "h", "h", "h", "h"};
     static String[] money = {"", "k", "m", "b", "t", "q", "qi", "s", "sep", "OC", "N", "DEC", "UN", "DUO", "TRE"};
-
-    public static String color(String text) {
-        if (text == null || text.isEmpty()) return "";
-        return ForestColorAPI.colorize(text);
-    }
-
-    public static List<String> color(final List<?> list) {
-        final List<String> color = new ArrayList<>();
-        list.forEach(o -> color.add(Text.color((String) o)));
-        return color;
-    }
 
     public static String formatMoney(double value) {
         int index = 0;
@@ -61,24 +49,8 @@ public class Text {
         return String.format("%s%s", decimalFormat.format(value), time[index]);
     }
 
-    public static String getPrefix() {
-        return Text.color(RSBConfig.file().getString("Config.Prefix"));
-    }
-
     public static String randomColor() {
         return ChatColor.translateAlternateColorCodes('&', RealScoreboardAPI.getInstance().getAnimationManagerAPI().getLoopAnimation("rainbow") + "&6");
-    }
-
-    public static void send(CommandSender commandSender, List<String> asList) {
-        asList.forEach(s -> commandSender.sendMessage(color(s)));
-    }
-
-    public static void send(Player commandSender, String msg) {
-        commandSender.sendMessage(getPrefix() + color(msg));
-    }
-
-    public static void send(CommandSender commandSender, String msg) {
-        commandSender.sendMessage(getPrefix() + color(msg));
     }
 
     public static String formatMoneyLong(double money) {

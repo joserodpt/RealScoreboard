@@ -18,7 +18,8 @@ import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.PlayerData;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.external.ExternalBoard;
-import joserodpt.realscoreboard.api.utils.Text;
+import joserodpt.realscoreboard.api.utils.Format;
+import joserodpt.realutils.text.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -137,7 +138,7 @@ public class RSBPlayer {
                 .filter(s -> !s.contains("$skip"))
                 .map(s -> {
                     s = s.matches("(?i)%blank%") ?
-                            (Text.randomColor() + "§r" + Text.randomColor()) :
+                            (Format.randomColor() + "§r" + Format.randomColor()) :
                             s;
                     return Text.color(s);
                 })

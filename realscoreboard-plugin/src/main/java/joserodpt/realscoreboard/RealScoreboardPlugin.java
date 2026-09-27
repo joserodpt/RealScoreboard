@@ -19,20 +19,21 @@ import joserodpt.realpermissions.api.pluginhook.ExternalPluginPermission;
 import joserodpt.realscoreboard.api.RealScoreboardAPI;
 import joserodpt.realscoreboard.api.config.RSBConfig;
 import joserodpt.realscoreboard.api.config.RSBScoreboards;
-import joserodpt.realscoreboard.api.utils.GUIBuilder;
-import joserodpt.realscoreboard.api.utils.PlayerInput;
-import joserodpt.realscoreboard.api.utils.Text;
 import joserodpt.realscoreboard.commands.RSBCommandManager;
 import joserodpt.realscoreboard.gui.SettingsGUI;
 import joserodpt.realscoreboard.listeners.McMMOScoreboardListener;
 import joserodpt.realscoreboard.listeners.PlayerListener;
-import joserodpt.realscoreboard.utils.Metrics;
-import joserodpt.realscoreboard.utils.UpdateChecker;
+import joserodpt.realutils.RealUtils;
 import joserodpt.realutils.dialog.Dialogs;
+import joserodpt.realutils.input.PlayerInput;
+import joserodpt.realutils.text.ForestColorAPI;
+import joserodpt.realutils.text.Text;
+import joserodpt.realutils.update.UpdateChecker;
 import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -61,6 +62,11 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        //the listeners behind every GUIBuilder menu
+        RealUtils.setup(this);
+        //hex colours and gradients in every message, and the prefix read from the config each time
+        Text.colorizer(ForestColorAPI::colorize);
+        Text.prefix(() -> RSBConfig.file().getString("Config.Prefix"));
         printASCII();
         new Metrics(this, 10080);
 
@@ -88,14 +94,16 @@ public class RealScoreboardPlugin extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(realScoreboard), this);
         Bukkit.getPluginManager().registerEvents(SettingsGUI.getListener(), this);
-        Bukkit.getPluginManager().registerEvents(GUIBuilder.getListener(), this);
         //without it a chat prompt never hears its answer and its title stays up for good
         Bukkit.getPluginManager().registerEvents(PlayerInput.getListener(), this);
 
         //the settings and typed input are asked for in dialogs on servers that have them
         Dialogs.setup(this, () -> RSBConfig.file().getBoolean("Config.Use-Dialogs", true));
-        Dialogs.colorizer(Text::color);
-        PlayerInput.setup(this);
+        PlayerInput.setup(this,
+                p -> Arrays.asList("&l&9Type in chat your input", "&fType &4cancel &fto cancel"),
+                p -> Arrays.asList("&dInput", "&fType your input below."),
+                p -> Text.send(p, "&cInput cancelled."),
+                p -> Text.send(p, "&cAn error occurred."));
 
         //Lamp owns the command tree: the suggestions, the permissions and the error messages
         new RSBCommandManager(this, realScoreboard);
