@@ -20,6 +20,7 @@ import joserodpt.realscoreboard.api.scoreboard.RScoreboard;
 import joserodpt.realscoreboard.gui.SettingsGUI;
 import joserodpt.realutils.gui.GUIBuilder;
 import joserodpt.realutils.item.Items;
+import joserodpt.realutils.BuildInfo;
 import joserodpt.realutils.text.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -54,6 +55,10 @@ public class RealScoreboardCommand {
             SettingsGUI.open(p, rsa);
         } else {
             commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &fv" + this.rsa.getVersion()));
+            if (!(commandSender instanceof Player)) {
+                commandSender.sendMessage(Text.color("&7Built &f" + BuildInfo.time(this.rsa.getPlugin())));
+                commandSender.sendMessage(Text.color("&7RealUtils &f" + BuildInfo.realUtilsVersion(this.rsa.getPlugin())));
+            }
         }
     }
 

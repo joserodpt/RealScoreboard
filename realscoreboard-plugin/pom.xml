@@ -17,6 +17,10 @@
     <name>RealScoreboard-Plugin</name>
 
     <properties>
+        <!-- the build time, stamped into build.properties for the console to show. maven.build.timestamp
+             is always UTC and can't be filtered into resources itself, so it goes through a property -->
+        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
+        <build.time>${maven.build.timestamp}</build.time>
         <maven.compiler.release>16</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lamp.version>4.0.0-rc.18</lamp.version>
