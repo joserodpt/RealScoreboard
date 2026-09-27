@@ -54,11 +54,7 @@ public class RealScoreboardCommand {
         if (commandSender instanceof Player p && (p.isOp() || p.hasPermission("realscoreboard.admin"))) {
             SettingsGUI.open(p, rsa);
         } else {
-            commandSender.sendMessage(Text.color("&fReal&dScoreboard &7| &fv" + this.rsa.getVersion()));
-            if (!(commandSender instanceof Player)) {
-                commandSender.sendMessage(Text.color("&7Built &f" + BuildInfo.time(this.rsa.getPlugin())));
-                commandSender.sendMessage(Text.color("&7RealUtils &f" + BuildInfo.realUtilsVersion(this.rsa.getPlugin())));
-            }
+            BuildInfo.sendAbout(commandSender, this.rsa.getPlugin(), "&fReal&dScoreboard");
         }
     }
 
