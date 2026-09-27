@@ -106,6 +106,7 @@ public class SettingsGUI {
                 .onSave((player, category) -> Text.send(player, "&fSettings saved."));
         settings.category("&eGeneral", "&7Prefix, updates and when the scoreboard shows")
                 .text("Config.Prefix", "Plugin prefix", 64)
+                .list("Config.Vanish-Commands", "Commands that count as vanishing")
                 .toggle("Config.Check-for-Updates", "Check for updates").note("after a restart")
                 .toggle("Config.mcMMO-Support", "mcMMO support").note("after a restart")
                 .toggle("Config.RealScoreboard-Disabled-By-Default", "Scoreboard off by default").note("for new players")
@@ -119,11 +120,10 @@ public class SettingsGUI {
                 .text("Config.Days.Formatting", "Date format", 64)
                 .slider("Config.Days.Offset", "Date offset", -24, 24, 1).note("hours");
         settings.category("&dAnimations", "&7How fast titles and lines animate")
-                .slider("Config.Animations.Loop-Delay", "Ticks between animation frames", 1, 100, 1).note("after a restart");
+                .slider("Config.Animations.Loop-Delay", "Ticks between animation frames", 1, 100, 1);
         settings.category("&aWorlds", "&7Where the scoreboard is hidden or kept")
                 .list("Config.Disabled-Worlds", "Worlds without the scoreboard")
-                .list("Config.Bypass-Worlds", "Worlds that keep the last scoreboard")
-                .list("Config.Vanish-Commands", "Commands that count as vanishing");
+                .list("Config.Bypass-Worlds", "Worlds that keep the last scoreboard");
         settings.category("&6Messages", "&7What players are told")
                 .text("Config.Reloaded", "After a reload", 256)
                 .text("Config.Messages.Announce-Title", "Announcement title", 256)
